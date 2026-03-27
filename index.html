@@ -729,84 +729,75 @@ select option{background:var(--sf);}
 <div class="page" id="page-dealer">
   <div class="hd">
     <div class="hd-t">🏢 販売店マスタ</div>
-    <div class="hd-r"><button class="btn btn-p btn-sm" onclick="toggleAddDealer()">＋ 新規登録</button></div>
+    <div class="hd-r" style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn btn-g btn-sm" id="dealer-view-btn" onclick="setDealerView('tree')">🌳 ツリー</button>
+      <button class="btn btn-g btn-sm" onclick="setDealerView('table')">📋 テーブル</button>
+      <button class="btn btn-p btn-sm" onclick="toggleAddDealer()">＋ 新規登録</button>
+    </div>
   </div>
-  <!-- 検索バー -->
+  <!-- 検索＆フィルター -->
   <div class="deal-search">
     <div class="search-row">
-      <input class="search-input" id="dealer-search" type="text" placeholder="🔍  販売店名・担当者・エリアで検索..." oninput="applyDealerFilter()">
+      <input class="search-input" id="dealer-search" type="text" placeholder="🔍  会社名・担当者・ALL担当で検索..." oninput="applyDealerFilter()">
     </div>
     <div class="filter-row">
-      <span style="font-size:10px;color:var(--tx3);align-self:center;">種別：</span>
-      <div class="filter-chip on" id="dt-all" onclick="setDealerTypeFilter('all')">すべて</div>
-      <div class="filter-chip grn" id="dt-tu" onclick="setDealerTypeFilter('TU')">TU</div>
-      <div class="filter-chip amb" id="dt-kanku" onclick="setDealerTypeFilter('完クロ')">完クロ</div>
-      <div class="filter-chip" id="dt-both" onclick="setDealerTypeFilter('両方')">両方</div>
+      <span style="font-size:11px;color:var(--tx3);align-self:center;">ランク：</span>
+      <div class="filter-chip on" id="dr-all" onclick="setDealerRankFilter('all')">すべて</div>
+      <div class="filter-chip grn" id="dr-a" onclick="setDealerRankFilter('A')">A</div>
+      <div class="filter-chip amb" id="dr-b" onclick="setDealerRankFilter('B')">B</div>
+      <div class="filter-chip" id="dr-c" onclick="setDealerRankFilter('C')">C</div>
+      <span style="font-size:11px;color:var(--tx3);align-self:center;margin-left:8px;">スキーム：</span>
+      <div class="filter-chip on" id="ds-all" onclick="setDealerSchemeFilter('all')">すべて</div>
+      <div class="filter-chip amb" id="ds-ku" onclick="setDealerSchemeFilter('完全クロージング')">完クロ</div>
+      <div class="filter-chip grn" id="ds-tu" onclick="setDealerSchemeFilter('トスアップ')">TU</div>
+      <div class="filter-chip" id="ds-both" onclick="setDealerSchemeFilter('完クロ＋トスアップ')">両方</div>
     </div>
   </div>
   <div class="deal-count" id="dealer-count"></div>
   <div class="ct" style="padding-top:8px;">
+    <!-- CSV一括インポート -->
+    <div class="cd" style="border-color:rgba(79,125,247,.3);padding:12px 16px;margin-bottom:10px;">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <span style="font-size:13px;font-weight:600;color:var(--ac);">📥 既存CSVから一括登録</span>
+        <input type="file" id="dealer-csv-file" accept=".csv" style="font-size:12px;color:var(--tx2);">
+        <button class="btn btn-p btn-sm" onclick="importDealerCSV()">▶ インポート実行</button>
+        <span id="dealer-import-status" style="font-size:12px;color:var(--tx3);"></span>
+      </div>
+      <div style="font-size:11px;color:var(--tx3);margin-top:6px;">対応列：会社名, 何次　販売店, 商流, 1次販売店, 2次販売店, 窓口担当者名, 都道府県, 市区町村, ALL担当, 活動　ランク, スキーム</div>
+    </div>
     <!-- 新規登録フォーム -->
     <div class="cd" id="add-dealer-cd" style="display:none;">
       <div class="cd-t">販売店を登録</div>
       <div class="fg" style="margin-bottom:10px;">
-        <div class="fm"><label class="lb">販売店名</label><input type="text" id="dl-nm" placeholder="〇〇株式会社"></div>
-        <div class="fm"><label class="lb">担当者名</label><input type="text" id="dl-person" placeholder="山田 太郎"></div>
-        <div class="fm"><label class="lb">電話番号</label><input type="text" id="dl-tel" placeholder="03-0000-0000"></div>
-        <div class="fm"><label class="lb">メールアドレス</label><input type="text" id="dl-email" placeholder="example@email.com"></div>
-        <div class="fm"><label class="lb">担当営業（ALL側）</label>
+        <div class="fm"><label class="lb">会社名</label><input type="text" id="dl-nm" placeholder="〇〇株式会社"></div>
+        <div class="fm"><label class="lb">何次店</label>
+          <select id="dl-level"><option value="1次">1次</option><option value="2次">2次</option><option value="3次">3次</option></select>
+        </div>
+        <div class="fm"><label class="lb">商流（系列）</label><input type="text" id="dl-keiretu" placeholder="リアン・UR・TR など"></div>
+        <div class="fm"><label class="lb">1次販売店</label><input type="text" id="dl-p1" list="dl-p1-list" placeholder="1次店名"><datalist id="dl-p1-list"></datalist></div>
+        <div class="fm"><label class="lb">2次販売店</label><input type="text" id="dl-p2" list="dl-p2-list" placeholder="2次店名（3次の場合）"><datalist id="dl-p2-list"></datalist></div>
+        <div class="fm"><label class="lb">窓口担当者名</label><input type="text" id="dl-person" placeholder="山田 太郎"></div>
+        <div class="fm"><label class="lb">ALL担当</label>
           <select id="dl-sales"><option value="">未設定</option><option>橋野 浩一</option><option>川﨑 慧</option><option>浦塚 弘樹</option><option>坂本 憲司</option><option>又吉 俊</option><option>千代島 奨磨</option></select>
         </div>
-        <div class="fm"><label class="lb">販売店種別</label>
-          <select id="dl-type"><option>TU</option><option>完クロ</option><option>両方</option></select>
+        <div class="fm"><label class="lb">活動ランク</label>
+          <select id="dl-rank"><option value="">未設定</option><option>A</option><option>B</option><option>C</option><option>D</option></select>
         </div>
-        <div class="fm"><label class="lb">得意業種</label><input type="text" id="dl-industry" placeholder="飲食・小売・美容など"></div>
-        <div class="fm"><label class="lb">エリア</label><input type="text" id="dl-area" placeholder="大阪・関西など"></div>
-        <div class="fm full"><label class="lb">メモ</label><textarea id="dl-memo" placeholder="特記事項など" style="min-height:56px;"></textarea></div>
+        <div class="fm"><label class="lb">スキーム</label>
+          <select id="dl-scheme"><option value="完全クロージング">完全クロージング</option><option value="トスアップ">トスアップ</option><option value="完クロ＋トスアップ">完クロ＋トスアップ</option></select>
+        </div>
+        <div class="fm"><label class="lb">都道府県</label><input type="text" id="dl-pref" placeholder="東京都"></div>
+        <div class="fm"><label class="lb">市区町村</label><input type="text" id="dl-city" placeholder="渋谷区"></div>
+        <div class="fm full"><label class="lb">メモ</label><textarea id="dl-memo" style="min-height:44px;"></textarea></div>
       </div>
       <div style="display:flex;gap:8px;"><button class="btn btn-p btn-sm" id="dealer-btn" onclick="submitDealer()">登録</button><button class="btn btn-g btn-sm" onclick="toggleAddDealer()">キャンセル</button></div>
     </div>
-    <!-- 一覧テーブル -->
-    <div style="overflow-x:auto;background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);" id="dealer-list">
-      <div class="ld" style="padding:16px;"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div><span>読み込み中...</span></div>
-    </div>
+    <!-- ツリービュー -->
+    <div id="dealer-tree-view"></div>
+    <!-- テーブルビュー -->
+    <div id="dealer-table-view" style="display:none;overflow-x:auto;background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);" id="dealer-list"></div>
   </div>
 </div>
-
-<!-- スケジュール -->
-<div class="page" id="page-schedule">
-  <div class="hd">
-    <div class="hd-t">📅 スケジュール</div>
-    <div class="hd-r" style="display:flex;gap:8px;align-items:center;">
-      <button class="btn btn-g btn-sm" onclick="prevMonth()">◀</button>
-      <span id="cal-label" style="font-size:15px;font-weight:700;min-width:110px;text-align:center;"></span>
-      <button class="btn btn-g btn-sm" onclick="nextMonth()">▶</button>
-      <button class="btn btn-g btn-sm" onclick="goToday()">今月</button>
-      <select id="cal-person-filter" onchange="loadSchedule()" style="font-size:13px;padding:6px 10px;width:auto;border-radius:6px;">
-        <option value="">全員</option>
-        <option>橋野 浩一</option><option>川﨑 慧</option><option>浦塚 弘樹</option>
-        <option>坂本 憲司</option><option>又吉 俊</option><option>千代島 奨磨</option>
-      </select>
-    </div>
-  </div>
-  <div class="ct" style="padding:14px 20px;">
-    <!-- 凡例 -->
-    <div style="display:flex;gap:16px;margin-bottom:12px;font-size:12px;">
-      <span><span style="display:inline-block;width:12px;height:12px;background:#3b6ef0;border-radius:3px;margin-right:4px;vertical-align:middle;"></span>エンド商談</span>
-      <span><span style="display:inline-block;width:12px;height:12px;background:#16a34a;border-radius:3px;margin-right:4px;vertical-align:middle;"></span>販売店開拓</span>
-    </div>
-    <!-- カレンダー -->
-    <div id="cal-grid" style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;">
-      <div class="ld" style="padding:20px;"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div><span>読み込み中...</span></div>
-    </div>
-    <!-- 今後の予定リスト -->
-    <div style="margin-top:16px;">
-      <div class="cd-t" style="margin-bottom:10px;">📋 今月の商談予定一覧</div>
-      <div id="cal-list"></div>
-    </div>
-  </div>
-</div>
-
 <!-- メンバー管理 -->
 <div class="page" id="page-members">
   <div class="hd">
@@ -2227,12 +2218,16 @@ function goToday(){
 // ============================================================
 //  販売店マスタ
 // ============================================================
-let dealerTypeFilter = "all";
+let dealerRankFilter="all", dealerSchemeFilter="all", dealerViewMode="tree";
 
 async function loadDealer(){
   dealerList = await apiGet({type:"dealer"});
+  // 1次・2次販売店のdatalistを更新
+  const p1list=document.getElementById("dl-p1-list");
+  const p2list=document.getElementById("dl-p2-list");
+  if(p1list) p1list.innerHTML=[...new Set(dealerList.filter(d=>d["何次店"]==="1次").map(d=>d["会社名"]))].map(n=>`<option value="${n}">`).join("");
+  if(p2list) p2list.innerHTML=[...new Set(dealerList.filter(d=>d["何次店"]==="2次").map(d=>d["会社名"]))].map(n=>`<option value="${n}">`).join("");
   applyDealerFilter();
-  // 案件登録の販売店プルダウンも更新
   updateDealerDropdown();
 }
 
@@ -2240,11 +2235,23 @@ function toggleAddDealer(){
   const el=document.getElementById("add-dealer-cd");
   el.style.display=el.style.display==="none"?"block":"none";
 }
-
-function setDealerTypeFilter(v){
-  dealerTypeFilter=v;
-  [["all","dt-all"],["TU","dt-tu"],["完クロ","dt-kanku"],["両方","dt-both"]].forEach(([s,id])=>{
-    const el=document.getElementById(id);if(el) el.classList.toggle("on",s===v);
+function setDealerView(mode){
+  dealerViewMode=mode;
+  document.getElementById("dealer-tree-view").style.display=mode==="tree"?"block":"none";
+  document.getElementById("dealer-table-view").style.display=mode==="table"?"block":"none";
+  applyDealerFilter();
+}
+function setDealerRankFilter(v){
+  dealerRankFilter=v;
+  [["all","dr-all"],["A","dr-a"],["B","dr-b"],["C","dr-c"]].forEach(([s,id])=>{
+    const el=document.getElementById(id);if(el)el.classList.toggle("on",s===v);
+  });
+  applyDealerFilter();
+}
+function setDealerSchemeFilter(v){
+  dealerSchemeFilter=v;
+  [["all","ds-all"],["完全クロージング","ds-ku"],["トスアップ","ds-tu"],["完クロ＋トスアップ","ds-both"]].forEach(([s,id])=>{
+    const el=document.getElementById(id);if(el)el.classList.toggle("on",s===v);
   });
   applyDealerFilter();
 }
@@ -2252,53 +2259,112 @@ function setDealerTypeFilter(v){
 function applyDealerFilter(){
   const q=(document.getElementById("dealer-search")?.value||"").trim().toLowerCase();
   let list=dealerList;
-  if(q) list=list.filter(d=>(d["販売店名"]||"").toLowerCase().includes(q)||(d["担当者"]||"").toLowerCase().includes(q)||(d["エリア"]||"").toLowerCase().includes(q));
-  if(dealerTypeFilter!=="all") list=list.filter(d=>d["種別"]===dealerTypeFilter);
-  renderDealerList(list);
-}
-
-function renderDealerList(list){
-  const typeColor={"TU":"var(--g)","完クロ":"var(--am)","両方":"var(--ac)"};
+  if(q) list=list.filter(d=>(d["会社名"]||"").toLowerCase().includes(q)||(d["窓口担当者名"]||"").toLowerCase().includes(q)||(d["ALL担当"]||"").toLowerCase().includes(q));
+  if(dealerRankFilter!=="all") list=list.filter(d=>d["活動ランク"]===dealerRankFilter);
+  if(dealerSchemeFilter!=="all") list=list.filter(d=>d["スキーム"]===dealerSchemeFilter);
   const countEl=document.getElementById("dealer-count");
   if(countEl) countEl.textContent=`${list.length}件 表示中`;
+  if(dealerViewMode==="tree") renderDealerTree(list);
+  else renderDealerTable(list);
+}
 
-  if(list.length===0){
-    document.getElementById("dealer-list").innerHTML=`<div style="padding:20px;font-size:12px;color:var(--tx3);text-align:center;">販売店が登録されていません</div>`;
-    return;
-  }
+function renderDealerTree(list){
+  const el=document.getElementById("dealer-tree-view");
+  if(!el) return;
+  const rankColor={"A":"var(--g)","B":"var(--am)","C":"var(--tx3)","D":"var(--rd)"};
+  const schemeColor={"完全クロージング":"var(--am)","トスアップ":"var(--ac)","完クロ＋トスアップ":"var(--pu)"};
+  const schemeShort={"完全クロージング":"完クロ","トスアップ":"TU","完クロ＋トスアップ":"完クロ+TU"};
+
+  // 商流ごとにグループ化
+  const keiretus=[...new Set(list.map(d=>d["商流"]||"（直販・その他）"))].sort();
+
+  el.innerHTML=keiretus.map(k=>{
+    const kList=list.filter(d=>(d["商流"]||"（直販・その他）")===k);
+    const first1=kList.filter(d=>d["何次店"]==="1次");
+    const keiretu1=first1.length>0?first1[0]["1次販売店"]||k:k;
+
+    const renderDealer=(d,indent)=>{
+      const rank=d["活動ランク"]||"";
+      const scheme=d["スキーム"]||"";
+      const loc=(d["都道府県"]||"")+(d["市区町村"]||"");
+      return `<div style="padding:8px 12px 8px ${12+indent*20}px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px;background:${indent===0?"var(--sf2)":indent===1?"var(--sf)":"rgba(248,250,255,.5)"};">
+        <span style="font-size:10px;color:var(--tx3);min-width:28px;">${d["何次店"]||""}</span>
+        <span style="font-size:13px;font-weight:${indent===0?"700":"500"};flex:1;">${d["会社名"]||""}</span>
+        ${rank?`<span style="font-size:11px;font-weight:700;color:${rankColor[rank]||"var(--tx3)"};min-width:16px;">${rank}</span>`:""}
+        ${scheme?`<span style="font-size:10px;padding:2px 6px;border-radius:3px;background:rgba(0,0,0,.06);color:${schemeColor[scheme]||"var(--tx2)"};">${schemeShort[scheme]||scheme}</span>`:""}
+        <span style="font-size:11px;color:var(--tx3);">${d["ALL担当"]||""}</span>
+        ${loc?`<span style="font-size:11px;color:var(--tx3);">${loc}</span>`:""}
+        <button class="btn btn-g btn-sm" style="font-size:11px;padding:3px 8px;" onclick="editDealer('${d["id"]}')">編集</button>
+      </div>`;
+    };
+
+    // ツリー構築：1次→その配下2次→その配下3次
+    const lv1s=[...new Set(kList.filter(d=>d["何次店"]==="1次").map(d=>d["会社名"]))];
+    let treeHtml="";
+    lv1s.forEach(lv1nm=>{
+      const lv1d=kList.find(d=>d["会社名"]===lv1nm&&d["何次店"]==="1次");
+      if(lv1d) treeHtml+=renderDealer(lv1d,0);
+      // 2次
+      const lv2s=kList.filter(d=>d["何次店"]==="2次"&&d["1次販売店"]===lv1nm);
+      lv2s.forEach(lv2d=>{
+        treeHtml+=renderDealer(lv2d,1);
+        // 3次
+        const lv3s=kList.filter(d=>d["何次店"]==="3次"&&d["2次販売店"]===lv2d["会社名"]);
+        lv3s.forEach(lv3d=>{ treeHtml+=renderDealer(lv3d,2); });
+      });
+    });
+    // フィルターで1次が除外されて孤立した2次・3次も表示
+    const orphan2=kList.filter(d=>d["何次店"]==="2次"&&!lv1s.includes(d["1次販売店"]));
+    orphan2.forEach(d=>{ treeHtml+=renderDealer(d,1); });
+
+    return `<div class="cd" style="padding:0;margin-bottom:12px;overflow:hidden;">
+      <div style="padding:10px 14px;background:var(--ac);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px;">
+        <span>🏢 ${k}</span>
+        <span style="font-size:11px;opacity:.8;">${kList.length}社</span>
+      </div>
+      ${treeHtml}
+    </div>`;
+  }).join("") || `<div style="padding:20px;font-size:13px;color:var(--tx3);">条件に一致する販売店がありません</div>`;
+}
+
+function renderDealerTable(list){
+  const el=document.getElementById("dealer-table-view");
+  if(!el) return;
+  const rankColor={"A":"var(--g)","B":"var(--am)","C":"var(--tx3)","D":"var(--rd)"};
+  if(list.length===0){ el.innerHTML=`<div style="padding:20px;font-size:13px;color:var(--tx3);">条件に一致する販売店がありません</div>`; return; }
   const rows=list.map(d=>`<tr>
-    <td style="font-weight:500;white-space:nowrap;">${d["販売店名"]||""}</td>
-    <td style="white-space:nowrap;font-size:11px;">${d["担当者"]||"—"}</td>
-    <td style="white-space:nowrap;font-size:11px;">${d["電話"]||"—"}</td>
-    <td style="white-space:nowrap;font-size:11px;">${d["メール"]||"—"}</td>
-    <td style="white-space:nowrap;"><span class="bx" style="background:rgba(${d["種別"]==="TU"?"52,211,153":d["種別"]==="完クロ"?"245,158,11":"79,125,247"},.15);color:${typeColor[d["種別"]]||"var(--tx2)"};">${d["種別"]||"—"}</span></td>
-    <td style="white-space:nowrap;font-size:11px;">${d["担当営業"]||"—"}</td>
-    <td style="white-space:nowrap;font-size:11px;">${d["得意業種"]||"—"}</td>
-    <td style="white-space:nowrap;font-size:11px;">${d["エリア"]||"—"}</td>
-    <td style="font-size:11px;color:var(--tx2);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${d["メモ"]||"—"}</td>
-    <td style="white-space:nowrap;">
-      <button class="btn btn-g btn-sm" onclick="editDealer('${d["id"]}')">編集</button>
-    </td>
+    <td style="font-weight:600;font-size:13px;white-space:nowrap;padding:9px 12px;border-bottom:1px solid var(--bd);">${d["会社名"]||""}</td>
+    <td style="font-size:12px;padding:9px 12px;border-bottom:1px solid var(--bd);"><span style="background:var(--sf2);padding:2px 7px;border-radius:4px;font-size:11px;">${d["何次店"]||""}</span></td>
+    <td style="font-size:12px;padding:9px 12px;border-bottom:1px solid var(--bd);white-space:nowrap;">${d["商流"]||"—"}</td>
+    <td style="font-size:11px;padding:9px 12px;border-bottom:1px solid var(--bd);white-space:nowrap;">${d["1次販売店"]||"—"}</td>
+    <td style="font-size:11px;padding:9px 12px;border-bottom:1px solid var(--bd);white-space:nowrap;">${d["2次販売店"]||"—"}</td>
+    <td style="font-size:12px;padding:9px 12px;border-bottom:1px solid var(--bd);white-space:nowrap;">${d["窓口担当者名"]||"—"}</td>
+    <td style="font-size:12px;padding:9px 12px;border-bottom:1px solid var(--bd);white-space:nowrap;">${d["ALL担当"]||"—"}</td>
+    <td style="padding:9px 12px;border-bottom:1px solid var(--bd);"><span style="font-weight:700;color:${rankColor[d["活動ランク"]]||"var(--tx3)"};">${d["活動ランク"]||"—"}</span></td>
+    <td style="font-size:11px;padding:9px 12px;border-bottom:1px solid var(--bd);white-space:nowrap;">${d["スキーム"]||"—"}</td>
+    <td style="font-size:11px;padding:9px 12px;border-bottom:1px solid var(--bd);white-space:nowrap;">${(d["都道府県"]||"")+(d["市区町村"]||"")}</td>
+    <td style="padding:9px 12px;border-bottom:1px solid var(--bd);"><button class="btn btn-g btn-sm" style="font-size:11px;" onclick="editDealer('${d["id"]}')">編集</button></td>
   </tr>`).join("");
-  document.getElementById("dealer-list").innerHTML=`<table style="width:100%;border-collapse:collapse;min-width:900px;">
-    <thead><tr style="background:var(--sf);">
-      ${["販売店名","担当者","電話","メール","種別","担当営業(ALL)","得意業種","エリア","メモ",""].map(h=>`<th style="text-align:left;font-size:10px;font-weight:700;color:var(--tx3);padding:8px 12px;border-bottom:1px solid var(--bd);white-space:nowrap;">${h}</th>`).join("")}
-    </tr></thead>
-    <tbody style="font-size:12px;">${rows}</tbody>
+  el.innerHTML=`<table style="width:100%;border-collapse:collapse;min-width:1000px;">
+    <thead><tr style="background:var(--sf2);">${["会社名","何次店","商流","1次販売店","2次販売店","窓口担当","ALL担当","ランク","スキーム","エリア",""].map(h=>`<th style="text-align:left;font-size:11px;font-weight:700;color:var(--tx3);padding:9px 12px;border-bottom:1px solid var(--bd);white-space:nowrap;">${h}</th>`).join("")}</tr></thead>
+    <tbody>${rows}</tbody>
   </table>`;
 }
 
 async function submitDealer(){
   const btn=document.getElementById("dealer-btn");btn.textContent="登録中...";btn.disabled=true;
   const payload={
-    販売店名:document.getElementById("dl-nm").value,
-    担当者:document.getElementById("dl-person").value,
-    電話:document.getElementById("dl-tel").value,
-    メール:document.getElementById("dl-email").value,
-    担当営業:document.getElementById("dl-sales").value,
-    種別:document.getElementById("dl-type").value,
-    得意業種:document.getElementById("dl-industry").value,
-    エリア:document.getElementById("dl-area").value,
+    会社名:document.getElementById("dl-nm").value,
+    何次店:document.getElementById("dl-level").value,
+    商流:document.getElementById("dl-keiretu").value,
+    "1次販売店":document.getElementById("dl-p1").value,
+    "2次販売店":document.getElementById("dl-p2").value,
+    窓口担当者名:document.getElementById("dl-person").value,
+    ALL担当:document.getElementById("dl-sales").value,
+    活動ランク:document.getElementById("dl-rank").value,
+    スキーム:document.getElementById("dl-scheme").value,
+    都道府県:document.getElementById("dl-pref").value,
+    市区町村:document.getElementById("dl-city").value,
     メモ:document.getElementById("dl-memo").value,
     登録日:todayJST(),
   };
@@ -2306,7 +2372,7 @@ async function submitDealer(){
   btn.textContent="登録";btn.disabled=false;
   if(res.ok){
     toggleAddDealer();
-    ["dl-nm","dl-person","dl-tel","dl-email","dl-industry","dl-area","dl-memo"].forEach(id=>document.getElementById(id).value="");
+    ["dl-nm","dl-keiretu","dl-p1","dl-p2","dl-person","dl-pref","dl-city","dl-memo"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
     toast("販売店を登録しました");
     dealerList=await apiGet({type:"dealer"});
     applyDealerFilter();
@@ -2317,23 +2383,24 @@ async function submitDealer(){
 function editDealer(id){
   const d=dealerList.find(x=>String(x["id"])===String(id));
   if(!d) return;
-  // フォームに値をセット
-  document.getElementById("dl-nm").value=d["販売店名"]||"";
-  document.getElementById("dl-person").value=d["担当者"]||"";
-  document.getElementById("dl-tel").value=d["電話"]||"";
-  document.getElementById("dl-email").value=d["メール"]||"";
-  document.getElementById("dl-sales").value=d["担当営業"]||"";
-  document.getElementById("dl-type").value=d["種別"]||"TU";
-  document.getElementById("dl-industry").value=d["得意業種"]||"";
-  document.getElementById("dl-area").value=d["エリア"]||"";
+  document.getElementById("dl-nm").value=d["会社名"]||"";
+  document.getElementById("dl-level").value=d["何次店"]||"1次";
+  document.getElementById("dl-keiretu").value=d["商流"]||"";
+  document.getElementById("dl-p1").value=d["1次販売店"]||"";
+  document.getElementById("dl-p2").value=d["2次販売店"]||"";
+  document.getElementById("dl-person").value=d["窓口担当者名"]||"";
+  document.getElementById("dl-sales").value=d["ALL担当"]||"";
+  document.getElementById("dl-rank").value=d["活動ランク"]||"";
+  document.getElementById("dl-scheme").value=d["スキーム"]||"完全クロージング";
+  document.getElementById("dl-pref").value=d["都道府県"]||"";
+  document.getElementById("dl-city").value=d["市区町村"]||"";
   document.getElementById("dl-memo").value=d["メモ"]||"";
   document.getElementById("add-dealer-cd").style.display="block";
-  // 登録ボタンを更新に変更
   const btn=document.getElementById("dealer-btn");
   btn.textContent="更新";
   btn.onclick=async()=>{
     btn.textContent="更新中...";btn.disabled=true;
-    const payload={id,販売店名:document.getElementById("dl-nm").value,担当者:document.getElementById("dl-person").value,電話:document.getElementById("dl-tel").value,メール:document.getElementById("dl-email").value,担当営業:document.getElementById("dl-sales").value,種別:document.getElementById("dl-type").value,得意業種:document.getElementById("dl-industry").value,エリア:document.getElementById("dl-area").value,メモ:document.getElementById("dl-memo").value};
+    const payload={id,会社名:document.getElementById("dl-nm").value,何次店:document.getElementById("dl-level").value,商流:document.getElementById("dl-keiretu").value,"1次販売店":document.getElementById("dl-p1").value,"2次販売店":document.getElementById("dl-p2").value,窓口担当者名:document.getElementById("dl-person").value,ALL担当:document.getElementById("dl-sales").value,活動ランク:document.getElementById("dl-rank").value,スキーム:document.getElementById("dl-scheme").value,都道府県:document.getElementById("dl-pref").value,市区町村:document.getElementById("dl-city").value,メモ:document.getElementById("dl-memo").value};
     await apiPost({type:"dealer",action:"update",payload});
     btn.textContent="登録";btn.disabled=false;btn.onclick=submitDealer;
     toggleAddDealer();
@@ -2345,25 +2412,63 @@ function editDealer(id){
   document.getElementById("add-dealer-cd").scrollIntoView({behavior:"smooth"});
 }
 
-// 案件登録の販売店プルダウンをマスタから更新
+// 既存CSVからの一括インポート
+async function importDealerCSV(){
+  const fileEl=document.getElementById("dealer-csv-file");
+  const statusEl=document.getElementById("dealer-import-status");
+  if(!fileEl.files.length){statusEl.textContent="CSVファイルを選択してください";return;}
+  statusEl.textContent="読み込み中...";statusEl.style.color="var(--am)";
+  const text=await fileEl.files[0].text();
+  const enc=text.charCodeAt(0)===0xFEFF?text.slice(1):text; // BOM除去
+  const lines=enc.trim().split("\n").map(l=>l.replace(/\n/,""));
+  const headers=lines[0].split(",").map(h=>h.trim().replace(/"/g,""));
+  const rows=lines.slice(1).filter(l=>l.trim()).map(line=>{
+    const vals=parseCSV(line+"").rows[0]||{};
+    // 列名マッピング（元CSVの列名→マスタの列名）
+    const today=todayJST();
+    return {
+      会社名:vals["会社名"]||"",
+      何次店:(vals["何次　販売店"]||vals["何次店"]||"").trim(),
+      商流:vals["商流"]||"",
+      "1次販売店":vals["1次販売店"]||"",
+      "2次販売店":vals["2次販売店"]||"",
+      窓口担当者名:vals["窓口担当者名"]||"",
+      都道府県:vals["都道府県"]||"",
+      市区町村:vals["市区町村"]||"",
+      ALL担当:vals["ALL担当"]||"",
+      活動ランク:(vals["活動　ランク"]||vals["活動ランク"]||"").trim(),
+      スキーム:vals["スキーム"]||"",
+      電話:vals["電話"]||"",
+      メール:vals["メール"]||"",
+      メモ:"",
+      登録日:today,
+    };
+  }).filter(r=>r["会社名"]);
+  statusEl.textContent=`${rows.length}件 登録中...`;
+  // 50件ずつバッチ送信
+  let done=0;
+  for(let i=0;i<rows.length;i+=50){
+    const batch=rows.slice(i,i+50);
+    await apiPost({type:"dealer",action:"bulkCreate",payload:{rows:batch}});
+    done+=batch.length;
+    statusEl.textContent=`${done}/${rows.length}件 登録中...`;
+  }
+  statusEl.textContent=`✅ ${rows.length}件 登録完了`;
+  statusEl.style.color="var(--g)";
+  toast(`販売店マスタに${rows.length}件登録しました`);
+  dealerList=await apiGet({type:"dealer"});
+  applyDealerFilter();
+  updateDealerDropdown();
+}
+
 function updateDealerDropdown(){
   const sel=document.getElementById("nd-pt-select");
   if(!sel) return;
   const current=sel.value;
-  sel.innerHTML=`<option value="">— 選択 —</option>`+dealerList.map(d=>`<option value="${d["販売店名"]}" ${d["販売店名"]===current?"selected":""}>${d["販売店名"]}（${d["種別"]||""}）</option>`).join("")+`<option value="manual">手入力...</option>`;
+  sel.innerHTML=`<option value="">— 選択 —</option>`+
+    dealerList.map(d=>`<option value="${d["会社名"]}" ${d["会社名"]===current?"selected":""}>${d["会社名"]}（${d["何次店"]||""}・${d["活動ランク"]||""}）</option>`).join("")+
+    `<option value="manual">手入力...</option>`;
 }
-
-function onDealerSelectChange(val){
-  const input=document.getElementById("nd-pt");
-  if(val==="manual"){
-    input.style.display="block";
-    input.focus();
-  } else {
-    input.style.display="none";
-    input.value=val;
-  }
-}
-
 // ============================================================
 //  メンバー管理
 // ============================================================
