@@ -336,6 +336,18 @@ select option{background:var(--sf);}
       <div class="cd"><div class="cd-t">販売店別 TU受領（今月）</div><div id="exec-partner-rank"></div></div>
     </div>
     <div class="cd"><div class="cd-t">今後4ヶ月 入金見通し</div><div id="exec-cfbar"></div></div>
+
+    <!-- 本日のトピック -->
+    <div class="sec">💬 本日のトピック</div>
+    <div class="cd" id="exec-topics">
+      <div class="ld"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div><span>読み込み中...</span></div>
+    </div>
+
+    <!-- 整合性チェック -->
+    <div class="sec">⚠️ 日報 vs 案件管理 整合性チェック</div>
+    <div class="cd" style="padding:0;" id="exec-consistency">
+      <div class="ld" style="padding:16px;"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div><span>チェック中...</span></div>
+    </div>
   </div>
 </div>
 
@@ -1024,6 +1036,96 @@ async function loadExec(){
   const maxPV=Math.max(...ptArr.map(p=>p[1]),1);
   document.getElementById("exec-partner-rank").innerHTML=ptArr.length===0?`<div style="font-size:11px;color:var(--tx3);padding:8px 0;">今月のデータなし</div>`:ptArr.map(([nm,v])=>`<div class="fn-row"><span class="fn-l" style="width:100px;font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${nm}</span><div class="fn-b"><div class="fn-f" style="width:${Math.round(v/maxPV*100)}%;background:rgba(52,211,153,.3);color:var(--g);">${v}件</div></div><span class="fn-c" style="color:var(--g);">${v}</span></div>`).join("");
   renderCfBars("exec-cfbar",payments);
+
+  // 本日のトピック
+  const topicsEl = document.getElementById("exec-topics");
+  if(topicsEl){
+    const topicHtml = MEMBERS.map((nm,i) => {
+      const pr = todayR.filter(r=>r["担当者"]===nm);
+      const topic = pr.map(r=>r["トピック"]).filter(Boolean).join(" / ");
+      return `<div style="display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--bd);">
+        <div class="av" style="background:${MEMBER_COLORS[i]};width:32px;height:32px;font-size:13px;flex-shrink:0;">${nm[0]}</div>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:600;margin-bottom:3px;">${nm}</div>
+          ${topic
+            ? `<div style="font-size:13px;color:var(--tx2);line-height:1.6;">${topic}</div>`
+            : `<div style="font-size:12px;color:var(--tx3);">未入力</div>`
+          }
+        </div>
+      </div>`;
+    }).join("");
+    topicsEl.innerHTML = topicHtml;
+  }
+
+  // 整合性チェック
+  renderConsistencyCheck(todayR, deals_exec, today);
+}
+
+function renderConsistencyCheck(todayR, deals, today){
+  const el = document.getElementById("exec-consistency");
+  if(!el) return;
+
+  const rows = MEMBERS.map((nm,i) => {
+    const pr = todayR.filter(r=>r["担当者"]===nm);
+    // 日報の商談数（直販訪問＋TU受領）
+    const reportNego = pr.reduce((s,r)=>s+num(r,"直販訪問")+num(r,"TU受領"),0);
+    const reported = pr.length > 0;
+
+    // 案件管理の当日登録・更新件数（登録日 or 更新日が今日）
+    const dealCount = deals.filter(d=>{
+      if(d["担当者"]!==nm) return false;
+      const regDate = String(d["登録日"]||"").slice(0,10);
+      const updDate = String(d["更新日時"]||"").slice(0,10);
+      return regDate===today || updDate===today;
+    }).length;
+
+    const diff = reportNego - dealCount;
+    const ok = reportNego === 0 || Math.abs(diff) <= 1; // ±1まで許容
+    const status = !reported
+      ? {icon:"⚪", label:"未入力", color:"var(--tx3)", bg:"var(--sf2)"}
+      : reportNego === 0
+      ? {icon:"—", label:"商談なし", color:"var(--tx3)", bg:"var(--sf2)"}
+      : ok
+      ? {icon:"✅", label:"一致", color:"var(--g)", bg:"rgba(22,163,74,.06)"}
+      : diff > 0
+      ? {icon:"⚠️", label:`日報${reportNego}件 > 案件${dealCount}件 (${diff}件漏れの可能性)`, color:"var(--am)", bg:"rgba(217,119,6,.06)"}
+      : {icon:"⚠️", label:`日報${reportNego}件 < 案件${dealCount}件 (日報入力ミスの可能性)`, color:"var(--rd)", bg:"rgba(220,38,38,.06)"};
+
+    return `<div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--bd);background:${status.bg};">
+      <div class="av" style="background:${MEMBER_COLORS[i]};width:32px;height:32px;font-size:13px;flex-shrink:0;">${nm[0]}</div>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:600;">${nm}</div>
+        <div style="font-size:12px;color:var(--tx3);margin-top:2px;">
+          日報：商談${reportNego}件　｜　案件管理：本日更新${dealCount}件
+        </div>
+      </div>
+      <div style="font-size:13px;font-weight:700;color:${status.color};text-align:right;white-space:nowrap;">
+        ${status.icon} ${status.label}
+      </div>
+    </div>`;
+  }).join("");
+
+  // サマリー
+  const issues = MEMBERS.filter((nm,i)=>{
+    const pr = todayR.filter(r=>r["担当者"]===nm);
+    if(pr.length===0) return false;
+    const reportNego = pr.reduce((s,r)=>s+num(r,"直販訪問")+num(r,"TU受領"),0);
+    if(reportNego===0) return false;
+    const dealCount = deals.filter(d=>d["担当者"]===nm&&(String(d["登録日"]||"").slice(0,10)===today||String(d["更新日時"]||"").slice(0,10)===today)).length;
+    return Math.abs(reportNego - dealCount) > 1;
+  });
+
+  const summaryColor = issues.length===0 ? "var(--g)" : "var(--am)";
+  const summaryText = issues.length===0
+    ? "✅ 全員の日報と案件管理が一致しています"
+    : `⚠️ ${issues.join("・")} の日報と案件管理にズレがあります`;
+
+  el.innerHTML = `<div style="padding:10px 16px;background:${issues.length===0?"rgba(22,163,74,.08)":"rgba(217,119,6,.08)"};border-bottom:1px solid var(--bd);">
+    <span style="font-size:13px;font-weight:700;color:${summaryColor};">${summaryText}</span>
+  </div>${rows}
+  <div style="padding:10px 16px;font-size:11px;color:var(--tx3);">
+    ※ 日報の直販訪問＋TU受領と、案件管理の本日登録・更新件数を比較しています。±1件は誤差として許容。
+  </div>`;
 }
 
 // CASHFLOW
