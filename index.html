@@ -810,6 +810,37 @@ select option{background:var(--sf);}
     <div id="dealer-table-view" style="display:none;overflow-x:auto;background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);" id="dealer-list"></div>
   </div>
 </div>
+<!-- スケジュール -->
+<div class="page" id="page-schedule">
+  <div class="hd">
+    <div class="hd-t">📅 スケジュール</div>
+    <div class="hd-r" style="display:flex;gap:8px;align-items:center;">
+      <button class="btn btn-g btn-sm" onclick="prevMonth()">◀</button>
+      <span id="cal-label" style="font-size:15px;font-weight:700;min-width:110px;text-align:center;"></span>
+      <button class="btn btn-g btn-sm" onclick="nextMonth()">▶</button>
+      <button class="btn btn-g btn-sm" onclick="goToday()">今月</button>
+      <select id="cal-person-filter" onchange="loadSchedule()" style="font-size:13px;padding:6px 10px;width:auto;border-radius:6px;">
+        <option value="">全員</option>
+        <option>橋野 浩一</option><option>川﨑 慧</option><option>浦塚 弘樹</option>
+        <option>坂本 憲司</option><option>又吉 俊</option><option>千代島 奨磨</option>
+      </select>
+    </div>
+  </div>
+  <div class="ct" style="padding:14px 20px;">
+    <div style="display:flex;gap:16px;margin-bottom:12px;font-size:12px;">
+      <span><span style="display:inline-block;width:12px;height:12px;background:#3b6ef0;border-radius:3px;margin-right:4px;vertical-align:middle;"></span>エンド商談</span>
+      <span><span style="display:inline-block;width:12px;height:12px;background:#16a34a;border-radius:3px;margin-right:4px;vertical-align:middle;"></span>販売店開拓</span>
+    </div>
+    <div id="cal-grid" style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;">
+      <div class="ld" style="padding:20px;"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div><span>読み込み中...</span></div>
+    </div>
+    <div style="margin-top:16px;">
+      <div class="cd-t" style="margin-bottom:10px;">📋 今月の商談予定一覧</div>
+      <div id="cal-list"></div>
+    </div>
+  </div>
+</div>
+
 <!-- メンバー管理 -->
 <div class="page" id="page-members">
   <div class="hd">
