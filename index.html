@@ -280,7 +280,36 @@ select option{background:var(--sf);}
 </style>
 </head>
 <body>
-<div class="app">
+<!-- ログイン画面 -->
+<div id="login-screen" style="position:fixed;inset:0;background:#f4f6fb;display:flex;align-items:center;justify-content:center;z-index:9999;">
+  <div style="background:#fff;border-radius:16px;padding:36px 32px;width:340px;box-shadow:0 8px 32px rgba(59,110,240,.12);border:1px solid #e2e8f0;">
+    <div style="text-align:center;margin-bottom:28px;">
+      <div style="font-size:22px;font-weight:800;color:#3b6ef0;letter-spacing:.04em;">SALES HUB</div>
+      <div style="font-size:12px;color:#94a3b8;margin-top:4px;">株式会社ALL</div>
+    </div>
+    <div style="margin-bottom:16px;">
+      <label style="font-size:12px;font-weight:700;color:#475569;display:block;margin-bottom:6px;">ユーザーを選択</label>
+      <select id="login-user" onchange="onLoginUserChange(this.value)" style="width:100%;font-size:14px;padding:10px 12px;border-radius:8px;border:1px solid #d4d8e8;background:#f8fafc;">
+        <option value="">-- 選択してください --</option>
+        <option value="橋野 浩一">橋野 浩一</option>
+        <option value="川﨑 慧">川﨑 慧</option>
+        <option value="浦塚 弘樹">浦塚 弘樹</option>
+        <option value="坂本 憲司">坂本 憲司</option>
+        <option value="又吉 俊">又吉 俊</option>
+        <option value="千代島 奨磨">千代島 奨磨</option>
+        <option value="admin">管理者</option>
+      </select>
+    </div>
+    <div id="admin-pw-area" style="display:none;margin-bottom:16px;">
+      <label style="font-size:12px;font-weight:700;color:#475569;display:block;margin-bottom:6px;">管理者パスワード</label>
+      <input type="password" id="admin-pw" placeholder="パスワードを入力" style="width:100%;font-size:14px;padding:10px 12px;border-radius:8px;border:1px solid #d4d8e8;background:#f8fafc;box-sizing:border-box;" onkeydown="if(event.key==='Enter')doLogin()">
+      <div id="pw-error" style="font-size:11px;color:#dc2626;margin-top:4px;display:none;">パスワードが違います</div>
+    </div>
+    <button onclick="doLogin()" style="width:100%;padding:12px;background:#3b6ef0;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;" >ログイン</button>
+  </div>
+</div>
+
+<div class="app" id="app" style="display:none;">
 
 <aside class="sb">
   <div class="logo">
@@ -301,10 +330,10 @@ select option{background:var(--sf);}
     </div>
     <div class="ns">サポート部</div>
     <div class="ni" onclick="go('partner',this,'m4')"><span class="ni-ic">🏪</span>完クロ案件管理</div>
-    <div class="ns">データ管理</div>
-    <div class="ni" onclick="go('members',this,'mx')"><span class="ni-ic">👥</span>メンバー管理</div>
-    <div class="ni" onclick="go('dealer',this,'mx3')"><span class="ni-ic">🏢</span>販売店マスタ</div>
-    <div class="ni" onclick="go('import',this,'mx2')"><span class="ni-ic">📥</span>CSVインポート</div>
+    <div class="ns admin-only" id="nav-data-section">データ管理</div>
+    <div class="ni admin-only" onclick="go('members',this,'mx')"><span class="ni-ic">👥</span>メンバー管理</div>
+    <div class="ni admin-only" onclick="go('dealer',this,'mx3')"><span class="ni-ic">🏢</span>販売店マスタ</div>
+    <div class="ni admin-only" onclick="go('import',this,'mx2')"><span class="ni-ic">📥</span>CSVインポート</div>
     <div class="ns">スケジュール</div>
     <div class="ni" onclick="go('schedule',this,'ms')"><span class="ni-ic">📅</span>スケジュール</div>
     <div class="ns">レポート</div>
@@ -312,7 +341,7 @@ select option{background:var(--sf);}
     <div class="ni" onclick="go('monthly',this,'m6')"><span class="ni-ic">📅</span>月次レポート</div>
   </nav>
   <div class="sb-ft">
-    <div class="u-row"><div class="av" id="sb-av">?</div><div class="u-nm" id="sb-nm">未選択</div></div>
+    <div class="u-row" onclick="showLogout()" style="cursor:pointer;" title="クリックでログアウト"><div class="av" id="sb-av" style="background:#3b6ef0;">?</div><div><div class="u-nm" id="sb-nm">未選択</div><div style="font-size:10px;color:var(--tx3);" id="sb-role">—</div></div></div>
     <div id="conn-status" style="margin-top:8px;"><div class="conn-dot wait" id="cdot"></div><span id="ctxt">接続確認中...</span></div>
   </div>
 </aside>
@@ -3617,6 +3646,99 @@ function fmtDate(str){
 }
 function toast(msg){const t=document.getElementById("toast");t.textContent="✅ "+msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2500);}
 
+// ============================================================
+//  認証・ログイン
+// ============================================================
+const ADMIN_PW = "all4545";
+const MEMBER_COLORS_MAP = {"橋野 浩一":"#4f7df7","川﨑 慧":"#34d399","浦塚 弘樹":"#f59e0b","坂本 憲司":"#a78bfa","又吉 俊":"#f87171","千代島 奨磨":"#38bdf8"};
+let currentUser = "";
+let isAdmin = false;
+
+function onLoginUserChange(val){
+  const pwArea = document.getElementById("admin-pw-area");
+  const pwErr  = document.getElementById("pw-error");
+  if(pwArea) pwArea.style.display = val==="admin" ? "block" : "none";
+  if(pwErr)  pwErr.style.display  = "none";
+}
+
+function doLogin(){
+  const userSel = document.getElementById("login-user");
+  const user = userSel?.value||"";
+  if(!user){ alert("ユーザーを選択してください"); return; }
+  if(user === "admin"){
+    const pw = document.getElementById("admin-pw")?.value||"";
+    if(pw !== ADMIN_PW){
+      const err = document.getElementById("pw-error");
+      if(err) err.style.display="block";
+      return;
+    }
+    currentUser = "管理者";
+    isAdmin = true;
+  } else {
+    currentUser = user;
+    isAdmin = false;
+  }
+  // セッションストレージに保存
+  sessionStorage.setItem("salesHubUser", currentUser);
+  sessionStorage.setItem("salesHubAdmin", isAdmin?"1":"0");
+  applyLogin();
+}
+
+function applyLogin(){
+  // ログイン画面を隠してアプリを表示
+  const loginScreen = document.getElementById("login-screen");
+  const app = document.getElementById("app");
+  if(loginScreen) loginScreen.style.display="none";
+  if(app) app.style.display="flex";
+
+  // サイドバーのユーザー情報を更新
+  const avEl = document.getElementById("sb-av");
+  const nmEl = document.getElementById("sb-nm");
+  const roleEl = document.getElementById("sb-role");
+  if(avEl){
+    avEl.textContent = currentUser[0]||"?";
+    avEl.style.background = isAdmin?"#dc2626":(MEMBER_COLORS_MAP[currentUser]||"#3b6ef0");
+  }
+  if(nmEl) nmEl.textContent = currentUser;
+  if(roleEl) roleEl.textContent = isAdmin?"👑 管理者":"営業メンバー";
+
+  // 管理者メニューの表示制御
+  document.querySelectorAll(".admin-only").forEach(el=>{
+    el.style.display = isAdmin ? "" : "none";
+  });
+
+  // 日報の担当者をデフォルトセット
+  if(!isAdmin){
+    const repPs = document.getElementById("rep-ps");
+    if(repPs) repPs.value = currentUser;
+    // 案件登録フォームの担当者もセット
+    const ndPs = document.getElementById("nd-ps");
+    if(ndPs) ndPs.value = currentUser;
+  }
+}
+
+function showLogout(){
+  if(confirm(`${currentUser} としてログイン中です。
+ログアウトしますか？`)){
+    sessionStorage.removeItem("salesHubUser");
+    sessionStorage.removeItem("salesHubAdmin");
+    currentUser=""; isAdmin=false;
+    location.reload();
+  }
+}
+
+function checkSession(){
+  const savedUser  = sessionStorage.getItem("salesHubUser");
+  const savedAdmin = sessionStorage.getItem("salesHubAdmin");
+  if(savedUser){
+    currentUser = savedUser;
+    isAdmin = savedAdmin==="1";
+    applyLogin();
+    return true;
+  }
+  return false;
+}
+
 // INIT
 const now=new Date();
 document.getElementById("today-lbl").textContent=now.toLocaleDateString("ja-JP",{month:"long",day:"numeric"});
@@ -3625,6 +3747,14 @@ document.getElementById("r-date").value=todayJST();
 document.getElementById("py-date").value=todayJST();
 document.getElementById("hist-date").value=todayJST();
 updateSubFrame();
+// セッション確認（リロード時に再ログイン不要）
+if(!checkSession()){
+  // セッションなし → ログイン画面を表示
+  const loginScreen = document.getElementById("login-screen");
+  const app = document.getElementById("app");
+  if(loginScreen) loginScreen.style.display="flex";
+  if(app) app.style.display="none";
+}
 checkConn();
 loadExec();
 </script>
