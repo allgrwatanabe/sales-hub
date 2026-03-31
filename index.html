@@ -684,8 +684,23 @@ select option{background:var(--sf);}
 
 <!-- 週次レポート -->
 <div class="page" id="page-weekly">
-  <div class="hd"><div class="hd-t">📋 週次レポート</div><div class="hd-r"><span class="bx bx-b" id="weekly-lbl"></span><button class="btn btn-g btn-sm" onclick="loadWeekly()">↻ 更新</button></div></div>
+  <div class="hd">
+    <div class="hd-t">📋 週次レポート</div>
+    <div class="hd-r" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+      <span class="bx bx-b" id="weekly-lbl"></span>
+      <select id="weekly-person" onchange="loadWeekly()" style="font-size:13px;padding:6px 10px;width:auto;border-radius:6px;">
+        <option value="">👥 全員</option>
+        <option>橋野 浩一</option><option>川﨑 慧</option><option>浦塚 弘樹</option>
+        <option>坂本 憲司</option><option>又吉 俊</option><option>千代島 奨磨</option>
+      </select>
+      <button class="btn btn-g btn-sm" onclick="loadWeekly()">↻ 更新</button>
+      <button class="btn btn-gr btn-sm" onclick="exportReportPDF('weekly')">📥 PDF</button>
+    </div>
+  </div>
   <div class="ct">
+    <!-- 個人レポート（担当者選択時に表示） -->
+    <div id="weekly-personal-report" style="display:none;"></div>
+    <div id="weekly-team-report">
     <div class="week-tabs" id="week-tabs"></div>
     <!-- KPIカード -->
     <div class="kg" id="weekly-kpi"><div class="ld"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div><span>集計中...</span></div></div>
@@ -701,13 +716,28 @@ select option{background:var(--sf);}
       <div class="cd-t">💬 今週のトピック（担当者別）</div>
       <div id="weekly-topics"></div>
     </div>
+    </div><!-- /weekly-team-report -->
   </div>
 </div>
 
 <!-- 月次レポート -->
 <div class="page" id="page-monthly">
-  <div class="hd"><div class="hd-t">📅 月次レポート</div><div class="hd-r"><span class="bx bx-b" id="monthly-lbl"></span><button class="btn btn-gr btn-sm" onclick="exportMonthlyPDF()">📥 PDF出力</button></div></div>
+  <div class="hd">
+    <div class="hd-t">📅 月次レポート</div>
+    <div class="hd-r" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+      <span class="bx bx-b" id="monthly-lbl"></span>
+      <select id="monthly-person" onchange="loadMonthly()" style="font-size:13px;padding:6px 10px;width:auto;border-radius:6px;">
+        <option value="">👥 全員</option>
+        <option>橋野 浩一</option><option>川﨑 慧</option><option>浦塚 弘樹</option>
+        <option>坂本 憲司</option><option>又吉 俊</option><option>千代島 奨磨</option>
+      </select>
+      <button class="btn btn-gr btn-sm" onclick="exportReportPDF('monthly')">📥 PDF出力</button>
+    </div>
+  </div>
   <div class="ct">
+    <!-- 個人レポート（担当者選択時に表示） -->
+    <div id="monthly-personal-report" style="display:none;"></div>
+    <div id="monthly-team-report">
     <!-- KPIカード -->
     <div class="kg" id="monthly-kpi"><div class="ld"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div><span>読み込み中...</span></div></div>
     <!-- 転換率＋ステータス分布 -->
@@ -734,6 +764,7 @@ select option{background:var(--sf);}
     </div>
     <!-- 社長サマリ -->
     <div class="cd" style="border-color:rgba(79,125,247,.3);"><div class="cd-t" style="color:var(--ac);">📌 社長向けサマリ</div><div id="monthly-summary" style="font-size:12px;line-height:1.9;color:var(--tx2);">集計後に自動生成されます</div></div>
+    </div><!-- /monthly-team-report -->
   </div>
 </div>
 
@@ -1737,7 +1768,21 @@ function getWeekRange(offset){
   return{start:fmt(monday),end:fmt(sunday),label:`${monday.getMonth()+1}/${monday.getDate()}〜${sunday.getMonth()+1}/${sunday.getDate()}`};
 }
 async function loadWeekly(){
+  const person = document.getElementById("weekly-person")?.value||"";
+  const teamEl = document.getElementById("weekly-team-report");
+  const personalEl = document.getElementById("weekly-personal-report");
+  if(person){
+    if(teamEl) teamEl.style.display="none";
+    if(personalEl) personalEl.style.display="block";
+  } else {
+    if(teamEl) teamEl.style.display="block";
+    if(personalEl) personalEl.style.display="none";
+  }
   const [reports, deals] = await Promise.all([apiGet({type:"report"}), apiGet({type:"deal"})]);
+  if(person){
+    await renderPersonalWeeklyReport(person, reports, deals);
+    return;
+  }
   document.getElementById("week-tabs").innerHTML=[-2,-1,0].map(i=>{const{label}=getWeekRange(i);const lbl=i===0?"今週":i===-1?"先週":"先々週";return`<div class="wtab ${weekOffset===i?"on":""}" onclick="setWeekOffset(${i})">${lbl}（${label}）</div>`;}).join("");
   const{start,end,label}=getWeekRange(weekOffset);
   document.getElementById("weekly-lbl").textContent=label;
@@ -1845,9 +1890,32 @@ function setWeekOffset(offset){weekOffset=offset;loadWeekly();}
 
 // MONTHLY
 async function loadMonthly(){
+  const person = document.getElementById("monthly-person")?.value||"";
+  const teamEl = document.getElementById("monthly-team-report");
+  const personalEl = document.getElementById("monthly-personal-report");
+  if(person){
+    if(teamEl) teamEl.style.display="none";
+    if(personalEl) personalEl.style.display="block";
+  } else {
+    if(teamEl) teamEl.style.display="block";
+    if(personalEl) personalEl.style.display="none";
+  }
   const month=new Date().toISOString().slice(0,7);
   document.getElementById("monthly-lbl").textContent=month.replace("-","年")+"月";
   const [reports, deals, memberRaw] = await Promise.all([apiGet({type:"report"}), apiGet({type:"deal"}), apiGet({type:"member"})]);
+  // メンバーデータを更新
+  memberRaw.forEach(r => {
+    memberData[r["担当者"]] = {
+      annualBudget: parseInt(r["年間予算"])||0,
+      partners: r["担当販売店"] ? r["担当販売店"].split(",").map(s=>s.trim()).filter(Boolean) : [],
+      fiscalYear: parseInt(r["年度"])||new Date().getFullYear(),
+      id: r["id"]||""
+    };
+  });
+  if(person){
+    await renderPersonalMonthlyReport(person, month, reports, deals);
+    return;
+  }
   // メンバーデータをローカルにも更新
   memberRaw.forEach(r => {
     memberData[r["担当者"]] = {
@@ -2726,33 +2794,235 @@ async function removeMemberPartner(idx, name, partner){
 }
 
 // ============================================================
+//  個人レポート
+// ============================================================
+async function renderPersonalWeeklyReport(person, reports, deals){
+  const el = document.getElementById("weekly-personal-report");
+  if(!el) return;
+  const {start,end,label} = getWeekRange(weekOffset);
+  document.getElementById("weekly-lbl").textContent = label;
+  const wr = reports.filter(r=>String(r["日付"])>=start&&String(r["日付"])<=end&&r["担当者"]===person);
+  const dVisit=wr.reduce((s,r)=>s+num(r,"直販訪問"),0);
+  const tuR=wr.reduce((s,r)=>s+num(r,"TU受領"),0);
+  const dInd=wr.reduce((s,r)=>s+num(r,"直販内示"),0);
+  const tuI=wr.reduce((s,r)=>s+num(r,"TU内示"),0);
+  const dWon=wr.reduce((s,r)=>s+num(r,"直販受注"),0);
+  const tuW=wr.reduce((s,r)=>s+num(r,"TU受注"),0);
+  const endCont=wr.reduce((s,r)=>s+num(r,"エンド書類回収")+num(r,"エンドクレーム")+num(r,"エンド納品")+num(r,"エンド打合せ"),0);
+  const nego=dVisit+tuR, contact=nego+endCont, ind=dInd+tuI, won=dWon+tuW;
+  const cr=contact>0?Math.round(nego/contact*100):0;
+  const ir=nego>0?Math.round(ind/nego*100):0;
+  const wr2=ind>0?Math.round(won/ind*100):0;
+  const topics=wr.filter(r=>r["トピック"]).map(r=>`<div style="padding:8px 12px;background:var(--sf2);border-radius:6px;margin-bottom:6px;border-left:3px solid var(--am);">
+    <div style="font-size:11px;color:var(--tx3);margin-bottom:3px;">${r["日付"]}</div>
+    <div style="font-size:13px;">${r["トピック"]}</div>
+  </div>`).join("") || `<div style="color:var(--tx3);font-size:12px;">今週のトピックなし</div>`;
+
+  // 日別グラフデータ（平日のみ）
+  const days=[];
+  let cur=new Date(start);
+  while(cur.toISOString().split("T")[0]<=end){
+    const dow=cur.getDay();
+    if(dow!==0&&dow!==6) days.push(cur.toISOString().split("T")[0]);
+    cur.setDate(cur.getDate()+1);
+  }
+  const barMaxW=300, barH=24, gap=8;
+  const dayData=days.map(d=>{
+    const dr=wr.filter(r=>String(r["日付"])===d);
+    return {d,nego:dr.reduce((s,r)=>s+num(r,"直販訪問")+num(r,"TU受領"),0),end:dr.reduce((s,r)=>s+num(r,"エンド書類回収")+num(r,"エンドクレーム")+num(r,"エンド納品")+num(r,"エンド打合せ"),0)};
+  });
+  const maxV=Math.max(...dayData.map(d=>d.nego+d.end),1);
+  const svgH=(barH+gap)*days.length+30;
+  const barSvg=`<svg width="100%" viewBox="0 0 420 ${svgH}" xmlns="http://www.w3.org/2000/svg">
+    ${dayData.map((d,i)=>{
+      const y=30+i*(barH+gap);
+      const wNego=Math.round(d.nego/maxV*barMaxW);
+      const wEnd=Math.round(d.end/maxV*barMaxW);
+      const dow=["日","月","火","水","木","金","土"][new Date(d.d).getDay()];
+      return `<text x="0" y="${y+barH/2+4}" font-size="11" fill="var(--tx3)">${d.d.slice(5)} (${dow})</text>
+        <rect x="80" y="${y}" width="${wNego}" height="${barH}" rx="3" fill="#3b6ef0" opacity="0.8"/>
+        ${wEnd>0?`<rect x="${80+wNego}" y="${y}" width="${wEnd}" height="${barH}" rx="3" fill="#38bdf8" opacity="0.7"/>`:""}
+        <text x="${80+wNego+wEnd+6}" y="${y+barH/2+4}" font-size="11" fill="var(--tx2)">${d.nego+d.end>0?(d.nego+d.end)+"件":""}</text>`;
+    }).join("")}
+    <text x="80" y="18" font-size="10" fill="#3b6ef0">■ 商談</text>
+    <text x="135" y="18" font-size="10" fill="#38bdf8">■ エンド対応</text>
+  </svg>`;
+
+  el.innerHTML=`
+    <div style="margin-bottom:16px;padding:14px 16px;background:var(--ac);color:#fff;border-radius:10px;">
+      <div style="font-size:18px;font-weight:700;">${person} 週次レポート</div>
+      <div style="font-size:13px;opacity:.85;margin-top:4px;">${label}</div>
+    </div>
+    <div class="kg" style="grid-template-columns:repeat(4,1fr);margin-bottom:14px;">
+      <div class="kpi bl"><div class="kpi-l">接触数</div><div class="kpi-v bl">${contact}件</div><div class="kpi-s">商談率 ${cr}%</div></div>
+      <div class="kpi am"><div class="kpi-l">内示率</div><div class="kpi-v am">${ir}%</div><div class="kpi-s">内示 ${ind}件</div></div>
+      <div class="kpi gr"><div class="kpi-l">受注率</div><div class="kpi-v gr">${wr2}%</div><div class="kpi-s">受注 ${won}件</div></div>
+      <div class="kpi rd"><div class="kpi-l">エンド対応</div><div class="kpi-v rd">${endCont}件</div><div class="kpi-s">書類・納品等</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+      <div class="cd">
+        <div class="cd-t">📊 日別 活動量</div>
+        ${barSvg}
+      </div>
+      <div class="cd">
+        <div class="cd-t">💬 今週のトピック</div>
+        ${topics}
+      </div>
+    </div>`;
+}
+
+async function renderPersonalMonthlyReport(person, month, reports, deals){
+  const el = document.getElementById("monthly-personal-report");
+  if(!el) return;
+  el.innerHTML=`<div class="ld" style="padding:20px;"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div><span>集計中...</span></div>`;
+
+  const mr = reports.filter(r=>String(r["日付"]).startsWith(month)&&r["担当者"]===person);
+  const dVisit=mr.reduce((s,r)=>s+num(r,"直販訪問"),0);
+  const tuR=mr.reduce((s,r)=>s+num(r,"TU受領"),0);
+  const dInd=mr.reduce((s,r)=>s+num(r,"直販内示"),0);
+  const tuI=mr.reduce((s,r)=>s+num(r,"TU内示"),0);
+  const dWon=mr.reduce((s,r)=>s+num(r,"直販受注"),0);
+  const tuW=mr.reduce((s,r)=>s+num(r,"TU受注"),0);
+  const endCont=mr.reduce((s,r)=>s+num(r,"エンド書類回収")+num(r,"エンドクレーム")+num(r,"エンド納品")+num(r,"エンド打合せ"),0);
+  const nego=dVisit+tuR, contact=nego+endCont, ind=dInd+tuI, won=dWon+tuW;
+  const cr=contact>0?Math.round(nego/contact*100):0;
+  const ir=nego>0?Math.round(ind/nego*100):0;
+  const wr=ind>0?Math.round(won/ind*100):0;
+
+  // 粗利・予算
+  const mBudget=getMemberBudget(person);
+  const monthlyBudget=mBudget.annualBudget>0?Math.round(mBudget.annualBudget/12):0;
+  const myDeals=deals.filter(d=>d["担当者"]===person&&["ordered","applying","adopted"].includes(d["ステータス"]));
+  const gpTotal=myDeals.reduce((s,d)=>s+num(d,"粗利"),0);
+  const gpProgress=monthlyBudget>0?Math.min(Math.round(gpTotal/monthlyBudget*100),200):0;
+  const gpColor=gpProgress>=100?"var(--g)":gpProgress>=70?"var(--am)":"var(--rd)";
+
+  // 日別グラフ（月間）
+  // 月間の平日のみ抽出
+  const daysInMonth=new Date(parseInt(month.split("-")[0]),parseInt(month.split("-")[1]),0).getDate();
+  const dayData=Array.from({length:daysInMonth},(_,i)=>{
+    const d=`${month}-${String(i+1).padStart(2,"0")}`;
+    const dow=new Date(d).getDay();
+    if(dow===0||dow===6) return null; // 土日除外
+    const dr=mr.filter(r=>String(r["日付"])===d);
+    return {d,label:String(i+1),contact:dr.reduce((s,r)=>s+num(r,"直販訪問")+num(r,"TU受領")+num(r,"エンド書類回収")+num(r,"エンドクレーム")+num(r,"エンド納品")+num(r,"エンド打合せ"),0)};
+  }).filter(Boolean);
+  const maxV=Math.max(...dayData.map(d=>d.contact),1);
+  const barW=18, gap=4, svgH=130, labelH=20;
+  const svgW=Math.max(400,dayData.length*(barW+gap)+40);
+  const barSvg=`<svg width="100%" viewBox="0 0 ${svgW} ${svgH}" xmlns="http://www.w3.org/2000/svg">
+    ${dayData.map((d,i)=>{
+      const x=i*(barW+gap)+20;
+      const bH=Math.round(d.contact/maxV*(svgH-labelH-25));
+      return `<rect x="${x}" y="${svgH-labelH-bH}" width="${barW}" height="${Math.max(bH,2)}" rx="3" fill="#3b6ef0" opacity="${d.contact>0?0.8:0.12}"/>
+        <text x="${x+barW/2}" y="${svgH-4}" font-size="9" text-anchor="middle" fill="var(--tx3)">${d.label}</text>
+        ${d.contact>0?`<text x="${x+barW/2}" y="${svgH-labelH-bH-4}" font-size="9" text-anchor="middle" fill="#3b6ef0" font-weight="bold">${d.contact}</text>`:""}`;
+    }).join("")}
+  </svg>`;
+
+  // 当月案件一覧
+  const myMonthDeals=deals.filter(d=>{
+    if(d["担当者"]!==person) return false;
+    return String(d["登録日"]||"").startsWith(month)||String(d["更新日時"]||"").startsWith(month);
+  });
+  const stL={prospect:"見込",negotiating:"商談中",indicated:"内示",ordered:"受注",applying:"申請中",adopted:"採択",lost:"失注",rejected:"不採択"};
+  const stC={prospect:"st-p",negotiating:"st-n",indicated:"st-i",ordered:"st-w",applying:"st-n",adopted:"st-w",lost:"st-l",rejected:"st-l"};
+  const dealRows=myMonthDeals.length===0
+    ?`<div style="font-size:12px;color:var(--tx3);padding:8px;">今月の案件なし</div>`
+    :myMonthDeals.map(d=>`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bd);">
+      <span class="st ${stC[d["ステータス"]]||""}" style="white-space:nowrap;">${stL[d["ステータス"]]||""}</span>
+      <span style="flex:1;font-size:13px;">${d["案件名"]||""}</span>
+      <span style="font-size:12px;color:var(--tx3);">${d["申請補助金"]||""}</span>
+      <span style="font-size:13px;font-family:var(--mo);color:var(--g);">¥${d["金額"]||0}万</span>
+    </div>`).join("");
+
+  // トピック一覧
+  const topics=mr.filter(r=>r["トピック"]).map(r=>`<div style="padding:8px 12px;background:var(--sf2);border-radius:6px;margin-bottom:6px;border-left:3px solid var(--am);">
+    <div style="font-size:11px;color:var(--tx3);margin-bottom:3px;">${r["日付"]}</div>
+    <div style="font-size:13px;">${r["トピック"]}</div>
+  </div>`).join("") || `<div style="color:var(--tx3);font-size:12px;">今月のトピックなし</div>`;
+
+  const [y,m]=month.split("-");
+  el.innerHTML=`
+    <div style="margin-bottom:16px;padding:14px 16px;background:var(--ac);color:#fff;border-radius:10px;" class="no-break">
+      <div style="font-size:20px;font-weight:700;">${person} 月次レポート</div>
+      <div style="font-size:13px;opacity:.85;margin-top:4px;">${y}年${m}月</div>
+    </div>
+    <!-- KPI -->
+    <div class="kg" style="grid-template-columns:repeat(5,1fr);margin-bottom:14px;" class="no-break">
+      <div class="kpi bl"><div class="kpi-l">月間接触数</div><div class="kpi-v bl">${contact}件</div><div class="kpi-s">商談率 ${cr}%</div></div>
+      <div class="kpi am"><div class="kpi-l">内示率</div><div class="kpi-v am">${ir}%</div><div class="kpi-s">内示 ${ind}件</div></div>
+      <div class="kpi gr"><div class="kpi-l">受注率</div><div class="kpi-v gr">${wr}%</div><div class="kpi-s">受注 ${won}件</div></div>
+      <div class="kpi rd"><div class="kpi-l">エンド対応</div><div class="kpi-v rd">${endCont}件</div><div class="kpi-s">書類・納品等</div></div>
+      <div class="kpi" style="border-top:3px solid var(--pu);"><div class="kpi-l">粗利実績</div><div class="kpi-v" style="color:var(--pu);">¥${gpTotal}万</div><div class="kpi-s">目標 ¥${monthlyBudget}万</div></div>
+    </div>
+    <!-- 粗利進捗バー -->
+    <div class="cd no-break" style="margin-bottom:14px;">
+      <div class="cd-t">💰 粗利予算進捗</div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;">
+        <span>¥${gpTotal}万 / ¥${monthlyBudget}万</span>
+        <span style="font-weight:700;color:${gpColor};">${gpProgress}%</span>
+      </div>
+      <div style="height:14px;background:var(--sf3);border-radius:7px;overflow:hidden;">
+        <div style="height:100%;width:${Math.min(gpProgress,100)}%;background:${gpColor};border-radius:7px;transition:.5s;"></div>
+      </div>
+      ${gpProgress>=100?`<div style="font-size:12px;color:var(--g);margin-top:6px;font-weight:600;">✅ 月間予算達成！</div>`:gpProgress>=70?`<div style="font-size:12px;color:var(--am);margin-top:6px;">⚠️ 目標の${gpProgress}%達成。あと¥${monthlyBudget-gpTotal}万</div>`:`<div style="font-size:12px;color:var(--rd);margin-top:6px;">❗ 目標の${gpProgress}%。あと¥${monthlyBudget-gpTotal}万必要</div>`}
+    </div>
+    <!-- 日別活動グラフ -->
+    <div class="cd no-break" style="margin-bottom:14px;">
+      <div class="cd-t">📊 日別 活動量（接触数合計）</div>
+      ${barSvg}
+      <div style="font-size:11px;color:var(--tx3);margin-top:4px;"><span style="color:#3b6ef0">■</span> 平日のみ表示（土日除く）</div>
+    </div>
+    <!-- 案件一覧 -->
+    <div class="cd no-break" style="margin-bottom:14px;">
+      <div class="cd-t">💼 今月の案件（${myMonthDeals.length}件）</div>
+      ${dealRows}
+    </div>
+    <!-- トピック -->
+    <div class="cd">
+      <div class="cd-t">💬 今月のトピック</div>
+      ${topics}
+    </div>`;
+}
+
+// ============================================================
 //  PDF出力
 // ============================================================
-function exportMonthlyPDF(){
-  const lbl=document.getElementById("monthly-lbl")?.textContent||"月次レポート";
-  // 印刷用スタイルを追加
+function exportReportPDF(type){
+  const person = document.getElementById(`${type}-person`)?.value||"";
+  const lbl = type==="weekly"
+    ? document.getElementById("weekly-lbl")?.textContent||"週次レポート"
+    : document.getElementById("monthly-lbl")?.textContent||"月次レポート";
+  const title = person ? `${person} ${lbl}` : lbl;
+
   const style=document.createElement("style");
   style.id="print-style";
   style.textContent=`
     @media print {
-      .sb,.mob-nav,.hd-r,.deal-edit-row,.add-hist-form,.week-tabs { display:none !important; }
-      .app { display:block !important; }
-      .main { display:block !important; }
-      .page { display:block !important; }
-      .page:not(#page-monthly) { display:none !important; }
-      #page-monthly { display:block !important; }
-      body { background:#fff !important; }
-      .cd { box-shadow:none !important; border:1px solid #ddd !important; }
-      * { color-adjust:exact; -webkit-print-color-adjust:exact; }
+      @page { margin: 15mm; size: A4; }
+      .sb,.mob-nav,.hd-r,.deal-edit-row,.add-hist-form,.week-tabs,
+      .filter-row,.search-row,button,select,input { display:none !important; }
+      .app,.main { display:block !important; height:auto !important; overflow:visible !important; }
+      .page { display:none !important; }
+      #page-${type} { display:block !important; }
+      #${type}-team-report, #${type}-personal-report { display:block !important; }
+      .hd { box-shadow:none !important; border-bottom:2px solid #ddd !important; }
+      .cd { box-shadow:none !important; border:1px solid #ddd !important; page-break-inside:avoid; }
+      .kg { page-break-inside:avoid; }
+      .no-break { page-break-inside:avoid; }
+      body { background:#fff !important; font-size:12px !important; }
+      .kpi-v { font-size:22px !important; }
+      * { color-adjust:exact; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
     }
   `;
   document.head.appendChild(style);
-  const title=document.title;
-  document.title=lbl+" レポート";
-  window.print();
+  const prevTitle=document.title;
   document.title=title;
-  setTimeout(()=>{ const el=document.getElementById("print-style"); if(el) el.remove(); },1000);
-  toast("印刷ダイアログを開きました（PDFとして保存できます）");
+  window.print();
+  document.title=prevTitle;
+  setTimeout(()=>{ const el=document.getElementById("print-style");if(el)el.remove(); },1000);
+  toast("印刷ダイアログを開きました");
 }
 
 // ============================================================
