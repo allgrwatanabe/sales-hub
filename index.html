@@ -3707,11 +3707,10 @@ function applyLogin(){
     el.style.display = isAdmin ? "" : "none";
   });
 
-  // 日報の担当者をデフォルトセット
+  // 日報・案件登録の担当者をデフォルトセット
   if(!isAdmin){
-    const repPs = document.getElementById("rep-ps");
-    if(repPs) repPs.value = currentUser;
-    // 案件登録フォームの担当者もセット
+    const rPerson = document.getElementById("r-person");
+    if(rPerson) rPerson.value = currentUser;
     const ndPs = document.getElementById("nd-ps");
     if(ndPs) ndPs.value = currentUser;
   }
