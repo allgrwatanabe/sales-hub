@@ -350,7 +350,15 @@ select option{background:var(--sf);}
 
 <!-- 経営ダッシュボード -->
 <div class="page on" id="page-exec">
-  <div class="hd"><div class="hd-t">👁️ 経営ダッシュボード</div><div class="hd-r"><span class="bx bx-b" id="today-lbl"></span><button class="btn btn-g btn-sm" onclick="loadExec()">↻ 更新</button></div></div>
+  <div class="hd">
+  <div class="hd-t">👁️ 経営ダッシュボード</div>
+  <div class="hd-r" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+    <span class="bx bx-b" id="today-lbl"></span>
+    <input type="date" id="exec-date-pick" style="font-size:13px;padding:6px 10px;border-radius:6px;border:1px solid var(--bd);background:var(--sf2);" onchange="loadExec()">
+    <button class="btn btn-g btn-sm" onclick="document.getElementById('exec-date-pick').value=todayJST();loadExec()">今日</button>
+    <button class="btn btn-g btn-sm" onclick="loadExec()">↻ 更新</button>
+  </div>
+</div>
   <div class="ct">
     <div class="sec">今月の主要指標</div>
     <div class="kg">
@@ -467,6 +475,15 @@ select option{background:var(--sf);}
         </div>
       </div>
 
+      <!-- 社内同行 -->
+      <div class="ch-f">
+        <div class="ch-h" style="background:rgba(100,116,139,.1);color:#64748b;">👥 社内同行</div>
+        <div class="ch-b" style="grid-template-columns:1fr 1fr;padding:12px 14px;">
+          <div class="nf"><label>新規同行</label><div class="nc"><button class="nb" onclick="cn('accompany_new',-1)">−</button><div class="nd" id="accompany_new">0</div><button class="nb" onclick="cn('accompany_new',1)">＋</button></div></div>
+          <div class="nf"><label>既存同行</label><div class="nc"><button class="nb" onclick="cn('accompany_exist',-1)">−</button><div class="nd" id="accompany_exist">0</div><button class="nb" onclick="cn('accompany_exist',1)">＋</button></div></div>
+        </div>
+      </div>
+
       <!-- エンド対応 -->
       <div class="ch-f">
         <div class="ch-h" style="background:rgba(56,189,248,.1);color:#38bdf8;">📋 エンド対応（接触）</div>
@@ -490,7 +507,11 @@ select option{background:var(--sf);}
         <textarea id="r-topic" placeholder="商談の手応え、販売店の動き、懸案事項など"></textarea>
       </div>
       <div style="display:flex;gap:8px;align-items:center;">
-        <button class="btn btn-p" id="rep-btn" onclick="submitReport()">📨 日報を送信</button>
+        <div id="rep-today-status" style="font-size:12px;color:var(--tx3);margin-bottom:8px;"></div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;">
+    <button class="btn btn-p" id="rep-btn" onclick="submitReport()">📨 日報を送信</button>
+    <button class="btn btn-g" id="rep-edit-btn" onclick="loadTodayReport()" style="display:none;">✏️ 本日分を編集</button>
+  </div>
         <button class="btn btn-g" onclick="clearRep()">クリア</button>
         <span id="rep-status" style="font-size:11px;color:var(--tx3);"></span>
       </div>
@@ -1180,18 +1201,22 @@ function go(page,sideEl,mnId){
   if(sideEl) sideEl.classList.add("on");
   if(mnId){const mnEl=document.getElementById(mnId);if(mnEl)mnEl.classList.add("on");}
   document.getElementById("mainScroll").scrollTop=0;
-  ({exec:loadExec,cashflow:loadPayments,deals:loadDeals,'partner-dev':loadPartnerDev,'vendor-nego':loadVendorNego,'client-nego':loadClientNego,partner:loadPartners,weekly:loadWeekly,monthly:loadMonthly,members:loadMembers,dealer:loadDealer,schedule:loadSchedule,import:()=>{}}[page]||(() => {}))();
+  ({exec:loadExec,cashflow:loadPayments,deals:loadDeals,'partner-dev':loadPartnerDev,'vendor-nego':loadVendorNego,'client-nego':loadClientNego,partner:loadPartners,weekly:loadWeekly,monthly:loadMonthly,members:loadMembers,dealer:loadDealer,schedule:loadSchedule,report:checkTodayReport,import:()=>{}}[page]||(() => {}))();
 }
 
 // 日報タブ（不要になったが残存コードを無害化）
 function switchRepTab(){}
 
-const NV={d_visit:0,d_prospect:0,d_ind:0,d_won:0,t_recv:0,t_nego:0,t_ind:0,t_won:0,p_new:0,p_exist:0,c_new:0,c_exist:0,c_doc:0,c_claim:0,c_deliver:0,c_mtg:0};
+const NV={d_visit:0,d_prospect:0,d_ind:0,d_won:0,t_recv:0,t_nego:0,t_ind:0,t_won:0,p_new:0,p_exist:0,c_new:0,c_exist:0,accompany_new:0,accompany_exist:0,c_doc:0,c_claim:0,c_deliver:0,c_mtg:0};
 function cn(k,d){NV[k]=Math.max(0,NV[k]+d);document.getElementById(k).textContent=NV[k];}
 
 // EXEC
 async function loadExec(){
-  const today=todayJST(),month=today.slice(0,7);
+  const execDateEl=document.getElementById("exec-date-pick");
+  const today=execDateEl?.value||todayJST();
+  if(execDateEl&&!execDateEl.value) execDateEl.value=today;
+  const month=today.slice(0,7);
+  document.getElementById("today-lbl").textContent=today.replace(/-/g,"/");
   const [reports,payments]=await Promise.all([apiGet({type:"report"}),apiGet({type:"payment"})]);
   const todayR=reports.filter(r=>r["日付"]===today),monthR=reports.filter(r=>String(r["日付"]).startsWith(month));
 
@@ -1258,19 +1283,30 @@ async function loadExec(){
   renderCfBars("exec-cfbar",payments);
 
   // 本日のトピック
+  // フィードバックデータ取得
+  const fbRaw = await apiGet({type:"feedback",date:today}).catch(()=>[]);
+  const execFeedbacks={};
+  fbRaw.forEach(f=>{ execFeedbacks[f["担当者"]]=f["フィードバック"]||""; });
+
   const topicsEl = document.getElementById("exec-topics");
   if(topicsEl){
     const topicHtml = MEMBERS.map((nm,i) => {
       const pr = todayR.filter(r=>r["担当者"]===nm);
       const topic = pr.map(r=>r["トピック"]).filter(Boolean).join(" / ");
-      return `<div style="display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--bd);">
-        <div class="av" style="background:${MEMBER_COLORS[i]};width:32px;height:32px;font-size:13px;flex-shrink:0;">${nm[0]}</div>
-        <div style="flex:1;">
-          <div style="font-size:13px;font-weight:600;margin-bottom:3px;">${nm}</div>
-          ${topic
-            ? `<div style="font-size:13px;color:var(--tx2);line-height:1.6;">${topic}</div>`
-            : `<div style="font-size:12px;color:var(--tx3);">未入力</div>`
-          }
+      const fbText = execFeedbacks[nm]||"";
+      const safeNm = nm.replace(/ /g,"_").replace(/　/g,"_");
+      return `<div style="padding:12px 0;border-bottom:1px solid var(--bd);">
+        <div style="display:flex;gap:12px;">
+          <div class="av" style="background:${MEMBER_COLORS[i]};width:32px;height:32px;font-size:13px;flex-shrink:0;">${nm[0]}</div>
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:600;margin-bottom:4px;">${nm}</div>
+            ${topic
+              ? `<div style="font-size:13px;color:var(--tx2);line-height:1.6;margin-bottom:6px;">${topic}</div>`
+              : `<div style="font-size:12px;color:var(--tx3);margin-bottom:6px;">未入力</div>`
+            }
+            ${isAdmin ? `<textarea id="fb-${safeNm}" placeholder="フィードバックを入力（管理者のみ）" style="width:100%;font-size:12px;padding:6px 8px;border-radius:6px;border:1px solid var(--bd);background:var(--sf2);min-height:40px;resize:vertical;box-sizing:border-box;">${fbText}</textarea><button class="btn btn-g btn-sm" style="margin-top:4px;font-size:11px;" onclick="saveFeedback('${nm}','${today}',document.getElementById('fb-${safeNm}').value)">💾 保存</button>` :
+              fbText ? `<div style="padding:6px 10px;background:rgba(79,125,247,.08);border-radius:6px;font-size:12px;border-left:3px solid var(--ac);"><span style="font-size:10px;color:var(--tx3);display:block;margin-bottom:2px;">📝 上長フィードバック</span>${fbText}</div>` : ""}
+          </div>
         </div>
       </div>`;
     }).join("");
@@ -1348,6 +1384,67 @@ function renderConsistencyCheck(todayR, deals, today){
   </div>`;
 }
 
+// ① 日報ページ読み込み時の確認
+async function checkTodayReport(){
+  const today=todayJST();
+  const reports=await apiGet({type:"report"});
+  const myReport=reports.find(r=>r["日付"]===today&&r["担当者"]===currentUser);
+  const editBtn=document.getElementById("rep-edit-btn");
+  const statusEl=document.getElementById("rep-today-status");
+  if(myReport){
+    if(editBtn) editBtn.style.display="inline-flex";
+    if(statusEl) statusEl.innerHTML=`<span style="color:var(--g);font-weight:600;">✅ 本日分の日報は送信済みです</span>`;
+  } else {
+    if(editBtn) editBtn.style.display="none";
+    if(statusEl) statusEl.innerHTML="";
+    window._editingReportId=null;
+  }
+}
+
+// ① 日報編集：本日分を読み込んでフォームにセット
+async function loadTodayReport(){
+  const today=todayJST();
+  const reports=await apiGet({type:"report"});
+  const myReport=reports.find(r=>r["日付"]===today&&r["担当者"]===currentUser);
+  if(!myReport){toast("本日の日報が見つかりません");return;}
+
+  // 各フィールドをセット
+  const fields=[
+    ["d_visit","直販訪問"],["d_prospect","直販新規見込"],["d_ind","直販内示"],["d_won","直販受注"],
+    ["t_recv","TU受領"],["t_nego","TU商談"],["t_ind","TU内示"],["t_won","TU受注"],
+    ["p_new","販売店新規"],["p_exist","販売店既存"],
+    ["c_new","取引先新規"],["c_exist","取引先既存"],
+    ["accompany_new","社内同行新規"],["accompany_exist","社内同行既存"],
+    ["c_doc","エンド書類回収"],["c_claim","エンドクレーム"],["c_deliver","エンド納品"],["c_mtg","エンド打合せ"],
+  ];
+  fields.forEach(([nvKey,shKey])=>{
+    NV[nvKey]=num(myReport,shKey);
+    const el=document.getElementById(nvKey);
+    if(el) el.textContent=NV[nvKey];
+  });
+  // 目標・トピック
+  ["目標1","目標2","目標3","トピック"].forEach(k=>{
+    const elMap={"目標1":"r-g1","目標2":"r-g2","目標3":"r-g3","トピック":"r-topic"};
+    const el=document.getElementById(elMap[k]);
+    if(el) el.value=myReport[k]||"";
+  });
+  // 送信ボタンを「更新」に変更
+  const btn=document.getElementById("rep-btn");
+  if(btn){btn.textContent="📨 日報を更新";btn.style.background="var(--am)";}
+  const statusEl=document.getElementById("rep-today-status");
+  if(statusEl) statusEl.innerHTML=`<span style="color:var(--am);font-weight:600;">✏️ 編集モード：送信済みの日報を編集中（ID: ${myReport["id"]}）</span>`;
+  // 送信関数に既存IDを保持
+  window._editingReportId=myReport["id"];
+  toast("本日の日報を読み込みました");
+}
+
+// ③ フィードバック保存
+async function saveFeedback(member, date, text){
+  const res=await apiPost({type:"feedback",action:"upsert",payload:{担当者:member,日付:date,フィードバック:text}});
+  if(res.ok) toast(member+"へのフィードバックを保存しました");
+  else toast("保存に失敗しました");
+}
+
 // CASHFLOW
 function renderCfBars(elId,payments){
   const today=new Date();
@@ -1420,6 +1517,7 @@ async function submitReport(){
     目標3:document.getElementById("g3").value,
     トピック:document.getElementById("r-topic").value,
     取引先新規:NV.c_new, 取引先既存:NV.c_exist,
+    社内同行新規:NV.accompany_new, 社内同行既存:NV.accompany_exist,
     エンド書類回収:NV.c_doc, エンドクレーム:NV.c_claim, エンド納品:NV.c_deliver, エンド打合せ:NV.c_mtg,
   };
   const res=await apiPost({type:"report",action:"create",payload});
