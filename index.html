@@ -273,10 +273,41 @@ select option{background:var(--sf);}
 .mob-nav-i{display:flex;justify-content:space-around;}
 .mn{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:4px 8px;border-radius:6px;color:var(--tx3);transition:.15s;}
 .mn.on{color:var(--ac);}
-.mn-ic{font-size:22px;}
+.mn-ic{width:22px;height:22px;display:flex;align-items:center;justify-content:center;}
+.mn-ic svg{width:20px;height:20px;}
 .mn-lb{font-size:11px;font-weight:600;}
 @media(max-width:900px){.sb{display:none;}.mob-nav{display:block;}.main{padding-bottom:72px;}.kg{grid-template-columns:1fr 1fr;}.pg{grid-template-columns:1fr;}.deal-meta-grid{grid-template-columns:1fr 1fr;}.ct{padding:14px 16px;}.hd{padding:14px 16px;}}
 @media(max-width:600px){.kg{grid-template-columns:1fr 1fr;}.fg,.fg3,.fg4{grid-template-columns:1fr;}.ch-b4{grid-template-columns:1fr 1fr;}.ch-b3{grid-template-columns:1fr 1fr;}.deal-meta-grid{grid-template-columns:1fr;}.kpi-v{font-size:24px;}}
+
+/* ===== Refined Design ===== */
+/* SVG icon sizing in nav */
+.ni-ic{display:flex;align-items:center;justify-content:center;width:18px;height:18px;flex-shrink:0;}
+.ni-ic svg,.ni-sub .ni-ic svg{width:16px;height:16px;}
+/* Section label refinement */
+.sec{font-size:11px;font-weight:700;color:var(--tx3);letter-spacing:.04em;text-transform:uppercase;margin-bottom:12px;padding-bottom:0;}
+/* KPI top accent via border instead of ::after pseudo */
+.kpi{border-top:3px solid transparent;}
+.kpi::after{display:none;}
+.kpi.bl{border-top-color:var(--ac);}
+.kpi.gr{border-top-color:var(--g);}
+.kpi.am{border-top-color:var(--am);}
+.kpi.rd{border-top-color:var(--rd);}
+/* Card title refinement */
+.cd-t{font-size:12px;font-weight:700;color:var(--tx2);margin-bottom:14px;letter-spacing:.02em;}
+/* Header title */
+.hd-t{font-size:17px;font-weight:700;letter-spacing:-.01em;}
+/* Logo refinement */
+.logo-t{font-size:14px;font-weight:800;color:var(--ac);letter-spacing:.12em;}
+/* Feedback bubble in topic sections */
+.topic-fb{margin-top:7px;padding:7px 12px;background:rgba(59,110,240,.06);border-left:3px solid var(--ac);border-radius:0 6px 6px 0;}
+.topic-fb-lbl{font-size:10px;font-weight:700;color:var(--ac);letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;}
+.topic-fb-txt{font-size:12px;color:var(--tx2);line-height:1.7;white-space:pre-wrap;}
+/* Refined nav section label */
+.ns{font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:.1em;text-transform:uppercase;padding:10px 8px 3px;margin-top:4px;}
+/* Avatar in exec pg - slightly larger */
+.pc-h .av{width:34px;height:34px;font-size:13px;}
+/* Refined toast */
+#toast{border-radius:6px;font-size:12px;padding:10px 18px;font-weight:600;}
 </style>
 </head>
 <body>
@@ -317,28 +348,28 @@ select option{background:var(--sf);}
     <div class="logo-s">株式会社ALL</div>
   </div>
   <nav class="nav">
-    <div class="ni on" onclick="go('exec',this,'m0')"><span class="ni-ic">👁️</span>ダッシュボード</div>
-    <div class="ni" onclick="go('cashflow',this,'m1')"><span class="ni-ic">💴</span>入金予定</div>
+    <div class="ni on" onclick="go('exec',this,'m0')"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>ダッシュボード</div>
+    <div class="ni" onclick="go('cashflow',this,'m1')"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></span>入金予定</div>
     <div class="ns">営業部</div>
-    <div class="ni" onclick="go('report',this,'m2')"><span class="ni-ic">📝</span>日報入力</div>
-    <div class="ni-parent" id="nav-deals-parent" onclick="toggleDealsMenu()"><span class="ni-ic">💼</span>商談管理<span class="ni-bd" id="nb-d">—</span><span class="ni-arrow" id="deals-arrow">▶</span></div>
+    <div class="ni" onclick="go('report',this,'m2')"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>日報入力</div>
+    <div class="ni-parent" id="nav-deals-parent" onclick="toggleDealsMenu()"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>商談管理<span class="ni-bd" id="nb-d">—</span><span class="ni-arrow" id="deals-arrow">▶</span></div>
     <div class="sub-menu" id="deals-submenu">
-      <div class="ni-sub" id="nav-deals-end" onclick="go('deals',null,'m3');setDealsSubActive('end')"><span class="ni-ic">🏢</span>エンド商談管理</div>
-      <div class="ni-sub" id="nav-deals-vendor" onclick="go('vendor-nego',null,'m3');setDealsSubActive('vendor')"><span class="ni-ic">🏪</span>販売店商談管理</div>
-      <div class="ni-sub" id="nav-deals-client" onclick="go('client-nego',null,'m3');setDealsSubActive('client')"><span class="ni-ic">🤝</span>取引先商談管理</div>
-      <div class="ni-sub" id="nav-deals-partner" onclick="go('partner-dev',null,'m3');setDealsSubActive('partner')"><span class="ni-ic">🔍</span>販売店開拓管理</div>
+      <div class="ni-sub" id="nav-deals-end" onclick="go('deals',null,'m3');setDealsSubActive('end')"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="18" rx="1"/><path d="M9 22V12h6v10"/><line x1="2" y1="9" x2="22" y2="9"/></svg></span>エンド商談管理</div>
+      <div class="ni-sub" id="nav-deals-vendor" onclick="go('vendor-nego',null,'m3');setDealsSubActive('vendor')"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></span>販売店商談管理</div>
+      <div class="ni-sub" id="nav-deals-client" onclick="go('client-nego',null,'m3');setDealsSubActive('client')"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>取引先商談管理</div>
+      <div class="ni-sub" id="nav-deals-partner" onclick="go('partner-dev',null,'m3');setDealsSubActive('partner')"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>販売店開拓管理</div>
     </div>
     <div class="ns">サポート部</div>
-    <div class="ni" onclick="go('partner',this,'m4')"><span class="ni-ic">🏪</span>完クロ案件管理</div>
+    <div class="ni" onclick="go('partner',this,'m4')"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,11 12,14 22,4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>完クロ案件管理</div>
     <div class="ns admin-only" id="nav-data-section">データ管理</div>
-    <div class="ni admin-only" onclick="go('members',this,'mx')"><span class="ni-ic">👥</span>メンバー管理</div>
-    <div class="ni admin-only" onclick="go('dealer',this,'mx3')"><span class="ni-ic">🏢</span>販売店マスタ</div>
-    <div class="ni admin-only" onclick="go('import',this,'mx2')"><span class="ni-ic">📥</span>CSVインポート</div>
+    <div class="ni admin-only" onclick="go('members',this,'mx')"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>メンバー管理</div>
+    <div class="ni admin-only" onclick="go('dealer',this,'mx3')"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></span>販売店マスタ</div>
+    <div class="ni admin-only" onclick="go('import',this,'mx2')"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16,16 12,12 8,16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg></span>CSVインポート</div>
     <div class="ns">スケジュール</div>
-    <div class="ni" onclick="go('schedule',this,'ms')"><span class="ni-ic">📅</span>スケジュール</div>
+    <div class="ni" onclick="go('schedule',this,'ms')"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>スケジュール</div>
     <div class="ns">レポート</div>
-    <div class="ni" onclick="go('weekly',this,'m5')"><span class="ni-ic">📋</span>週次レポート</div>
-    <div class="ni" onclick="go('monthly',this,'m6')"><span class="ni-ic">📅</span>月次レポート</div>
+    <div class="ni" onclick="go('weekly',this,'m5')"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>週次レポート</div>
+    <div class="ni" onclick="go('monthly',this,'m6')"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg></span>月次レポート</div>
   </nav>
   <div class="sb-ft">
     <div class="u-row" onclick="showLogout()" style="cursor:pointer;" title="クリックでログアウト"><div class="av" id="sb-av" style="background:#3b6ef0;">?</div><div><div class="u-nm" id="sb-nm">未選択</div><div style="font-size:10px;color:var(--tx3);" id="sb-role">—</div></div></div>
@@ -350,7 +381,7 @@ select option{background:var(--sf);}
 
 <!-- 経営ダッシュボード -->
 <div class="page on" id="page-exec">
-  <div class="hd"><div class="hd-t">👁️ 経営ダッシュボード</div><div class="hd-r"><span class="bx bx-b" id="today-lbl"></span><button class="btn btn-g btn-sm" onclick="loadExec()">↻ 更新</button></div></div>
+  <div class="hd"><div class="hd-t">経営ダッシュボード</div><div class="hd-r"><span class="bx bx-b" id="today-lbl"></span><button class="btn btn-g btn-sm" onclick="loadExec()">↻ 更新</button></div></div>
   <div class="ct">
     <div class="sec">今月の主要指標</div>
     <div class="kg">
@@ -370,18 +401,14 @@ select option{background:var(--sf);}
 
     <!-- 本日のトピック + 要約 -->
     <div class="sec" style="display:flex;align-items:center;justify-content:space-between;">
-      <span>💬 本日のトピック</span>
-      <div style="display:flex;gap:6px;">
-        <button class="btn btn-g btn-sm" id="btn-topic-today" onclick="showTopicMode('today')" style="font-size:11px;padding:5px 10px;">本日</button>
-        <button class="btn btn-g btn-sm" id="btn-topic-week" onclick="showTopicMode('week')" style="font-size:11px;padding:5px 10px;">📝 週間要約</button>
-      </div>
+      <span>本日のトピック</span>
     </div>
     <div class="cd" id="exec-topics">
       <div class="ld"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div><span>読み込み中...</span></div>
     </div>
 
     <!-- 整合性チェック -->
-    <div class="sec">⚠️ 日報 vs 案件管理 整合性チェック</div>
+    <div class="sec">日報 vs 案件管理 整合性チェック</div>
     <div class="cd" style="padding:0;" id="exec-consistency">
       <div class="ld" style="padding:16px;"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div><span>チェック中...</span></div>
     </div>
@@ -390,7 +417,7 @@ select option{background:var(--sf);}
 
 <!-- 入金予定 -->
 <div class="page" id="page-cashflow">
-  <div class="hd"><div class="hd-t">💴 入金予定管理</div><div class="hd-r"><button class="btn btn-p btn-sm" onclick="toggleAddPay()">＋ 入金予定追加</button></div></div>
+  <div class="hd"><div class="hd-t">入金予定管理</div><div class="hd-r"><button class="btn btn-p btn-sm" onclick="toggleAddPay()">＋ 入金予定追加</button></div></div>
   <div class="ct">
     <div class="sec">月別 入金見通し</div>
     <div class="cd" style="border-color:rgba(79,125,247,.3);padding:12px 16px;margin-bottom:10px;">
@@ -403,7 +430,7 @@ select option{background:var(--sf);}
     </div>
     <!-- 受注・採択案件の自動集計グラフ -->
     <div class="cd">
-      <div class="cd-t" style="color:var(--ac);">📊 受注・採択案件 入金見通し（自動集計）</div>
+      <div class="cd-t" style="color:var(--ac);">受注・採択案件 入金見通し（自動集計）</div>
       <div id="deal-cf-chart"></div>
     </div>
     <div class="cd" id="cf-bar-cd"></div>
@@ -425,7 +452,7 @@ select option{background:var(--sf);}
 
 <!-- 日報入力 -->
 <div class="page" id="page-report">
-  <div class="hd"><div class="hd-t">📝 日報入力</div><div class="hd-r"><span class="bx bx-a" id="rep-dt-lbl"></span></div></div>
+  <div class="hd"><div class="hd-t">日報入力</div><div class="hd-r"><span class="bx bx-a" id="rep-dt-lbl"></span></div></div>
   <div class="ct">
     <div class="cd">
       <div class="fg" style="margin-bottom:14px;">
@@ -501,11 +528,11 @@ select option{background:var(--sf);}
         <span id="rep-status" style="font-size:11px;color:var(--tx3);"></span>
       </div>
     </div>
-    <div class="cd" id="rep-preview" style="display:none;"><div class="cd-t">✅ 送信済み（本日）</div><div id="rep-preview-body"></div></div>
+    <div class="cd" id="rep-preview" style="display:none;"><div class="cd-t">送信済み（本日）</div><div id="rep-preview-body"></div></div>
 
     <!-- ===== 日報閲覧・フィードバック ===== -->
     <div class="cd" style="margin-top:6px;">
-      <div class="cd-t">📋 過去の日報を確認・フィードバック</div>
+      <div class="cd-t">過去の日報を確認・フィードバック</div>
       <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:flex-end;">
         <div class="fm" style="flex:1;min-width:140px;">
           <label class="lb">日付を選択</label>
@@ -518,7 +545,7 @@ select option{background:var(--sf);}
             <option>坂本 憲司</option><option>又吉 俊</option><option>千代島 奨磨</option>
           </select>
         </div>
-        <button class="btn btn-g btn-sm" onclick="loadReportView()" style="flex-shrink:0;">📋 表示</button>
+        <button class="btn btn-g btn-sm" onclick="loadReportView()" style="flex-shrink:0;">表示</button>
       </div>
       <div id="rep-view-result"></div>
     </div>
@@ -528,7 +555,7 @@ select option{background:var(--sf);}
 <!-- ★案件管理（一覧） -->
 <div class="page" id="page-deals">
   <div class="hd">
-    <div class="hd-t">💼 案件管理</div>
+    <div class="hd-t">案件管理</div>
     <div class="hd-r"><button class="btn btn-p btn-sm" onclick="toggleAddDeal()">＋ 新規</button></div>
   </div>
   <!-- 検索＆フィルターバー -->
@@ -612,7 +639,7 @@ select option{background:var(--sf);}
 <!-- ★案件詳細（カルテ） -->
 <div class="page" id="page-deal-detail">
   <div class="hd">
-    <div class="hd-t">💼 案件カルテ</div>
+    <div class="hd-t">案件カルテ</div>
     <div class="hd-r"><button class="btn btn-g btn-sm" onclick="go('deals',null,'m3')">← 一覧に戻る</button></div>
   </div>
   <div class="ct">
@@ -646,7 +673,7 @@ select option{background:var(--sf);}
 <!-- 販売店商談管理 -->
 <div class="page" id="page-vendor-nego">
   <div class="hd">
-    <div class="hd-t">🏪 販売店商談管理</div>
+    <div class="hd-t">販売店商談管理</div>
     <div class="hd-r"><button class="btn btn-p btn-sm" onclick="toggleVendornegoAdd()">＋ 新規登録</button></div>
   </div>
   <div class="deal-search">
@@ -676,7 +703,7 @@ select option{background:var(--sf);}
 <!-- 販売店商談管理 カルテ -->
 <div class="page" id="page-vendor-nego-detail">
   <div class="hd">
-    <div class="hd-t">🏪 商談カルテ</div>
+    <div class="hd-t">商談カルテ</div>
     <div class="hd-r"><button class="btn btn-g btn-sm" onclick="go('vendor-nego',null,'m3');setDealsSubActive('vendor')">← 一覧に戻る</button></div>
   </div>
   <div class="ct">
@@ -704,7 +731,7 @@ select option{background:var(--sf);}
 <!-- 取引先商談管理 -->
 <div class="page" id="page-client-nego">
   <div class="hd">
-    <div class="hd-t">🤝 取引先商談管理</div>
+    <div class="hd-t">取引先商談管理</div>
     <div class="hd-r"><button class="btn btn-p btn-sm" onclick="toggleClientnegoAdd()">＋ 新規登録</button></div>
   </div>
   <div class="deal-search">
@@ -734,7 +761,7 @@ select option{background:var(--sf);}
 <!-- 取引先商談管理 カルテ -->
 <div class="page" id="page-client-nego-detail">
   <div class="hd">
-    <div class="hd-t">🤝 商談カルテ</div>
+    <div class="hd-t">商談カルテ</div>
     <div class="hd-r"><button class="btn btn-g btn-sm" onclick="go('client-nego',null,'m3');setDealsSubActive('client')">← 一覧に戻る</button></div>
   </div>
   <div class="ct">
@@ -762,7 +789,7 @@ select option{background:var(--sf);}
 <!-- ★販売店開拓管理 -->
 <div class="page" id="page-partner-dev">
   <div class="hd">
-    <div class="hd-t">🤝 販売店開拓管理</div>
+    <div class="hd-t">販売店開拓管理</div>
     <div class="hd-r">
       <button class="btn btn-p btn-sm" onclick="toggleAddPartnerDev()">＋ 新規登録</button>
     </div>
@@ -816,7 +843,7 @@ select option{background:var(--sf);}
 <!-- ★販売店開拓カルテ -->
 <div class="page" id="page-pd-detail">
   <div class="hd">
-    <div class="hd-t">🤝 代理店カルテ</div>
+    <div class="hd-t">代理店カルテ</div>
     <div class="hd-r"><button class="btn btn-g btn-sm" onclick="go('partner-dev',null,'m3');setDealsSubActive('partner')">← 一覧に戻る</button></div>
   </div>
   <div class="ct">
@@ -844,7 +871,7 @@ select option{background:var(--sf);}
 
 <!-- 販売店管理 -->
 <div class="page" id="page-partner">
-  <div class="hd"><div class="hd-t">🏪 完クロ案件管理</div><div class="hd-r"><span class="bx bx-b">今月集計</span></div></div>
+  <div class="hd"><div class="hd-t">完クロ案件管理</div><div class="hd-r"><span class="bx bx-b">今月集計</span></div></div>
   <div class="ct">
     <div class="partner-note">⚠️ このページはサポート部（完クロ案件担当）が入力・管理します。</div>
     <!-- TU・完クロ案件サマリ -->
@@ -867,7 +894,7 @@ select option{background:var(--sf);}
 <!-- 週次レポート -->
 <div class="page" id="page-weekly">
   <div class="hd">
-    <div class="hd-t">📋 週次レポート</div>
+    <div class="hd-t">週次レポート</div>
     <div class="hd-r" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
       <span class="bx bx-b" id="weekly-lbl"></span>
       <select id="weekly-person" onchange="loadWeekly()" style="font-size:13px;padding:6px 10px;width:auto;border-radius:6px;">
@@ -888,14 +915,14 @@ select option{background:var(--sf);}
     <div class="kg" id="weekly-kpi"><div class="ld"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div><span>集計中...</span></div></div>
     <!-- 転換率セクション -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
-      <div class="cd"><div class="cd-t">📊 フェーズ転換率</div><div id="weekly-rates"></div></div>
-      <div class="cd"><div class="cd-t">📦 案件ステータス分布（全体）</div><div id="weekly-status-dist"></div></div>
+      <div class="cd"><div class="cd-t">フェーズ転換率</div><div id="weekly-rates"></div></div>
+      <div class="cd"><div class="cd-t">案件ステータス分布（全体）</div><div id="weekly-status-dist"></div></div>
     </div>
     <!-- 担当者別実績テーブル -->
     <div class="cd"><div class="cd-t">担当者別 週間実績</div><div class="tw" id="weekly-table"></div></div>
     <!-- トピック -->
     <div class="cd">
-      <div class="cd-t">💬 今週のトピック（担当者別）</div>
+      <div class="cd-t">今週のトピック（担当者別）</div>
       <div id="weekly-topics"></div>
     </div>
     </div><!-- /weekly-team-report -->
@@ -905,7 +932,7 @@ select option{background:var(--sf);}
 <!-- 月次レポート -->
 <div class="page" id="page-monthly">
   <div class="hd">
-    <div class="hd-t">📅 月次レポート</div>
+    <div class="hd-t">月次レポート</div>
     <div class="hd-r" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
       <span class="bx bx-b" id="monthly-lbl"></span>
       <select id="monthly-person" onchange="loadMonthly()" style="font-size:13px;padding:6px 10px;width:auto;border-radius:6px;">
@@ -924,28 +951,28 @@ select option{background:var(--sf);}
     <div class="kg" id="monthly-kpi"><div class="ld"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div><span>読み込み中...</span></div></div>
     <!-- 転換率＋ステータス分布 -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
-      <div class="cd"><div class="cd-t">📊 フェーズ転換率</div><div id="monthly-rates"></div></div>
-      <div class="cd"><div class="cd-t">📦 案件ステータス分布</div><div id="monthly-status-dist"></div></div>
+      <div class="cd"><div class="cd-t">フェーズ転換率</div><div id="monthly-rates"></div></div>
+      <div class="cd"><div class="cd-t">案件ステータス分布</div><div id="monthly-status-dist"></div></div>
     </div>
     <!-- 予算進捗 -->
     <div class="cd" style="border-color:rgba(79,125,247,.3);">
-      <div class="cd-t" style="color:var(--ac);">🎯 担当者別 予算進捗</div>
+      <div class="cd-t" style="color:var(--ac);">担当者別 予算進捗</div>
       <div id="monthly-budget-progress"></div>
     </div>
     <!-- 粗利 -->
     <div class="cd" style="border-color:rgba(167,139,250,.3);">
-      <div class="cd-t" style="color:var(--pu);">💰 粗利集計（受注・申請中・採択案件）</div>
+      <div class="cd-t" style="color:var(--pu);">粗利集計（受注・申請中・採択案件）</div>
       <div id="monthly-gp"></div>
     </div>
     <!-- 担当者別実績 -->
     <div class="cd"><div class="cd-t">担当者別 月間実績</div><div class="tw" id="monthly-table"></div></div>
     <!-- 担当者別トピック -->
     <div class="cd">
-      <div class="cd-t">💬 今月のトピック（担当者別）</div>
+      <div class="cd-t">今月のトピック（担当者別）</div>
       <div id="monthly-topics"></div>
     </div>
     <!-- 社長サマリ -->
-    <div class="cd" style="border-color:rgba(79,125,247,.3);"><div class="cd-t" style="color:var(--ac);">📌 社長向けサマリ</div><div id="monthly-summary" style="font-size:12px;line-height:1.9;color:var(--tx2);">集計後に自動生成されます</div></div>
+    <div class="cd" style="border-color:rgba(79,125,247,.3);"><div class="cd-t" style="color:var(--ac);">社長向けサマリ</div><div id="monthly-summary" style="font-size:12px;line-height:1.9;color:var(--tx2);">集計後に自動生成されます</div></div>
     </div><!-- /monthly-team-report -->
   </div>
 </div>
@@ -953,7 +980,7 @@ select option{background:var(--sf);}
 <!-- 販売店マスタ -->
 <div class="page" id="page-dealer">
   <div class="hd">
-    <div class="hd-t">🏢 販売店マスタ</div>
+    <div class="hd-t">販売店マスタ</div>
     <div class="hd-r" style="display:flex;gap:8px;flex-wrap:wrap;">
       <button class="btn btn-g btn-sm" id="dealer-view-btn" onclick="setDealerView('tree')">🌳 ツリー</button>
       <button class="btn btn-g btn-sm" onclick="setDealerView('table')">📋 テーブル</button>
@@ -1026,7 +1053,7 @@ select option{background:var(--sf);}
 <!-- スケジュール -->
 <div class="page" id="page-schedule">
   <div class="hd">
-    <div class="hd-t">📅 スケジュール</div>
+    <div class="hd-t">スケジュール</div>
     <div class="hd-r" style="display:flex;gap:8px;align-items:center;">
       <button class="btn btn-g btn-sm" onclick="prevMonth()">◀</button>
       <span id="cal-label" style="font-size:15px;font-weight:700;min-width:110px;text-align:center;"></span>
@@ -1048,7 +1075,7 @@ select option{background:var(--sf);}
       <div class="ld" style="padding:20px;"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div><span>読み込み中...</span></div>
     </div>
     <div style="margin-top:16px;">
-      <div class="cd-t" style="margin-bottom:10px;">📋 今月の商談予定一覧</div>
+      <div class="cd-t" style="margin-bottom:10px;">今月の商談予定一覧</div>
       <div id="cal-list"></div>
     </div>
   </div>
@@ -1057,12 +1084,12 @@ select option{background:var(--sf);}
 <!-- メンバー管理 -->
 <div class="page" id="page-members">
   <div class="hd">
-    <div class="hd-t">👥 メンバー管理</div>
+    <div class="hd-t">メンバー管理</div>
     <div class="hd-r"><span class="bx bx-b">予算・担当販売店設定</span></div>
   </div>
   <div class="ct">
     <div class="cd" style="border-color:rgba(79,125,247,.3);">
-      <div class="cd-t" style="color:var(--ac);">📋 使い方</div>
+      <div class="cd-t" style="color:var(--ac);">使い方</div>
       <div style="font-size:12px;color:var(--tx2);line-height:1.8;">
         各メンバーの年間粗利予算を設定すると、月次レポートで進捗率が自動表示されます。<br>
         担当販売店を登録すると、各メンバーの販売店一覧が管理できます。
@@ -1077,12 +1104,12 @@ select option{background:var(--sf);}
 <!-- CSVインポート -->
 <div class="page" id="page-import">
   <div class="hd">
-    <div class="hd-t">📥 CSVインポート</div>
+    <div class="hd-t">CSVインポート</div>
     <div class="hd-r"><span class="bx bx-b">既存データ一括登録</span></div>
   </div>
   <div class="ct">
     <div class="cd" style="border-color:rgba(79,125,247,.3);">
-      <div class="cd-t" style="color:var(--ac);">📋 インポートの使い方</div>
+      <div class="cd-t" style="color:var(--ac);">インポートの使い方</div>
       <div style="font-size:12px;color:var(--tx2);line-height:1.9;">
         1. 下のボタンから対象のCSVテンプレートをダウンロード<br>
         2. テンプレートにデータを入力して保存（文字コード：UTF-8）<br>
@@ -1093,7 +1120,7 @@ select option{background:var(--sf);}
 
     <!-- 案件インポート -->
     <div class="cd">
-      <div class="cd-t">💼 エンド商談データ（案件）</div>
+      <div class="cd-t">エンド商談データ（案件）</div>
       <div style="font-size:11px;color:var(--tx3);margin-bottom:10px;">
         列：案件名, チャネル(end/tossup), 申請補助金, 申請枠, 販売店, 担当者, 金額, ステータス(prospect/negotiating/indicated/won/lost), 見込ランク(A/B/C), 入金予定月(YYYY-MM), メモ, 登録日(YYYY-MM-DD)
       </div>
@@ -1107,7 +1134,7 @@ select option{background:var(--sf);}
 
     <!-- 販売店開拓インポート -->
     <div class="cd">
-      <div class="cd-t">🤝 販売店開拓データ</div>
+      <div class="cd-t">販売店開拓データ</div>
       <div style="font-size:11px;color:var(--tx3);margin-bottom:10px;">
         列：代理店名, 担当者, リード元, 電話番号, メール, 都道府県, 対応者, ステータス(非対応/1stコンタクト/面談済み/対応中/検討中/契約/除外/CLOSE), メモ, 登録日(YYYY-MM-DD)
       </div>
@@ -1121,7 +1148,7 @@ select option{background:var(--sf);}
 
     <!-- 日報インポート -->
     <div class="cd">
-      <div class="cd-t">📝 日報データ</div>
+      <div class="cd-t">日報データ</div>
       <div style="font-size:11px;color:var(--tx3);margin-bottom:10px;">
         列：日付(YYYY-MM-DD), 担当者, 直販訪問, 直販新規見込, 直販内示, 直販受注, TU受領, TU商談, TU内示, TU受注, 販売店新規, 販売店既存, 目標1, 目標2, 目標3, トピック
       </div>
@@ -1135,7 +1162,7 @@ select option{background:var(--sf);}
 
     <!-- 販売店マスタインポート -->
     <div class="cd">
-      <div class="cd-t">🏢 販売店マスタ</div>
+      <div class="cd-t">販売店マスタ（インポート）</div>
       <div style="font-size:12px;color:var(--tx2);margin-bottom:10px;">
         列：会社名, 何次店(1次/2次/3次), 商流, 1次販売店, 2次販売店, 窓口担当者名, 都道府県, 市区町村, ALL担当, 活動ランク(A/B/C), スキーム(完全クロージング/トスアップ/完クロ＋トスアップ), 電話, メール, メモ, 登録日(YYYY-MM-DD)
       </div>
@@ -1158,11 +1185,11 @@ select option{background:var(--sf);}
 
 <div class="mob-nav">
   <div class="mob-nav-i">
-    <div class="mn on" id="m0" onclick="go('exec',null,'m0')"><span class="mn-ic">👁️</span><span class="mn-lb">経営</span></div>
-    <div class="mn" id="m1" onclick="go('cashflow',null,'m1')"><span class="mn-ic">💴</span><span class="mn-lb">入金</span></div>
-    <div class="mn" id="m2" onclick="go('report',null,'m2')"><span class="mn-ic">📝</span><span class="mn-lb">日報</span></div>
-    <div class="mn" id="m3" onclick="go('deals',null,'m3')"><span class="mn-ic">💼</span><span class="mn-lb">案件</span></div>
-    <div class="mn" id="m4" onclick="go('weekly',null,'m4')"><span class="mn-ic">📋</span><span class="mn-lb">週次</span></div>
+    <div class="mn on" id="m0" onclick="go('exec',null,'m0')"><span class="mn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span><span class="mn-lb">経営</span></div>
+    <div class="mn" id="m1" onclick="go('cashflow',null,'m1')"><span class="mn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></span><span class="mn-lb">入金</span></div>
+    <div class="mn" id="m2" onclick="go('report',null,'m2')"><span class="mn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span><span class="mn-lb">日報</span></div>
+    <div class="mn" id="m3" onclick="go('deals',null,'m3')"><span class="mn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span><span class="mn-lb">案件</span></div>
+    <div class="mn" id="m4" onclick="go('weekly',null,'m4')"><span class="mn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span><span class="mn-lb">週次</span></div>
   </div>
 </div>
 <div id="toast"></div>
@@ -1284,41 +1311,14 @@ async function loadExec(){
   document.getElementById("exec-partner-rank").innerHTML=ptArr.length===0?`<div style="font-size:11px;color:var(--tx3);padding:8px 0;">今月のデータなし</div>`:ptArr.map(([nm,v])=>`<div class="fn-row"><span class="fn-l" style="width:100px;font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${nm}</span><div class="fn-b"><div class="fn-f" style="width:${Math.round(v/maxPV*100)}%;background:rgba(52,211,153,.3);color:var(--g);">${v}件</div></div><span class="fn-c" style="color:var(--g);">${v}</span></div>`).join("");
   renderCfBars("exec-cfbar",payments);
 
-  // 全日報データをグローバルに保持（週間要約用）
-  window._allReports = reports;
-
-  // 本日のトピック（初期表示）
-  renderTopicMode('today', reports, today);
-  document.getElementById("btn-topic-today").classList.add("on");
-
-  // 整合性チェック
-  renderConsistencyCheck(todayR, deals_exec, today);
-}
-
-// ============================================================
-//  トピック モード切替・要約
-// ============================================================
-function showTopicMode(mode){
-  const reports = window._allReports || [];
-  const today = todayJST();
-  // ボタンのハイライト切替
-  const btnToday = document.getElementById("btn-topic-today");
-  const btnWeek  = document.getElementById("btn-topic-week");
-  if(btnToday) btnToday.classList.toggle("on", mode==="today");
-  if(btnWeek)  btnWeek.classList.toggle("on",  mode==="week");
-  renderTopicMode(mode, reports, today);
-}
-
-function renderTopicMode(mode, reports, today){
-  const topicsEl = document.getElementById("exec-topics");
-  if(!topicsEl) return;
-
-  if(mode==="today"){
-    // 本日のトピック（担当者別1行）
-    const todayR = reports.filter(r=>r["日付"]===today);
+  // 本日のトピック（担当者別 + フィードバック表示）
+  (function(){
+    const topicsEl = document.getElementById("exec-topics");
+    if(!topicsEl) return;
     const html = MEMBERS.map((nm,i)=>{
       const pr = todayR.filter(r=>r["担当者"]===nm);
       const topic = pr.map(r=>r["トピック"]).filter(Boolean).join(" / ");
+      const fb = pr.map(r=>r["フィードバック"]).filter(Boolean).join(" / ");
       return `<div style="display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--bd);">
         <div class="av" style="background:${MEMBER_COLORS[i]};width:32px;height:32px;font-size:13px;flex-shrink:0;">${nm[0]}</div>
         <div style="flex:1;">
@@ -1326,65 +1326,15 @@ function renderTopicMode(mode, reports, today){
           ${topic
             ? `<div style="font-size:13px;color:var(--tx2);line-height:1.6;">${topic}</div>`
             : `<div style="font-size:12px;color:var(--tx3);">未入力</div>`}
+          ${fb ? `<div class="topic-fb"><div class="topic-fb-lbl">Feedback</div><div class="topic-fb-txt">${fb}</div></div>` : ""}
         </div>
       </div>`;
     }).join("");
     topicsEl.innerHTML = html || `<div style="font-size:12px;color:var(--tx3);">本日のトピックなし</div>`;
-    return;
-  }
+  })();
 
-  // 週間要約モード（過去7日間）
-  const d7ago = (()=>{ const d=new Date();d.setDate(d.getDate()-6);const jst=new Date(d.getTime()+9*3600*1000);return jst.toISOString().split("T")[0]; })();
-  const weekR = reports.filter(r=>{ const dt=String(r["日付"]||""); return dt>=d7ago && dt<=today && r["トピック"]; });
-
-  if(weekR.length===0){
-    topicsEl.innerHTML=`<div style="font-size:12px;color:var(--tx3);">過去7日間のトピックなし</div>`;
-    return;
-  }
-
-  // 担当者別 → 日付順に並べて表示
-  const byPerson={};
-  weekR.forEach(r=>{
-    if(!byPerson[r["担当者"]]) byPerson[r["担当者"]]=[];
-    byPerson[r["担当者"]].push({date:r["日付"], text:r["トピック"]});
-  });
-
-  const html = MEMBERS.filter(nm=>byPerson[nm]).map((nm,_i)=>{
-    const i = MEMBERS.indexOf(nm);
-    const items = byPerson[nm].sort((a,b)=>a.date>b.date?1:-1);
-    // キーワード集計（文字列から主な単語を抽出してカウント）
-    const allText = items.map(t=>t.text).join(" ");
-    const keywords = extractKeywords(allText);
-    const kwHtml = keywords.length>0
-      ? `<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;">${keywords.map(kw=>`<span style="font-size:10px;padding:2px 7px;border-radius:99px;background:rgba(79,125,247,.12);color:var(--ac);">${kw}</span>`).join("")}</div>`
-      : "";
-    return `<div style="padding:10px 0;border-bottom:1px solid var(--bd);">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
-        <div class="av" style="background:${MEMBER_COLORS[i]};width:28px;height:28px;font-size:11px;flex-shrink:0;">${nm[0]}</div>
-        <span style="font-size:13px;font-weight:700;">${nm}</span>
-        <span style="font-size:11px;color:var(--tx3);">${items.length}日分</span>
-      </div>
-      ${items.map(t=>`<div style="display:flex;gap:8px;margin-bottom:5px;padding:6px 10px;background:var(--sf2);border-radius:6px;">
-        <span style="font-size:10px;color:var(--tx3);white-space:nowrap;padding-top:1px;">${t.date.slice(5)}</span>
-        <span style="font-size:12px;color:var(--tx2);line-height:1.6;">${t.text}</span>
-      </div>`).join("")}
-      ${kwHtml}
-    </div>`;
-  }).join("");
-
-  topicsEl.innerHTML=`
-    <div style="font-size:11px;color:var(--tx3);margin-bottom:10px;">📅 集計期間：${d7ago} 〜 ${today}（過去7日間）</div>
-    ${html}`;
-}
-
-function extractKeywords(text){
-  // 簡易キーワード抽出：よく出る名詞・フレーズを集計
-  const stopWords=new Set(["ない","する","した","ある","いる","また","これ","その","ため","こと","もの","から","まで","にて","での","について","として","によって","など","および"]);
-  // 括弧内・助詞・2文字以下を除外して単語に近いトークンを抽出
-  const tokens = text.replace(/[（(【\[「]/g," ").replace(/[）)\]】」]/g," ").split(/[\s,、。・\n！？!?]+/).map(s=>s.trim()).filter(s=>s.length>=2&&s.length<=8&&!stopWords.has(s));
-  const freq={};
-  tokens.forEach(t=>{ freq[t]=(freq[t]||0)+1; });
-  return Object.entries(freq).filter(([,v])=>v>=2).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([k])=>k);
+  // 整合性チェック
+  renderConsistencyCheck(todayR, deals_exec, today);
 }
 
 function renderConsistencyCheck(todayR, deals, today){
@@ -2225,18 +2175,19 @@ async function loadWeekly(){
     document.getElementById("weekly-table").innerHTML=`<table><thead><tr><th>担当者</th><th>接触数</th><th>商談率</th><th>内示数</th><th>内示率</th><th>受注数</th><th>受注率</th><th>販売店</th></tr></thead><tbody>${rows.join("")}</tbody></table>`;
   }
 
-  // 担当者別トピック
+  // 担当者別トピック（フィードバック付き）
   const topicByPerson={};
   wr.filter(r=>r["トピック"]).forEach(r=>{
     if(!topicByPerson[r["担当者"]]) topicByPerson[r["担当者"]]=[];
-    topicByPerson[r["担当者"]].push({date:r["日付"],text:r["トピック"]});
+    topicByPerson[r["担当者"]].push({date:r["日付"],text:r["トピック"],fb:r["フィードバック"]||""});
   });
   const topicHtml=Object.entries(topicByPerson).map(([nm,items])=>`
     <div style="margin-bottom:14px;">
-      <div style="font-size:12px;font-weight:700;color:var(--am);margin-bottom:6px;">👤 ${nm}</div>
+      <div style="font-size:12px;font-weight:700;color:var(--am);margin-bottom:6px;">${nm}</div>
       ${items.map(t=>`<div style="padding:8px 12px;background:var(--sf2);border-radius:6px;margin-bottom:6px;border-left:3px solid var(--am);">
         <div style="font-size:10px;color:var(--tx3);margin-bottom:3px;">${t.date}</div>
         <div style="font-size:12px;color:var(--tx2);">${t.text}</div>
+        ${t.fb?`<div class="topic-fb"><div class="topic-fb-lbl">Feedback</div><div class="topic-fb-txt">${t.fb}</div></div>`:""}
       </div>`).join("")}
     </div>`).join("");
   document.getElementById("weekly-topics").innerHTML=topicHtml||`<div style="color:var(--tx3);font-size:11px;padding:8px 0;">この週のトピックなし</div>`;
@@ -2424,18 +2375,19 @@ async function loadMonthly(){
     <tbody>${rows.join("")}<tr style="font-weight:700;background:rgba(79,125,247,.04);">${totRow.map((v,i)=>`<td class="${i===0?"td-n":"td-m"}" style="${i===0?"color:var(--ac)":""}">${v}</td>`).join("")}</tr></tbody>
   </table>`;
 
-  // 担当者別トピック
+  // 担当者別トピック（フィードバック付き）
   const topicByPerson={};
   mr.filter(r=>r["トピック"]).forEach(r=>{
     if(!topicByPerson[r["担当者"]]) topicByPerson[r["担当者"]]=[];
-    topicByPerson[r["担当者"]].push({date:r["日付"],text:r["トピック"]});
+    topicByPerson[r["担当者"]].push({date:r["日付"],text:r["トピック"],fb:r["フィードバック"]||""});
   });
   const topicHtml=Object.entries(topicByPerson).map(([nm,items])=>`
     <div style="margin-bottom:14px;">
-      <div style="font-size:12px;font-weight:700;color:var(--am);margin-bottom:6px;">👤 ${nm}</div>
+      <div style="font-size:12px;font-weight:700;color:var(--am);margin-bottom:6px;">${nm}</div>
       ${items.sort((a,b)=>a.date>b.date?1:-1).map(t=>`<div style="padding:8px 12px;background:var(--sf2);border-radius:6px;margin-bottom:6px;border-left:3px solid var(--am);">
         <div style="font-size:10px;color:var(--tx3);margin-bottom:3px;">${t.date}</div>
         <div style="font-size:12px;color:var(--tx2);">${t.text}</div>
+        ${t.fb?`<div class="topic-fb"><div class="topic-fb-lbl">Feedback</div><div class="topic-fb-txt">${t.fb}</div></div>`:""}
       </div>`).join("")}
     </div>`).join("");
   document.getElementById("monthly-topics").innerHTML=topicHtml||`<div style="color:var(--tx3);font-size:11px;padding:8px 0;">今月のトピックなし</div>`;
@@ -3344,6 +3296,7 @@ async function renderPersonalWeeklyReport(person, reports, deals){
   const topics=wr.filter(r=>r["トピック"]).map(r=>`<div style="padding:8px 12px;background:var(--sf2);border-radius:6px;margin-bottom:6px;border-left:3px solid var(--am);">
     <div style="font-size:11px;color:var(--tx3);margin-bottom:3px;">${r["日付"]}</div>
     <div style="font-size:13px;">${r["トピック"]}</div>
+    ${r["フィードバック"]?`<div class="topic-fb"><div class="topic-fb-lbl">Feedback</div><div class="topic-fb-txt">${r["フィードバック"]}</div></div>`:""}
   </div>`).join("") || `<div style="color:var(--tx3);font-size:12px;">今週のトピックなし</div>`;
 
   // 日別グラフデータ（平日のみ）
@@ -3389,11 +3342,11 @@ async function renderPersonalWeeklyReport(person, reports, deals){
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
       <div class="cd">
-        <div class="cd-t">📊 日別 活動量</div>
+        <div class="cd-t">日別 活動量</div>
         ${barSvg}
       </div>
       <div class="cd">
-        <div class="cd-t">💬 今週のトピック</div>
+        <div class="cd-t">今週のトピック</div>
         ${topics}
       </div>
     </div>`;
@@ -3501,10 +3454,11 @@ async function renderPersonalMonthlyReport(person, month, reports, deals){
       <span style="font-size:12px;font-family:var(--mo);color:var(--pu);white-space:nowrap;">${num(d,"粗利")>0?"粗利¥"+d["粗利"]+"万":""}</span>
     </div>`).join("");
 
-  // トピック
+  // トピック（フィードバック付き）
   const topics=mr.filter(r=>r["トピック"]).map(r=>`<div style="padding:8px 12px;background:var(--sf2);border-radius:6px;margin-bottom:6px;border-left:3px solid var(--am);">
     <div style="font-size:11px;color:var(--tx3);margin-bottom:2px;">${r["日付"]}</div>
     <div style="font-size:13px;">${r["トピック"]}</div>
+    ${r["フィードバック"]?`<div class="topic-fb"><div class="topic-fb-lbl">Feedback</div><div class="topic-fb-txt">${r["フィードバック"]}</div></div>`:""}
   </div>`).join()||`<div style="font-size:12px;color:var(--tx3);">今月のトピックなし</div>`;
 
   el.innerHTML=`
@@ -3582,13 +3536,13 @@ async function renderPersonalMonthlyReport(person, month, reports, deals){
 
     <!-- 今月の案件 -->
     <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:16px;margin-bottom:18px;box-shadow:0 1px 4px rgba(0,0,0,.06);">
-      <div style="font-size:13px;font-weight:700;color:#475569;margin-bottom:10px;">💼 今月の案件（${myMonthDeals.length}件）</div>
+      <div style="font-size:13px;font-weight:700;color:#475569;margin-bottom:10px;">今月の案件（${myMonthDeals.length}件）</div>
       ${dealRows}
     </div>
 
     <!-- トピック -->
     <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.06);">
-      <div style="font-size:13px;font-weight:700;color:#475569;margin-bottom:10px;">💬 今月のトピック</div>
+      <div style="font-size:13px;font-weight:700;color:#475569;margin-bottom:10px;">今月のトピック</div>
       ${topics}
     </div>`;
 }
