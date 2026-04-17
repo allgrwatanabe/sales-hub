@@ -273,41 +273,10 @@ select option{background:var(--sf);}
 .mob-nav-i{display:flex;justify-content:space-around;}
 .mn{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:4px 8px;border-radius:6px;color:var(--tx3);transition:.15s;}
 .mn.on{color:var(--ac);}
-.mn-ic{width:22px;height:22px;display:flex;align-items:center;justify-content:center;}
-.mn-ic svg{width:20px;height:20px;}
+.mn-ic{font-size:22px;}
 .mn-lb{font-size:11px;font-weight:600;}
 @media(max-width:900px){.sb{display:none;}.mob-nav{display:block;}.main{padding-bottom:72px;}.kg{grid-template-columns:1fr 1fr;}.pg{grid-template-columns:1fr;}.deal-meta-grid{grid-template-columns:1fr 1fr;}.ct{padding:14px 16px;}.hd{padding:14px 16px;}}
 @media(max-width:600px){.kg{grid-template-columns:1fr 1fr;}.fg,.fg3,.fg4{grid-template-columns:1fr;}.ch-b4{grid-template-columns:1fr 1fr;}.ch-b3{grid-template-columns:1fr 1fr;}.deal-meta-grid{grid-template-columns:1fr;}.kpi-v{font-size:24px;}}
-
-/* ===== Refined Design ===== */
-/* SVG icon sizing in nav */
-.ni-ic{display:flex;align-items:center;justify-content:center;width:18px;height:18px;flex-shrink:0;}
-.ni-ic svg,.ni-sub .ni-ic svg{width:16px;height:16px;}
-/* Section label refinement */
-.sec{font-size:11px;font-weight:700;color:var(--tx3);letter-spacing:.04em;text-transform:uppercase;margin-bottom:12px;padding-bottom:0;}
-/* KPI top accent via border instead of ::after pseudo */
-.kpi{border-top:3px solid transparent;}
-.kpi::after{display:none;}
-.kpi.bl{border-top-color:var(--ac);}
-.kpi.gr{border-top-color:var(--g);}
-.kpi.am{border-top-color:var(--am);}
-.kpi.rd{border-top-color:var(--rd);}
-/* Card title refinement */
-.cd-t{font-size:12px;font-weight:700;color:var(--tx2);margin-bottom:14px;letter-spacing:.02em;}
-/* Header title */
-.hd-t{font-size:17px;font-weight:700;letter-spacing:-.01em;}
-/* Logo refinement */
-.logo-t{font-size:14px;font-weight:800;color:var(--ac);letter-spacing:.12em;}
-/* Feedback bubble in topic sections */
-.topic-fb{margin-top:7px;padding:7px 12px;background:rgba(59,110,240,.06);border-left:3px solid var(--ac);border-radius:0 6px 6px 0;}
-.topic-fb-lbl{font-size:10px;font-weight:700;color:var(--ac);letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;}
-.topic-fb-txt{font-size:12px;color:var(--tx2);line-height:1.7;white-space:pre-wrap;}
-/* Refined nav section label */
-.ns{font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:.1em;text-transform:uppercase;padding:10px 8px 3px;margin-top:4px;}
-/* Avatar in exec pg - slightly larger */
-.pc-h .av{width:34px;height:34px;font-size:13px;}
-/* Refined toast */
-#toast{border-radius:6px;font-size:12px;padding:10px 18px;font-weight:600;}
 </style>
 </head>
 <body>
@@ -348,28 +317,28 @@ select option{background:var(--sf);}
     <div class="logo-s">株式会社ALL</div>
   </div>
   <nav class="nav">
-    <div class="ni on" onclick="go('exec',this,'m0')"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>ダッシュボード</div>
-    <div class="ni" onclick="go('cashflow',this,'m1')"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></span>入金予定</div>
+    <div class="ni on" onclick="go('exec',this,'m0')"><span class="ni-ic">📊</span>ダッシュボード</div>
+    <div class="ni" onclick="go('cashflow',this,'m1')"><span class="ni-ic">💴</span>入金予定</div>
     <div class="ns">営業部</div>
-    <div class="ni" onclick="go('report',this,'m2')"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>日報入力</div>
-    <div class="ni-parent" id="nav-deals-parent" onclick="toggleDealsMenu()"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>商談管理<span class="ni-bd" id="nb-d">—</span><span class="ni-arrow" id="deals-arrow">▶</span></div>
+    <div class="ni" onclick="go('report',this,'m2')"><span class="ni-ic">📝</span>日報入力</div>
+    <div class="ni-parent" id="nav-deals-parent" onclick="toggleDealsMenu()"><span class="ni-ic">💼</span>商談管理<span class="ni-bd" id="nb-d">—</span><span class="ni-arrow" id="deals-arrow">▶</span></div>
     <div class="sub-menu" id="deals-submenu">
-      <div class="ni-sub" id="nav-deals-end" onclick="go('deals',null,'m3');setDealsSubActive('end')"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="18" rx="1"/><path d="M9 22V12h6v10"/><line x1="2" y1="9" x2="22" y2="9"/></svg></span>エンド商談管理</div>
-      <div class="ni-sub" id="nav-deals-vendor" onclick="go('vendor-nego',null,'m3');setDealsSubActive('vendor')"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></span>販売店商談管理</div>
-      <div class="ni-sub" id="nav-deals-client" onclick="go('client-nego',null,'m3');setDealsSubActive('client')"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>取引先商談管理</div>
-      <div class="ni-sub" id="nav-deals-partner" onclick="go('partner-dev',null,'m3');setDealsSubActive('partner')"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>販売店開拓管理</div>
+      <div class="ni-sub" id="nav-deals-end" onclick="go('deals',null,'m3');setDealsSubActive('end')"><span class="ni-ic">🏢</span>エンド商談管理</div>
+      <div class="ni-sub" id="nav-deals-vendor" onclick="go('vendor-nego',null,'m3');setDealsSubActive('vendor')"><span class="ni-ic">🏪</span>販売店商談管理</div>
+      <div class="ni-sub" id="nav-deals-client" onclick="go('client-nego',null,'m3');setDealsSubActive('client')"><span class="ni-ic">🤝</span>取引先商談管理</div>
+      <div class="ni-sub" id="nav-deals-partner" onclick="go('partner-dev',null,'m3');setDealsSubActive('partner')"><span class="ni-ic">🔍</span>販売店開拓管理</div>
     </div>
     <div class="ns">サポート部</div>
-    <div class="ni" onclick="go('partner',this,'m4')"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,11 12,14 22,4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>完クロ案件管理</div>
+    <div class="ni" onclick="go('partner',this,'m4')"><span class="ni-ic">🏪</span>完クロ案件管理</div>
     <div class="ns admin-only" id="nav-data-section">データ管理</div>
-    <div class="ni admin-only" onclick="go('members',this,'mx')"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>メンバー管理</div>
-    <div class="ni admin-only" onclick="go('dealer',this,'mx3')"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></span>販売店マスタ</div>
-    <div class="ni admin-only" onclick="go('import',this,'mx2')"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16,16 12,12 8,16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg></span>CSVインポート</div>
+    <div class="ni admin-only" onclick="go('members',this,'mx')"><span class="ni-ic">👥</span>メンバー管理</div>
+    <div class="ni admin-only" onclick="go('dealer',this,'mx3')"><span class="ni-ic">🏢</span>販売店マスタ</div>
+    <div class="ni admin-only" onclick="go('import',this,'mx2')"><span class="ni-ic">📥</span>CSVインポート</div>
     <div class="ns">スケジュール</div>
-    <div class="ni" onclick="go('schedule',this,'ms')"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>スケジュール</div>
+    <div class="ni" onclick="go('schedule',this,'ms')"><span class="ni-ic">📅</span>スケジュール</div>
     <div class="ns">レポート</div>
-    <div class="ni" onclick="go('weekly',this,'m5')"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>週次レポート</div>
-    <div class="ni" onclick="go('monthly',this,'m6')"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg></span>月次レポート</div>
+    <div class="ni" onclick="go('weekly',this,'m5')"><span class="ni-ic">📋</span>週次レポート</div>
+    <div class="ni" onclick="go('monthly',this,'m6')"><span class="ni-ic">📅</span>月次レポート</div>
   </nav>
   <div class="sb-ft">
     <div class="u-row" onclick="showLogout()" style="cursor:pointer;" title="クリックでログアウト"><div class="av" id="sb-av" style="background:#3b6ef0;">?</div><div><div class="u-nm" id="sb-nm">未選択</div><div style="font-size:10px;color:var(--tx3);" id="sb-role">—</div></div></div>
@@ -381,28 +350,35 @@ select option{background:var(--sf);}
 
 <!-- 経営ダッシュボード -->
 <div class="page on" id="page-exec">
-  <div class="hd"><div class="hd-t">経営ダッシュボード</div><div class="hd-r"><span class="bx bx-b" id="today-lbl"></span><button class="btn btn-g btn-sm" onclick="loadExec()">↻ 更新</button></div></div>
+  <div class="hd">
+    <div class="hd-t">経営ダッシュボード</div>
+    <div class="hd-r" style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+      <button class="btn btn-g btn-sm" onclick="shiftExecDate(-1)" title="前日">◀</button>
+      <input type="date" id="exec-date-pick" style="font-size:13px;padding:5px 10px;border-radius:6px;border:1px solid var(--bd);background:var(--sf2);" onchange="loadExec()">
+      <button class="btn btn-g btn-sm" onclick="shiftExecDate(1)" title="翌日">▶</button>
+      <button class="btn btn-g btn-sm" onclick="document.getElementById('exec-date-pick').value=todayJST();loadExec()">今日</button>
+      <button class="btn btn-g btn-sm" onclick="loadExec()">↻ 更新</button>
+    </div>
+  </div>
   <div class="ct">
-    <div class="sec">今月の主要指標</div>
+    <div class="sec" id="exec-month-lbl">今月の主要指標</div>
     <div class="kg">
       <div class="kpi am"><div class="kpi-l">入金見込（受注）</div><div class="kpi-v am" id="kpi-pay">—</div><div class="kpi-s">受注案件の金額合計</div></div>
       <div class="kpi gr" style="grid-column:span 1;"><div class="kpi-l">入金予定（採択）</div><div class="kpi-v gr" id="kpi-adopted">—</div><div class="kpi-s">採択案件の金額合計</div></div>
-      <div class="kpi gr"><div class="kpi-l">エンド商談 内示率</div><div class="kpi-v gr" id="kpi-tu">—</div><div class="kpi-s">内示÷商談数</div></div>
-      <div class="kpi bl"><div class="kpi-l">今日の全商談件数</div><div class="kpi-v bl" id="kpi-acts">—</div><div class="kpi-s">全員合計（本日）</div></div>
-      <div class="kpi rd"><div class="kpi-l">今月 キャンセル</div><div class="kpi-v rd" id="kpi-cancel">—</div><div class="kpi-s">日報集計値</div></div>
+      <div class="kpi gr"><div class="kpi-l">TU決定率（今月）</div><div class="kpi-v gr" id="kpi-tu">—</div><div class="kpi-s">内示÷商談数</div></div>
+      <div class="kpi bl"><div class="kpi-l">商談件数（選択日）</div><div class="kpi-v bl" id="kpi-acts">—</div><div class="kpi-s">全員合計</div></div>
+      <div class="kpi rd"><div class="kpi-l">内示合計（今月）</div><div class="kpi-v rd" id="kpi-cancel">—</div><div class="kpi-s">直販+TU</div></div>
     </div>
-    <div class="sec">担当者別 本日の活動</div>
+    <div class="sec" id="exec-day-lbl">担当者別 本日の活動</div>
     <div class="pg" id="exec-pg"><div class="ld"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div><span>読み込み中...</span></div></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
-      <div class="cd"><div class="cd-t">エンド商談 フェーズ分布（今月）</div><div id="exec-funnel"></div></div>
+      <div class="cd"><div class="cd-t" id="exec-funnel-lbl">エンド商談 フェーズ分布（今月）</div><div id="exec-funnel"></div></div>
       <div class="cd"><div class="cd-t">販売店別 TU受領（今月）</div><div id="exec-partner-rank"></div></div>
     </div>
     <div class="cd"><div class="cd-t">今後4ヶ月 入金見通し</div><div id="exec-cfbar"></div></div>
 
-    <!-- 本日のトピック + 要約 -->
-    <div class="sec" style="display:flex;align-items:center;justify-content:space-between;">
-      <span>本日のトピック</span>
-    </div>
+    <!-- トピック -->
+    <div class="sec" id="exec-topic-sec-lbl">トピック</div>
     <div class="cd" id="exec-topics">
       <div class="ld"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div><span>読み込み中...</span></div>
     </div>
@@ -417,7 +393,7 @@ select option{background:var(--sf);}
 
 <!-- 入金予定 -->
 <div class="page" id="page-cashflow">
-  <div class="hd"><div class="hd-t">入金予定管理</div><div class="hd-r"><button class="btn btn-p btn-sm" onclick="toggleAddPay()">＋ 入金予定追加</button></div></div>
+  <div class="hd"><div class="hd-t">💴 入金予定管理</div><div class="hd-r"><button class="btn btn-p btn-sm" onclick="toggleAddPay()">＋ 入金予定追加</button></div></div>
   <div class="ct">
     <div class="sec">月別 入金見通し</div>
     <div class="cd" style="border-color:rgba(79,125,247,.3);padding:12px 16px;margin-bottom:10px;">
@@ -430,7 +406,7 @@ select option{background:var(--sf);}
     </div>
     <!-- 受注・採択案件の自動集計グラフ -->
     <div class="cd">
-      <div class="cd-t" style="color:var(--ac);">受注・採択案件 入金見通し（自動集計）</div>
+      <div class="cd-t" style="color:var(--ac);">📊 受注・採択案件 入金見通し（自動集計）</div>
       <div id="deal-cf-chart"></div>
     </div>
     <div class="cd" id="cf-bar-cd"></div>
@@ -452,7 +428,7 @@ select option{background:var(--sf);}
 
 <!-- 日報入力 -->
 <div class="page" id="page-report">
-  <div class="hd"><div class="hd-t">日報入力</div><div class="hd-r"><span class="bx bx-a" id="rep-dt-lbl"></span></div></div>
+  <div class="hd"><div class="hd-t">📝 日報入力</div><div class="hd-r"><span class="bx bx-a" id="rep-dt-lbl"></span></div></div>
   <div class="ct">
     <div class="cd">
       <div class="fg" style="margin-bottom:14px;">
@@ -500,6 +476,15 @@ select option{background:var(--sf);}
         </div>
       </div>
 
+      <!-- 社内同行 -->
+      <div class="ch-f">
+        <div class="ch-h" style="background:rgba(100,116,139,.1);color:#64748b;">👥 社内同行</div>
+        <div class="ch-b" style="grid-template-columns:1fr 1fr;padding:12px 14px;">
+          <div class="nf"><label>新規同行</label><div class="nc"><button class="nb" onclick="cn('accompany_new',-1)">−</button><div class="nd" id="accompany_new">0</div><button class="nb" onclick="cn('accompany_new',1)">＋</button></div></div>
+          <div class="nf"><label>既存同行</label><div class="nc"><button class="nb" onclick="cn('accompany_exist',-1)">−</button><div class="nd" id="accompany_exist">0</div><button class="nb" onclick="cn('accompany_exist',1)">＋</button></div></div>
+        </div>
+      </div>
+
       <!-- エンド対応 -->
       <div class="ch-f">
         <div class="ch-h" style="background:rgba(56,189,248,.1);color:#38bdf8;">📋 エンド対応（接触）</div>
@@ -523,39 +508,23 @@ select option{background:var(--sf);}
         <textarea id="r-topic" placeholder="商談の手応え、販売店の動き、懸案事項など"></textarea>
       </div>
       <div style="display:flex;gap:8px;align-items:center;">
-        <button class="btn btn-p" id="rep-btn" onclick="submitReport()">📨 日報を送信</button>
+        <div id="rep-today-status" style="font-size:12px;color:var(--tx3);margin-bottom:8px;"></div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;">
+    <button class="btn btn-p" id="rep-btn" onclick="submitReport()">📨 日報を送信</button>
+    <button class="btn btn-g" id="rep-edit-btn" onclick="loadTodayReport()" style="display:none;">✏️ 本日分を編集</button>
+  </div>
         <button class="btn btn-g" onclick="clearRep()">クリア</button>
         <span id="rep-status" style="font-size:11px;color:var(--tx3);"></span>
       </div>
     </div>
-    <div class="cd" id="rep-preview" style="display:none;"><div class="cd-t">送信済み（本日）</div><div id="rep-preview-body"></div></div>
-
-    <!-- ===== 日報閲覧・フィードバック ===== -->
-    <div class="cd" style="margin-top:6px;">
-      <div class="cd-t">過去の日報を確認・フィードバック</div>
-      <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:flex-end;">
-        <div class="fm" style="flex:1;min-width:140px;">
-          <label class="lb">日付を選択</label>
-          <input type="date" id="rv-date">
-        </div>
-        <div class="fm" style="flex:1;min-width:140px;">
-          <label class="lb">担当者</label>
-          <select id="rv-person">
-            <option>橋野 浩一</option><option>川﨑 慧</option><option>浦塚 弘樹</option>
-            <option>坂本 憲司</option><option>又吉 俊</option><option>千代島 奨磨</option>
-          </select>
-        </div>
-        <button class="btn btn-g btn-sm" onclick="loadReportView()" style="flex-shrink:0;">表示</button>
-      </div>
-      <div id="rep-view-result"></div>
-    </div>
+    <div class="cd" id="rep-preview" style="display:none;"><div class="cd-t">✅ 送信済み（本日）</div><div id="rep-preview-body"></div></div>
   </div>
 </div>
 
 <!-- ★案件管理（一覧） -->
 <div class="page" id="page-deals">
   <div class="hd">
-    <div class="hd-t">案件管理</div>
+    <div class="hd-t">💼 案件管理</div>
     <div class="hd-r"><button class="btn btn-p btn-sm" onclick="toggleAddDeal()">＋ 新規</button></div>
   </div>
   <!-- 検索＆フィルターバー -->
@@ -639,7 +608,7 @@ select option{background:var(--sf);}
 <!-- ★案件詳細（カルテ） -->
 <div class="page" id="page-deal-detail">
   <div class="hd">
-    <div class="hd-t">案件カルテ</div>
+    <div class="hd-t">💼 案件カルテ</div>
     <div class="hd-r"><button class="btn btn-g btn-sm" onclick="go('deals',null,'m3')">← 一覧に戻る</button></div>
   </div>
   <div class="ct">
@@ -673,7 +642,7 @@ select option{background:var(--sf);}
 <!-- 販売店商談管理 -->
 <div class="page" id="page-vendor-nego">
   <div class="hd">
-    <div class="hd-t">販売店商談管理</div>
+    <div class="hd-t">🏪 販売店商談管理</div>
     <div class="hd-r"><button class="btn btn-p btn-sm" onclick="toggleVendornegoAdd()">＋ 新規登録</button></div>
   </div>
   <div class="deal-search">
@@ -703,7 +672,7 @@ select option{background:var(--sf);}
 <!-- 販売店商談管理 カルテ -->
 <div class="page" id="page-vendor-nego-detail">
   <div class="hd">
-    <div class="hd-t">商談カルテ</div>
+    <div class="hd-t">🏪 商談カルテ</div>
     <div class="hd-r"><button class="btn btn-g btn-sm" onclick="go('vendor-nego',null,'m3');setDealsSubActive('vendor')">← 一覧に戻る</button></div>
   </div>
   <div class="ct">
@@ -731,7 +700,7 @@ select option{background:var(--sf);}
 <!-- 取引先商談管理 -->
 <div class="page" id="page-client-nego">
   <div class="hd">
-    <div class="hd-t">取引先商談管理</div>
+    <div class="hd-t">🤝 取引先商談管理</div>
     <div class="hd-r"><button class="btn btn-p btn-sm" onclick="toggleClientnegoAdd()">＋ 新規登録</button></div>
   </div>
   <div class="deal-search">
@@ -761,7 +730,7 @@ select option{background:var(--sf);}
 <!-- 取引先商談管理 カルテ -->
 <div class="page" id="page-client-nego-detail">
   <div class="hd">
-    <div class="hd-t">商談カルテ</div>
+    <div class="hd-t">🤝 商談カルテ</div>
     <div class="hd-r"><button class="btn btn-g btn-sm" onclick="go('client-nego',null,'m3');setDealsSubActive('client')">← 一覧に戻る</button></div>
   </div>
   <div class="ct">
@@ -789,7 +758,7 @@ select option{background:var(--sf);}
 <!-- ★販売店開拓管理 -->
 <div class="page" id="page-partner-dev">
   <div class="hd">
-    <div class="hd-t">販売店開拓管理</div>
+    <div class="hd-t">🤝 販売店開拓管理</div>
     <div class="hd-r">
       <button class="btn btn-p btn-sm" onclick="toggleAddPartnerDev()">＋ 新規登録</button>
     </div>
@@ -843,7 +812,7 @@ select option{background:var(--sf);}
 <!-- ★販売店開拓カルテ -->
 <div class="page" id="page-pd-detail">
   <div class="hd">
-    <div class="hd-t">代理店カルテ</div>
+    <div class="hd-t">🤝 代理店カルテ</div>
     <div class="hd-r"><button class="btn btn-g btn-sm" onclick="go('partner-dev',null,'m3');setDealsSubActive('partner')">← 一覧に戻る</button></div>
   </div>
   <div class="ct">
@@ -871,7 +840,7 @@ select option{background:var(--sf);}
 
 <!-- 販売店管理 -->
 <div class="page" id="page-partner">
-  <div class="hd"><div class="hd-t">完クロ案件管理</div><div class="hd-r"><span class="bx bx-b">今月集計</span></div></div>
+  <div class="hd"><div class="hd-t">🏪 完クロ案件管理</div><div class="hd-r"><span class="bx bx-b">今月集計</span></div></div>
   <div class="ct">
     <div class="partner-note">⚠️ このページはサポート部（完クロ案件担当）が入力・管理します。</div>
     <!-- TU・完クロ案件サマリ -->
@@ -894,7 +863,7 @@ select option{background:var(--sf);}
 <!-- 週次レポート -->
 <div class="page" id="page-weekly">
   <div class="hd">
-    <div class="hd-t">週次レポート</div>
+    <div class="hd-t">📋 週次レポート</div>
     <div class="hd-r" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
       <span class="bx bx-b" id="weekly-lbl"></span>
       <select id="weekly-person" onchange="loadWeekly()" style="font-size:13px;padding:6px 10px;width:auto;border-radius:6px;">
@@ -915,14 +884,14 @@ select option{background:var(--sf);}
     <div class="kg" id="weekly-kpi"><div class="ld"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div><span>集計中...</span></div></div>
     <!-- 転換率セクション -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
-      <div class="cd"><div class="cd-t">フェーズ転換率</div><div id="weekly-rates"></div></div>
-      <div class="cd"><div class="cd-t">案件ステータス分布（全体）</div><div id="weekly-status-dist"></div></div>
+      <div class="cd"><div class="cd-t">📊 フェーズ転換率</div><div id="weekly-rates"></div></div>
+      <div class="cd"><div class="cd-t">📦 案件ステータス分布（全体）</div><div id="weekly-status-dist"></div></div>
     </div>
     <!-- 担当者別実績テーブル -->
     <div class="cd"><div class="cd-t">担当者別 週間実績</div><div class="tw" id="weekly-table"></div></div>
     <!-- トピック -->
     <div class="cd">
-      <div class="cd-t">今週のトピック（担当者別）</div>
+      <div class="cd-t">💬 今週のトピック（担当者別）</div>
       <div id="weekly-topics"></div>
     </div>
     </div><!-- /weekly-team-report -->
@@ -932,7 +901,7 @@ select option{background:var(--sf);}
 <!-- 月次レポート -->
 <div class="page" id="page-monthly">
   <div class="hd">
-    <div class="hd-t">月次レポート</div>
+    <div class="hd-t">📅 月次レポート</div>
     <div class="hd-r" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
       <span class="bx bx-b" id="monthly-lbl"></span>
       <select id="monthly-person" onchange="loadMonthly()" style="font-size:13px;padding:6px 10px;width:auto;border-radius:6px;">
@@ -951,28 +920,28 @@ select option{background:var(--sf);}
     <div class="kg" id="monthly-kpi"><div class="ld"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div><span>読み込み中...</span></div></div>
     <!-- 転換率＋ステータス分布 -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
-      <div class="cd"><div class="cd-t">フェーズ転換率</div><div id="monthly-rates"></div></div>
-      <div class="cd"><div class="cd-t">案件ステータス分布</div><div id="monthly-status-dist"></div></div>
+      <div class="cd"><div class="cd-t">📊 フェーズ転換率</div><div id="monthly-rates"></div></div>
+      <div class="cd"><div class="cd-t">📦 案件ステータス分布</div><div id="monthly-status-dist"></div></div>
     </div>
     <!-- 予算進捗 -->
     <div class="cd" style="border-color:rgba(79,125,247,.3);">
-      <div class="cd-t" style="color:var(--ac);">担当者別 予算進捗</div>
+      <div class="cd-t" style="color:var(--ac);">🎯 担当者別 予算進捗</div>
       <div id="monthly-budget-progress"></div>
     </div>
     <!-- 粗利 -->
     <div class="cd" style="border-color:rgba(167,139,250,.3);">
-      <div class="cd-t" style="color:var(--pu);">粗利集計（受注・申請中・採択案件）</div>
+      <div class="cd-t" style="color:var(--pu);">💰 粗利集計（受注・申請中・採択案件）</div>
       <div id="monthly-gp"></div>
     </div>
     <!-- 担当者別実績 -->
     <div class="cd"><div class="cd-t">担当者別 月間実績</div><div class="tw" id="monthly-table"></div></div>
     <!-- 担当者別トピック -->
     <div class="cd">
-      <div class="cd-t">今月のトピック（担当者別）</div>
+      <div class="cd-t">💬 今月のトピック（担当者別）</div>
       <div id="monthly-topics"></div>
     </div>
     <!-- 社長サマリ -->
-    <div class="cd" style="border-color:rgba(79,125,247,.3);"><div class="cd-t" style="color:var(--ac);">社長向けサマリ</div><div id="monthly-summary" style="font-size:12px;line-height:1.9;color:var(--tx2);">集計後に自動生成されます</div></div>
+    <div class="cd" style="border-color:rgba(79,125,247,.3);"><div class="cd-t" style="color:var(--ac);">📌 社長向けサマリ</div><div id="monthly-summary" style="font-size:12px;line-height:1.9;color:var(--tx2);">集計後に自動生成されます</div></div>
     </div><!-- /monthly-team-report -->
   </div>
 </div>
@@ -1053,7 +1022,7 @@ select option{background:var(--sf);}
 <!-- スケジュール -->
 <div class="page" id="page-schedule">
   <div class="hd">
-    <div class="hd-t">スケジュール</div>
+    <div class="hd-t">📅 スケジュール</div>
     <div class="hd-r" style="display:flex;gap:8px;align-items:center;">
       <button class="btn btn-g btn-sm" onclick="prevMonth()">◀</button>
       <span id="cal-label" style="font-size:15px;font-weight:700;min-width:110px;text-align:center;"></span>
@@ -1075,7 +1044,7 @@ select option{background:var(--sf);}
       <div class="ld" style="padding:20px;"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div><span>読み込み中...</span></div>
     </div>
     <div style="margin-top:16px;">
-      <div class="cd-t" style="margin-bottom:10px;">今月の商談予定一覧</div>
+      <div class="cd-t" style="margin-bottom:10px;">📋 今月の商談予定一覧</div>
       <div id="cal-list"></div>
     </div>
   </div>
@@ -1084,7 +1053,7 @@ select option{background:var(--sf);}
 <!-- メンバー管理 -->
 <div class="page" id="page-members">
   <div class="hd">
-    <div class="hd-t">メンバー管理</div>
+    <div class="hd-t">👥 メンバー管理</div>
     <div class="hd-r"><span class="bx bx-b">予算・担当販売店設定</span></div>
   </div>
   <div class="ct">
@@ -1104,12 +1073,12 @@ select option{background:var(--sf);}
 <!-- CSVインポート -->
 <div class="page" id="page-import">
   <div class="hd">
-    <div class="hd-t">CSVインポート</div>
+    <div class="hd-t">📥 CSVインポート</div>
     <div class="hd-r"><span class="bx bx-b">既存データ一括登録</span></div>
   </div>
   <div class="ct">
     <div class="cd" style="border-color:rgba(79,125,247,.3);">
-      <div class="cd-t" style="color:var(--ac);">インポートの使い方</div>
+      <div class="cd-t" style="color:var(--ac);">📋 インポートの使い方</div>
       <div style="font-size:12px;color:var(--tx2);line-height:1.9;">
         1. 下のボタンから対象のCSVテンプレートをダウンロード<br>
         2. テンプレートにデータを入力して保存（文字コード：UTF-8）<br>
@@ -1120,7 +1089,7 @@ select option{background:var(--sf);}
 
     <!-- 案件インポート -->
     <div class="cd">
-      <div class="cd-t">エンド商談データ（案件）</div>
+      <div class="cd-t">💼 エンド商談データ（案件）</div>
       <div style="font-size:11px;color:var(--tx3);margin-bottom:10px;">
         列：案件名, チャネル(end/tossup), 申請補助金, 申請枠, 販売店, 担当者, 金額, ステータス(prospect/negotiating/indicated/won/lost), 見込ランク(A/B/C), 入金予定月(YYYY-MM), メモ, 登録日(YYYY-MM-DD)
       </div>
@@ -1134,7 +1103,7 @@ select option{background:var(--sf);}
 
     <!-- 販売店開拓インポート -->
     <div class="cd">
-      <div class="cd-t">販売店開拓データ</div>
+      <div class="cd-t">🤝 販売店開拓データ</div>
       <div style="font-size:11px;color:var(--tx3);margin-bottom:10px;">
         列：代理店名, 担当者, リード元, 電話番号, メール, 都道府県, 対応者, ステータス(非対応/1stコンタクト/面談済み/対応中/検討中/契約/除外/CLOSE), メモ, 登録日(YYYY-MM-DD)
       </div>
@@ -1148,7 +1117,7 @@ select option{background:var(--sf);}
 
     <!-- 日報インポート -->
     <div class="cd">
-      <div class="cd-t">日報データ</div>
+      <div class="cd-t">📝 日報データ</div>
       <div style="font-size:11px;color:var(--tx3);margin-bottom:10px;">
         列：日付(YYYY-MM-DD), 担当者, 直販訪問, 直販新規見込, 直販内示, 直販受注, TU受領, TU商談, TU内示, TU受注, 販売店新規, 販売店既存, 目標1, 目標2, 目標3, トピック
       </div>
@@ -1185,11 +1154,11 @@ select option{background:var(--sf);}
 
 <div class="mob-nav">
   <div class="mob-nav-i">
-    <div class="mn on" id="m0" onclick="go('exec',null,'m0')"><span class="mn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span><span class="mn-lb">経営</span></div>
-    <div class="mn" id="m1" onclick="go('cashflow',null,'m1')"><span class="mn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></span><span class="mn-lb">入金</span></div>
-    <div class="mn" id="m2" onclick="go('report',null,'m2')"><span class="mn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span><span class="mn-lb">日報</span></div>
-    <div class="mn" id="m3" onclick="go('deals',null,'m3')"><span class="mn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span><span class="mn-lb">案件</span></div>
-    <div class="mn" id="m4" onclick="go('weekly',null,'m4')"><span class="mn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span><span class="mn-lb">週次</span></div>
+    <div class="mn on" id="m0" onclick="go('exec',null,'m0')"><span class="mn-ic">👁️</span><span class="mn-lb">経営</span></div>
+    <div class="mn" id="m1" onclick="go('cashflow',null,'m1')"><span class="mn-ic">💴</span><span class="mn-lb">入金</span></div>
+    <div class="mn" id="m2" onclick="go('report',null,'m2')"><span class="mn-ic">📝</span><span class="mn-lb">日報</span></div>
+    <div class="mn" id="m3" onclick="go('deals',null,'m3')"><span class="mn-ic">💼</span><span class="mn-lb">案件</span></div>
+    <div class="mn" id="m4" onclick="go('weekly',null,'m4')"><span class="mn-ic">📋</span><span class="mn-lb">週次</span></div>
   </div>
 </div>
 <div id="toast"></div>
@@ -1233,19 +1202,42 @@ function go(page,sideEl,mnId){
   if(sideEl) sideEl.classList.add("on");
   if(mnId){const mnEl=document.getElementById(mnId);if(mnEl)mnEl.classList.add("on");}
   document.getElementById("mainScroll").scrollTop=0;
-  ({exec:loadExec,cashflow:loadPayments,deals:loadDeals,'partner-dev':loadPartnerDev,'vendor-nego':loadVendorNego,'client-nego':loadClientNego,partner:loadPartners,weekly:loadWeekly,monthly:loadMonthly,members:loadMembers,dealer:loadDealer,schedule:loadSchedule,import:()=>{}}[page]||(() => {}))();
+  ({exec:loadExec,cashflow:loadPayments,deals:loadDeals,'partner-dev':loadPartnerDev,'vendor-nego':loadVendorNego,'client-nego':loadClientNego,partner:loadPartners,weekly:loadWeekly,monthly:loadMonthly,members:loadMembers,dealer:loadDealer,schedule:loadSchedule,report:checkTodayReport,import:()=>{}}[page]||(() => {}))();
 }
 
 // 日報タブ（不要になったが残存コードを無害化）
 function switchRepTab(){}
 
-const NV={d_visit:0,d_prospect:0,d_ind:0,d_won:0,t_recv:0,t_nego:0,t_ind:0,t_won:0,p_new:0,p_exist:0,c_new:0,c_exist:0,c_doc:0,c_claim:0,c_deliver:0,c_mtg:0};
+const NV={d_visit:0,d_prospect:0,d_ind:0,d_won:0,t_recv:0,t_nego:0,t_ind:0,t_won:0,p_new:0,p_exist:0,c_new:0,c_exist:0,accompany_new:0,accompany_exist:0,c_doc:0,c_claim:0,c_deliver:0,c_mtg:0};
 function cn(k,d){NV[k]=Math.max(0,NV[k]+d);document.getElementById(k).textContent=NV[k];}
 
 // EXEC
+function shiftExecDate(delta){
+  const el=document.getElementById("exec-date-pick");
+  const cur=el?.value||todayJST();
+  const d=new Date(cur+"T00:00:00");
+  d.setDate(d.getDate()+delta);
+  const jst=new Date(d.getTime());
+  el.value=jst.toISOString().split("T")[0];
+  loadExec();
+}
+
 async function loadExec(){
-  const today=todayJST(),month=today.slice(0,7);
+  const execDateEl=document.getElementById("exec-date-pick");
+  const today=execDateEl?.value||todayJST();
+  if(execDateEl&&!execDateEl.value) execDateEl.value=today;
+  const isToday=(today===todayJST());
+  const month=today.slice(0,7);
+  const [y,m]=month.split("-");
+  // 動的ラベル更新
+  const dayLblEl=document.getElementById("exec-day-lbl");
+  if(dayLblEl) dayLblEl.textContent=isToday?`担当者別 本日の活動（${today}）`:`担当者別 ${today} の活動`;
+  const monthLblEl=document.getElementById("exec-month-lbl");
+  if(monthLblEl) monthLblEl.textContent=`${y}年${m}月 主要指標`;
+  const topicSecEl=document.getElementById("exec-topic-sec-lbl");
+  if(topicSecEl) topicSecEl.textContent=isToday?`本日のトピック（${today}）`:`${today} のトピック`;
   const [reports,payments]=await Promise.all([apiGet({type:"report"}),apiGet({type:"payment"})]);
+  window._execReports=reports; // refreshExecTopics用にキャッシュ
   const todayR=reports.filter(r=>r["日付"]===today),monthR=reports.filter(r=>String(r["日付"]).startsWith(month));
 
   // 新フィールド名で集計
@@ -1263,18 +1255,13 @@ async function loadExec(){
   const adoptedEl=document.getElementById("kpi-adopted");
   if(adoptedEl) adoptedEl.textContent="¥"+adoptedAmt+"万";
   document.getElementById("kpi-tu").textContent=tuRate+"%";
-  // 今日の全商談件数：直販訪問 + TU受領 + 販売店商談（新規+既存）+ 取引先商談（新規+既存）
-  const todayContact=todayR.reduce((s,r)=>s+num(r,"直販訪問")+num(r,"TU受領")+num(r,"エンド書類回収")+num(r,"エンドクレーム")+num(r,"エンド納品")+num(r,"エンド打合せ")+num(r,"販売店新規")+num(r,"販売店既存")+num(r,"取引先新規")+num(r,"取引先既存"),0);
+  // 今日の全商談件数：直販訪問 + TU受領 + 販売店商談（新規+既存）
+  const todayContact=todayR.reduce((s,r)=>s+num(r,"直販訪問")+num(r,"TU受領")+num(r,"エンド書類回収")+num(r,"エンドクレーム")+num(r,"エンド納品")+num(r,"エンド打合せ")+num(r,"販売店新規")+num(r,"販売店既存"),0);
   const todayNego=todayR.reduce((s,r)=>s+num(r,"直販訪問")+num(r,"TU受領"),0);
   const todayRate=todayContact>0?Math.round(todayNego/todayContact*100):0;
   document.getElementById("kpi-acts").textContent=todayContact+"件";
   document.querySelector("#kpi-acts").closest(".kpi").querySelector(".kpi-s").textContent="商談率 "+todayRate+"% (商談"+todayNego+"件)";
   document.getElementById("kpi-cancel").textContent=monthR.reduce((s,r)=>s+num(r,"直販内示")+num(r,"TU内示"),0)+"件";
-
-  // KPIラベルを実態に合わせて更新
-  document.querySelector("#kpi-tu").closest(".kpi").querySelector(".kpi-l").textContent="TU決定率（今月）";
-  document.querySelector("#kpi-cancel").closest(".kpi").querySelector(".kpi-l").textContent="今月 内示合計";
-  document.querySelector("#kpi-cancel").closest(".kpi").querySelector(".kpi-s").textContent="直販+TU";
 
   const persons=["橋野 浩一","川﨑 慧","浦塚 弘樹","坂本 憲司","又吉 俊","千代島 奨磨"];
   const avColors=["#4f7df7","#34d399","#f59e0b","#a78bfa","#f87171","#38bdf8"];
@@ -1283,14 +1270,13 @@ async function loadExec(){
     const direct=pr.reduce((s,r)=>s+num(r,"直販訪問"),0);
     const tu    =pr.reduce((s,r)=>s+num(r,"TU受領"),0);
     const prt   =pr.reduce((s,r)=>s+num(r,"販売店新規")+num(r,"販売店既存"),0);
-    const client=pr.reduce((s,r)=>s+num(r,"取引先新規")+num(r,"取引先既存"),0);
     const endCont=pr.reduce((s,r)=>s+num(r,"エンド書類回収")+num(r,"エンドクレーム")+num(r,"エンド納品")+num(r,"エンド打合せ"),0);
     const nego=direct+tu;
-    const total=nego+prt+client+endCont;
+    const total=nego+prt+endCont;
     const rate=total>0?Math.round(nego/total*100):0;
     return `<div class="pc"><div class="pc-h"><div class="av" style="background:${avColors[i]}">${nm[0]}</div><div><div class="pc-n">${nm}</div><div style="font-size:10px;color:var(--tx3);">接触 ${total}件 商談率${rate}%</div></div><div style="margin-left:auto;font-size:22px;font-family:var(--mo);font-weight:700;">${total}</div></div>
-    <div class="pc-s" style="grid-template-columns:1fr 1fr 1fr 1fr 1fr;"><div class="ps-b"><div class="ps-n" style="color:var(--ac)">${direct}</div><div class="ps-t">直販</div></div><div class="ps-b"><div class="ps-n" style="color:var(--g)">${tu}</div><div class="ps-t">TU</div></div><div class="ps-b"><div class="ps-n" style="color:var(--pu)">${prt}</div><div class="ps-t">販売店</div></div><div class="ps-b"><div class="ps-n" style="color:#ca8a04">${client}</div><div class="ps-t">取引先</div></div><div class="ps-b"><div class="ps-n" style="color:#38bdf8">${endCont}</div><div class="ps-t">対応</div></div></div>
-    <div class="ch-pills">${nego>0?`<span class="pill pe">商談 ${nego}件</span>`:""}${client>0?`<span class="pill" style="background:rgba(234,179,8,.15);color:#ca8a04;">取引先 ${client}件</span>`:""}${endCont>0?`<span class="pill" style="background:rgba(56,189,248,.15);color:#38bdf8;">対応 ${endCont}件</span>`:""}${total===0?`<span style="font-size:13px;font-weight:700;background:rgba(248,113,113,.15);color:var(--rd);padding:4px 10px;border-radius:6px;">⚠️ 本日未入力</span>`:""}</div></div>`;
+    <div class="pc-s" style="grid-template-columns:1fr 1fr 1fr 1fr;"><div class="ps-b"><div class="ps-n" style="color:var(--ac)">${direct}</div><div class="ps-t">直販</div></div><div class="ps-b"><div class="ps-n" style="color:var(--g)">${tu}</div><div class="ps-t">TU</div></div><div class="ps-b"><div class="ps-n" style="color:var(--pu)">${prt}</div><div class="ps-t">販売店</div></div><div class="ps-b"><div class="ps-n" style="color:#38bdf8">${endCont}</div><div class="ps-t">対応</div></div></div>
+    <div class="ch-pills">${nego>0?`<span class="pill pe">商談 ${nego}件</span>`:""}${endCont>0?`<span class="pill" style="background:rgba(56,189,248,.15);color:#38bdf8;">対応 ${endCont}件</span>`:""}${total===0?`<span style="font-size:13px;font-weight:700;background:rgba(248,113,113,.15);color:var(--rd);padding:4px 10px;border-radius:6px;">⚠️ 本日未入力</span>`:""}</div></div>`;
   }).join("");
 
   // ファネル：直販の流れ（訪問→見込→内示→受注）
@@ -1311,27 +1297,13 @@ async function loadExec(){
   document.getElementById("exec-partner-rank").innerHTML=ptArr.length===0?`<div style="font-size:11px;color:var(--tx3);padding:8px 0;">今月のデータなし</div>`:ptArr.map(([nm,v])=>`<div class="fn-row"><span class="fn-l" style="width:100px;font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${nm}</span><div class="fn-b"><div class="fn-f" style="width:${Math.round(v/maxPV*100)}%;background:rgba(52,211,153,.3);color:var(--g);">${v}件</div></div><span class="fn-c" style="color:var(--g);">${v}</span></div>`).join("");
   renderCfBars("exec-cfbar",payments);
 
-  // 本日のトピック（担当者別 + フィードバック表示）
-  (function(){
-    const topicsEl = document.getElementById("exec-topics");
-    if(!topicsEl) return;
-    const html = MEMBERS.map((nm,i)=>{
-      const pr = todayR.filter(r=>r["担当者"]===nm);
-      const topic = pr.map(r=>r["トピック"]).filter(Boolean).join(" / ");
-      const fb = pr.map(r=>r["フィードバック"]).filter(Boolean).join(" / ");
-      return `<div style="display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--bd);">
-        <div class="av" style="background:${MEMBER_COLORS[i]};width:32px;height:32px;font-size:13px;flex-shrink:0;">${nm[0]}</div>
-        <div style="flex:1;">
-          <div style="font-size:13px;font-weight:600;margin-bottom:3px;">${nm}</div>
-          ${topic
-            ? `<div style="font-size:13px;color:var(--tx2);line-height:1.6;">${topic}</div>`
-            : `<div style="font-size:12px;color:var(--tx3);">未入力</div>`}
-          ${fb ? `<div class="topic-fb"><div class="topic-fb-lbl">Feedback</div><div class="topic-fb-txt">${fb}</div></div>` : ""}
-        </div>
-      </div>`;
-    }).join("");
-    topicsEl.innerHTML = html || `<div style="font-size:12px;color:var(--tx3);">本日のトピックなし</div>`;
-  })();
+  // トピック＋フィードバック表示（共用関数を使用）
+  const fbRaw = await apiGet({type:"feedback",date:today}).catch(()=>[]);
+  const execFeedbacks={};
+  fbRaw.forEach(f=>{ execFeedbacks[f["担当者"]]=f["フィードバック"]||""; });
+  // fallback: レポート行の「フィードバック」フィールドも参照
+  todayR.forEach(r=>{ if(r["フィードバック"]&&!execFeedbacks[r["担当者"]]) execFeedbacks[r["担当者"]]=r["フィードバック"]; });
+  renderExecTopics(todayR, execFeedbacks, today);
 
   // 整合性チェック
   renderConsistencyCheck(todayR, deals_exec, today);
@@ -1402,6 +1374,115 @@ function renderConsistencyCheck(todayR, deals, today){
   <div style="padding:10px 16px;font-size:11px;color:var(--tx3);">
     ※ 日報の直販訪問＋TU受領と、案件管理の本日登録・更新件数を比較しています。±1件は誤差として許容。
   </div>`;
+}
+
+// ① 日報ページ読み込み時の確認
+async function checkTodayReport(){
+  const today=todayJST();
+  const reports=await apiGet({type:"report"});
+  const myReport=reports.find(r=>r["日付"]===today&&r["担当者"]===currentUser);
+  const editBtn=document.getElementById("rep-edit-btn");
+  const statusEl=document.getElementById("rep-today-status");
+  if(myReport){
+    if(editBtn) editBtn.style.display="inline-flex";
+    if(statusEl) statusEl.innerHTML=`<span style="color:var(--g);font-weight:600;">✅ 本日分の日報は送信済みです</span>`;
+  } else {
+    if(editBtn) editBtn.style.display="none";
+    if(statusEl) statusEl.innerHTML="";
+    window._editingReportId=null;
+  }
+}
+
+// ① 日報編集：本日分を読み込んでフォームにセット
+async function loadTodayReport(){
+  const today=todayJST();
+  const reports=await apiGet({type:"report"});
+  const myReport=reports.find(r=>r["日付"]===today&&r["担当者"]===currentUser);
+  if(!myReport){toast("本日の日報が見つかりません");return;}
+
+  // 各フィールドをセット
+  const fields=[
+    ["d_visit","直販訪問"],["d_prospect","直販新規見込"],["d_ind","直販内示"],["d_won","直販受注"],
+    ["t_recv","TU受領"],["t_nego","TU商談"],["t_ind","TU内示"],["t_won","TU受注"],
+    ["p_new","販売店新規"],["p_exist","販売店既存"],
+    ["c_new","取引先新規"],["c_exist","取引先既存"],
+    ["accompany_new","社内同行新規"],["accompany_exist","社内同行既存"],
+    ["c_doc","エンド書類回収"],["c_claim","エンドクレーム"],["c_deliver","エンド納品"],["c_mtg","エンド打合せ"],
+  ];
+  fields.forEach(([nvKey,shKey])=>{
+    NV[nvKey]=num(myReport,shKey);
+    const el=document.getElementById(nvKey);
+    if(el) el.textContent=NV[nvKey];
+  });
+  // 目標・トピック
+  ["目標1","目標2","目標3","トピック"].forEach(k=>{
+    const elMap={"目標1":"r-g1","目標2":"r-g2","目標3":"r-g3","トピック":"r-topic"};
+    const el=document.getElementById(elMap[k]);
+    if(el) el.value=myReport[k]||"";
+  });
+  // 送信ボタンを「更新」に変更
+  const btn=document.getElementById("rep-btn");
+  if(btn){btn.textContent="📨 日報を更新";btn.style.background="var(--am)";}
+  const statusEl=document.getElementById("rep-today-status");
+  if(statusEl) statusEl.innerHTML=`<span style="color:var(--am);font-weight:600;">✏️ 編集モード：送信済みの日報を編集中（ID: ${myReport["id"]}）</span>`;
+  // 送信関数に既存IDを保持
+  window._editingReportId=myReport["id"];
+  toast("本日の日報を読み込みました");
+}
+
+// ③ フィードバック保存 → 保存後にトピックセクションを再描画
+async function saveFeedback(member, date, text){
+  const res=await apiPost({type:"feedback",action:"upsert",payload:{担当者:member,日付:date,フィードバック:text}});
+  if(res.ok){
+    toast(member+"へのフィードバックを保存しました");
+    // 保存成功後にトピックセクションを再取得して再描画
+    await refreshExecTopics(date);
+  } else {
+    toast("保存に失敗しました");
+  }
+}
+
+// トピック＋フィードバックセクションのみ再描画（高速リフレッシュ）
+async function refreshExecTopics(date){
+  if(!date){ const el=document.getElementById("exec-date-pick"); date=el?.value||todayJST(); }
+  // 日報データはキャッシュ優先
+  const reports = window._execReports || await apiGet({type:"report"});
+  const todayR  = reports.filter(r=>r["日付"]===date);
+  // フィードバックを再取得
+  const fbRaw = await apiGet({type:"feedback",date}).catch(()=>[]);
+  const feedbacks={};
+  fbRaw.forEach(f=>{ feedbacks[f["担当者"]]=f["フィードバック"]||""; });
+  // fallback: レポート行の「フィードバック」フィールドも参照
+  todayR.forEach(r=>{ if(r["フィードバック"]&&!feedbacks[r["担当者"]]) feedbacks[r["担当者"]]=r["フィードバック"]; });
+  renderExecTopics(todayR, feedbacks, date);
+}
+
+// トピックセクション描画ロジック（loadExecと共用）
+function renderExecTopics(todayR, feedbacks, date){
+  const topicsEl=document.getElementById("exec-topics");
+  if(!topicsEl) return;
+  // sec ラベルは loadExec 内で設定済みのため、ここでは何もしない
+  const topicHtml=MEMBERS.map((nm,i)=>{
+    const pr=todayR.filter(r=>r["担当者"]===nm);
+    const topic=pr.map(r=>r["トピック"]).filter(Boolean).join(" / ");
+    const fbText=feedbacks[nm]||"";
+    const safeNm=nm.replace(/ /g,"_").replace(/　/g,"_");
+    return `<div style="padding:12px 0;border-bottom:1px solid var(--bd);">
+      <div style="display:flex;gap:12px;">
+        <div class="av" style="background:${MEMBER_COLORS[i]};width:32px;height:32px;font-size:13px;flex-shrink:0;">${nm[0]}</div>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:600;margin-bottom:4px;">${nm}</div>
+          ${topic
+            ?`<div style="font-size:13px;color:var(--tx2);line-height:1.6;margin-bottom:6px;">${topic}</div>`
+            :`<div style="font-size:12px;color:var(--tx3);margin-bottom:6px;">未入力</div>`}
+          ${isAdmin
+            ?`<textarea id="fb-${safeNm}" placeholder="フィードバックを入力（管理者のみ）" style="width:100%;font-size:12px;padding:6px 8px;border-radius:6px;border:1px solid var(--bd);background:var(--sf2);min-height:40px;resize:vertical;box-sizing:border-box;">${fbText}</textarea><button class="btn btn-g btn-sm" style="margin-top:4px;font-size:11px;" onclick="saveFeedback('${nm}','${date}',document.getElementById('fb-${safeNm}').value)">💾 保存</button>`
+            :fbText?`<div style="margin-top:4px;padding:6px 10px;background:rgba(79,125,247,.08);border-radius:6px;font-size:12px;border-left:3px solid var(--ac);"><span style="font-size:10px;color:var(--tx3);display:block;margin-bottom:2px;">上長フィードバック</span>${fbText}</div>`:""}
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+  topicsEl.innerHTML=topicHtml||`<div style="font-size:12px;color:var(--tx3);">この日のトピックなし</div>`;
 }
 
 // CASHFLOW
@@ -1476,6 +1557,7 @@ async function submitReport(){
     目標3:document.getElementById("g3").value,
     トピック:document.getElementById("r-topic").value,
     取引先新規:NV.c_new, 取引先既存:NV.c_exist,
+    社内同行新規:NV.accompany_new, 社内同行既存:NV.accompany_exist,
     エンド書類回収:NV.c_doc, エンドクレーム:NV.c_claim, エンド納品:NV.c_deliver, エンド打合せ:NV.c_mtg,
   };
   const res=await apiPost({type:"report",action:"create",payload});
@@ -1512,96 +1594,6 @@ function clearRep(){
   document.getElementById("rep-preview").style.display="none";
 }
 function updateSbUser(){const nm=document.getElementById("r-person").value;document.getElementById("sb-nm").textContent=nm;document.getElementById("sb-av").textContent=nm[0];}
-
-// ============================================================
-//  日報閲覧・フィードバック
-// ============================================================
-async function loadReportView(){
-  const date   = document.getElementById("rv-date")?.value;
-  const person = document.getElementById("rv-person")?.value;
-  const el     = document.getElementById("rep-view-result");
-  if(!date||!person){ if(el) el.innerHTML=`<div style="font-size:12px;color:var(--tx3);">日付と担当者を選択してください。</div>`; return; }
-  el.innerHTML=`<div class="ld"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div><span>読み込み中...</span></div>`;
-  const reports = await apiGet({type:"report"});
-  const rep = reports.find(r=>String(r["日付"])===date && r["担当者"]===person);
-  if(!rep){
-    el.innerHTML=`<div style="font-size:12px;color:var(--tx3);padding:10px 0;">この日（${date}）の日報は見つかりませんでした。</div>`;
-    return;
-  }
-  const tuRate=num(rep,"TU受領")>0?Math.round((num(rep,"TU内示")+num(rep,"TU受注"))/num(rep,"TU受領")*100):0;
-
-  // フィードバック欄（管理者：入力可 / 一般：閲覧のみ）
-  const existFb = (rep["フィードバック"]||"").trim();
-  const fbSection = isAdmin
-    ? `<div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--bd);">
-        <label class="lb" style="display:block;margin-bottom:6px;">💬 管理者フィードバック</label>
-        <textarea id="fb-text" rows="3" placeholder="フィードバックを入力してください...">${existFb}</textarea>
-        <div style="display:flex;gap:8px;margin-top:8px;align-items:center;">
-          <button class="btn btn-p btn-sm" onclick="submitFeedback('${rep["id"]}')">💾 保存</button>
-          <span id="fb-save-status" style="font-size:11px;color:var(--tx3);"></span>
-        </div>
-       </div>`
-    : existFb
-      ? `<div style="margin-top:14px;padding:12px 14px;background:rgba(59,110,240,.06);border:1px solid rgba(59,110,240,.2);border-radius:8px;border-left:4px solid var(--ac);">
-           <div style="font-size:11px;font-weight:700;color:var(--ac);margin-bottom:6px;">💬 管理者からのフィードバック</div>
-           <div style="font-size:13px;color:var(--tx);line-height:1.8;white-space:pre-wrap;">${existFb}</div>
-         </div>`
-      : "";
-
-  el.innerHTML=`
-    <div style="font-size:13px;font-weight:700;color:var(--tx2);margin-bottom:10px;">📅 ${date}　${person}</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:11px;margin-bottom:8px;">
-      <div style="padding:8px;background:rgba(79,125,247,.08);border-radius:6px;border:1px solid rgba(79,125,247,.2);">
-        <div style="color:var(--ac);font-weight:700;margin-bottom:4px;">🏢 直販</div>
-        訪問 <b>${num(rep,"直販訪問")}</b>件 / 見込 <b>${num(rep,"直販新規見込")}</b>件<br>
-        内示 <b>${num(rep,"直販内示")}</b>件 / 受注 <b>${num(rep,"直販受注")}</b>件
-      </div>
-      <div style="padding:8px;background:rgba(52,211,153,.08);border-radius:6px;border:1px solid rgba(52,211,153,.2);">
-        <div style="color:var(--g);font-weight:700;margin-bottom:4px;">🔄 TU　決定率 ${tuRate}%</div>
-        受領 <b>${num(rep,"TU受領")}</b>件 / 商談 <b>${num(rep,"TU商談")}</b>件<br>
-        内示 <b>${num(rep,"TU内示")}</b>件 / 受注 <b>${num(rep,"TU受注")}</b>件
-      </div>
-      <div style="padding:8px;background:rgba(167,139,250,.08);border-radius:6px;border:1px solid rgba(167,139,250,.2);">
-        <div style="color:var(--pu);font-weight:700;margin-bottom:4px;">🤝 販売店</div>
-        新規 <b>${num(rep,"販売店新規")}</b>件 / 既存 <b>${num(rep,"販売店既存")}</b>件
-      </div>
-      <div style="padding:8px;background:rgba(234,179,8,.08);border-radius:6px;border:1px solid rgba(234,179,8,.2);">
-        <div style="color:#ca8a04;font-weight:700;margin-bottom:4px;">🤝 取引先</div>
-        新規 <b>${num(rep,"取引先新規")}</b>件 / 既存 <b>${num(rep,"取引先既存")}</b>件
-      </div>
-      <div style="padding:8px;background:rgba(56,189,248,.08);border-radius:6px;border:1px solid rgba(56,189,248,.2);">
-        <div style="color:#38bdf8;font-weight:700;margin-bottom:4px;">📋 エンド対応</div>
-        書類 <b>${num(rep,"エンド書類回収")}</b>件 / クレーム <b>${num(rep,"エンドクレーム")}</b>件<br>
-        納品 <b>${num(rep,"エンド納品")}</b>件 / 打合せ <b>${num(rep,"エンド打合せ")}</b>件
-      </div>
-      ${(rep["目標1"]||rep["目標2"]||rep["目標3"])?`
-      <div style="padding:8px;background:var(--sf2);border-radius:6px;border:1px solid var(--bd);">
-        <div style="font-size:10px;font-weight:700;color:var(--tx2);margin-bottom:4px;">🎯 目標</div>
-        ${rep["目標1"]?`<div style="font-size:11px;">① ${rep["目標1"]}</div>`:""}
-        ${rep["目標2"]?`<div style="font-size:11px;">② ${rep["目標2"]}</div>`:""}
-        ${rep["目標3"]?`<div style="font-size:11px;">③ ${rep["目標3"]}</div>`:""}
-      </div>`:""}
-    </div>
-    ${rep["トピック"]?`<div style="padding:10px 12px;background:rgba(245,158,11,.06);border-radius:6px;border-left:3px solid var(--am);font-size:12px;color:var(--tx2);margin-bottom:4px;white-space:pre-wrap;">💬 ${rep["トピック"]}</div>`:""}
-    ${fbSection}`;
-}
-
-async function submitFeedback(reportId){
-  const text = (document.getElementById("fb-text")?.value||"").trim();
-  const btn  = document.querySelector("#rep-view-result .btn-p");
-  const stEl = document.getElementById("fb-save-status");
-  if(btn){btn.textContent="保存中...";btn.disabled=true;}
-  if(stEl) stEl.textContent="";
-  const res = await apiPost({type:"report", action:"updateFeedback", payload:{id:reportId, フィードバック:text}});
-  if(btn){btn.textContent="💾 保存";btn.disabled=false;}
-  if(res&&res.ok){
-    toast("フィードバックを保存しました");
-    // 保存後に画面を再読み込みして反映
-    await loadReportView();
-  } else {
-    if(stEl) stEl.textContent="保存に失敗しました。再試行してください。";
-  }
-}
 
 // DEALS
 // ---- フィルター状態 ----
@@ -2175,19 +2167,18 @@ async function loadWeekly(){
     document.getElementById("weekly-table").innerHTML=`<table><thead><tr><th>担当者</th><th>接触数</th><th>商談率</th><th>内示数</th><th>内示率</th><th>受注数</th><th>受注率</th><th>販売店</th></tr></thead><tbody>${rows.join("")}</tbody></table>`;
   }
 
-  // 担当者別トピック（フィードバック付き）
+  // 担当者別トピック
   const topicByPerson={};
   wr.filter(r=>r["トピック"]).forEach(r=>{
     if(!topicByPerson[r["担当者"]]) topicByPerson[r["担当者"]]=[];
-    topicByPerson[r["担当者"]].push({date:r["日付"],text:r["トピック"],fb:r["フィードバック"]||""});
+    topicByPerson[r["担当者"]].push({date:r["日付"],text:r["トピック"]});
   });
   const topicHtml=Object.entries(topicByPerson).map(([nm,items])=>`
     <div style="margin-bottom:14px;">
-      <div style="font-size:12px;font-weight:700;color:var(--am);margin-bottom:6px;">${nm}</div>
+      <div style="font-size:12px;font-weight:700;color:var(--am);margin-bottom:6px;">👤 ${nm}</div>
       ${items.map(t=>`<div style="padding:8px 12px;background:var(--sf2);border-radius:6px;margin-bottom:6px;border-left:3px solid var(--am);">
         <div style="font-size:10px;color:var(--tx3);margin-bottom:3px;">${t.date}</div>
         <div style="font-size:12px;color:var(--tx2);">${t.text}</div>
-        ${t.fb?`<div class="topic-fb"><div class="topic-fb-lbl">Feedback</div><div class="topic-fb-txt">${t.fb}</div></div>`:""}
       </div>`).join("")}
     </div>`).join("");
   document.getElementById("weekly-topics").innerHTML=topicHtml||`<div style="color:var(--tx3);font-size:11px;padding:8px 0;">この週のトピックなし</div>`;
@@ -2375,19 +2366,18 @@ async function loadMonthly(){
     <tbody>${rows.join("")}<tr style="font-weight:700;background:rgba(79,125,247,.04);">${totRow.map((v,i)=>`<td class="${i===0?"td-n":"td-m"}" style="${i===0?"color:var(--ac)":""}">${v}</td>`).join("")}</tr></tbody>
   </table>`;
 
-  // 担当者別トピック（フィードバック付き）
+  // 担当者別トピック
   const topicByPerson={};
   mr.filter(r=>r["トピック"]).forEach(r=>{
     if(!topicByPerson[r["担当者"]]) topicByPerson[r["担当者"]]=[];
-    topicByPerson[r["担当者"]].push({date:r["日付"],text:r["トピック"],fb:r["フィードバック"]||""});
+    topicByPerson[r["担当者"]].push({date:r["日付"],text:r["トピック"]});
   });
   const topicHtml=Object.entries(topicByPerson).map(([nm,items])=>`
     <div style="margin-bottom:14px;">
-      <div style="font-size:12px;font-weight:700;color:var(--am);margin-bottom:6px;">${nm}</div>
+      <div style="font-size:12px;font-weight:700;color:var(--am);margin-bottom:6px;">👤 ${nm}</div>
       ${items.sort((a,b)=>a.date>b.date?1:-1).map(t=>`<div style="padding:8px 12px;background:var(--sf2);border-radius:6px;margin-bottom:6px;border-left:3px solid var(--am);">
         <div style="font-size:10px;color:var(--tx3);margin-bottom:3px;">${t.date}</div>
         <div style="font-size:12px;color:var(--tx2);">${t.text}</div>
-        ${t.fb?`<div class="topic-fb"><div class="topic-fb-lbl">Feedback</div><div class="topic-fb-txt">${t.fb}</div></div>`:""}
       </div>`).join("")}
     </div>`).join("");
   document.getElementById("monthly-topics").innerHTML=topicHtml||`<div style="color:var(--tx3);font-size:11px;padding:8px 0;">今月のトピックなし</div>`;
@@ -3296,7 +3286,6 @@ async function renderPersonalWeeklyReport(person, reports, deals){
   const topics=wr.filter(r=>r["トピック"]).map(r=>`<div style="padding:8px 12px;background:var(--sf2);border-radius:6px;margin-bottom:6px;border-left:3px solid var(--am);">
     <div style="font-size:11px;color:var(--tx3);margin-bottom:3px;">${r["日付"]}</div>
     <div style="font-size:13px;">${r["トピック"]}</div>
-    ${r["フィードバック"]?`<div class="topic-fb"><div class="topic-fb-lbl">Feedback</div><div class="topic-fb-txt">${r["フィードバック"]}</div></div>`:""}
   </div>`).join("") || `<div style="color:var(--tx3);font-size:12px;">今週のトピックなし</div>`;
 
   // 日別グラフデータ（平日のみ）
@@ -3342,11 +3331,11 @@ async function renderPersonalWeeklyReport(person, reports, deals){
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
       <div class="cd">
-        <div class="cd-t">日別 活動量</div>
+        <div class="cd-t">📊 日別 活動量</div>
         ${barSvg}
       </div>
       <div class="cd">
-        <div class="cd-t">今週のトピック</div>
+        <div class="cd-t">💬 今週のトピック</div>
         ${topics}
       </div>
     </div>`;
@@ -3454,11 +3443,10 @@ async function renderPersonalMonthlyReport(person, month, reports, deals){
       <span style="font-size:12px;font-family:var(--mo);color:var(--pu);white-space:nowrap;">${num(d,"粗利")>0?"粗利¥"+d["粗利"]+"万":""}</span>
     </div>`).join("");
 
-  // トピック（フィードバック付き）
+  // トピック
   const topics=mr.filter(r=>r["トピック"]).map(r=>`<div style="padding:8px 12px;background:var(--sf2);border-radius:6px;margin-bottom:6px;border-left:3px solid var(--am);">
     <div style="font-size:11px;color:var(--tx3);margin-bottom:2px;">${r["日付"]}</div>
     <div style="font-size:13px;">${r["トピック"]}</div>
-    ${r["フィードバック"]?`<div class="topic-fb"><div class="topic-fb-lbl">Feedback</div><div class="topic-fb-txt">${r["フィードバック"]}</div></div>`:""}
   </div>`).join()||`<div style="font-size:12px;color:var(--tx3);">今月のトピックなし</div>`;
 
   el.innerHTML=`
@@ -3536,13 +3524,13 @@ async function renderPersonalMonthlyReport(person, month, reports, deals){
 
     <!-- 今月の案件 -->
     <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:16px;margin-bottom:18px;box-shadow:0 1px 4px rgba(0,0,0,.06);">
-      <div style="font-size:13px;font-weight:700;color:#475569;margin-bottom:10px;">今月の案件（${myMonthDeals.length}件）</div>
+      <div style="font-size:13px;font-weight:700;color:#475569;margin-bottom:10px;">💼 今月の案件（${myMonthDeals.length}件）</div>
       ${dealRows}
     </div>
 
     <!-- トピック -->
     <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.06);">
-      <div style="font-size:13px;font-weight:700;color:#475569;margin-bottom:10px;">今月のトピック</div>
+      <div style="font-size:13px;font-weight:700;color:#475569;margin-bottom:10px;">💬 今月のトピック</div>
       ${topics}
     </div>`;
 }
@@ -3895,11 +3883,6 @@ document.getElementById("rep-dt-lbl").textContent=now.toLocaleDateString("ja-JP"
 document.getElementById("r-date").value=todayJST();
 document.getElementById("py-date").value=todayJST();
 document.getElementById("hist-date").value=todayJST();
-// 日報閲覧の初期値：前日
-(function(){
-  const rvDate=document.getElementById("rv-date");
-  if(rvDate){const d=new Date();d.setDate(d.getDate()-1);const jst=new Date(d.getTime()+9*3600*1000);rvDate.value=jst.toISOString().split("T")[0];}
-})();
 updateSubFrame();
 // セッション確認（リロード時に再ログイン不要）
 if(!checkSession()){
