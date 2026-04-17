@@ -317,7 +317,7 @@ select option{background:var(--sf);}
     <div class="logo-s">株式会社ALL</div>
   </div>
   <nav class="nav">
-    <div class="ni on" onclick="go('exec',this,'m0')"><span class="ni-ic">📊</span>ダッシュボード</div>
+    <div class="ni on" onclick="go('exec',this,'m0')"><span class="ni-ic">👁️</span>ダッシュボード</div>
     <div class="ni" onclick="go('cashflow',this,'m1')"><span class="ni-ic">💴</span>入金予定</div>
     <div class="ns">営業部</div>
     <div class="ni" onclick="go('report',this,'m2')"><span class="ni-ic">📝</span>日報入力</div>
@@ -350,15 +350,7 @@ select option{background:var(--sf);}
 
 <!-- 経営ダッシュボード -->
 <div class="page on" id="page-exec">
-  <div class="hd">
-  <div class="hd-t">📊 経営ダッシュボード</div>
-  <div class="hd-r" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-    <span class="bx bx-b" id="today-lbl"></span>
-    <input type="date" id="exec-date-pick" style="font-size:13px;padding:6px 10px;border-radius:6px;border:1px solid var(--bd);background:var(--sf2);" onchange="loadExec()">
-    <button class="btn btn-g btn-sm" onclick="document.getElementById('exec-date-pick').value=todayJST();loadExec()">今日</button>
-    <button class="btn btn-g btn-sm" onclick="loadExec()">↻ 更新</button>
-  </div>
-</div>
+  <div class="hd"><div class="hd-t">👁️ 経営ダッシュボード</div><div class="hd-r"><span class="bx bx-b" id="today-lbl"></span><button class="btn btn-g btn-sm" onclick="loadExec()">↻ 更新</button></div></div>
   <div class="ct">
     <div class="sec">今月の主要指標</div>
     <div class="kg">
@@ -376,8 +368,14 @@ select option{background:var(--sf);}
     </div>
     <div class="cd"><div class="cd-t">今後4ヶ月 入金見通し</div><div id="exec-cfbar"></div></div>
 
-    <!-- 本日のトピック -->
-    <div class="sec">💬 本日のトピック</div>
+    <!-- 本日のトピック + 要約 -->
+    <div class="sec" style="display:flex;align-items:center;justify-content:space-between;">
+      <span>💬 本日のトピック</span>
+      <div style="display:flex;gap:6px;">
+        <button class="btn btn-g btn-sm" id="btn-topic-today" onclick="showTopicMode('today')" style="font-size:11px;padding:5px 10px;">本日</button>
+        <button class="btn btn-g btn-sm" id="btn-topic-week" onclick="showTopicMode('week')" style="font-size:11px;padding:5px 10px;">📝 週間要約</button>
+      </div>
+    </div>
     <div class="cd" id="exec-topics">
       <div class="ld"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div><span>読み込み中...</span></div>
     </div>
@@ -475,15 +473,6 @@ select option{background:var(--sf);}
         </div>
       </div>
 
-      <!-- 社内同行 -->
-      <div class="ch-f">
-        <div class="ch-h" style="background:rgba(100,116,139,.1);color:#64748b;">👥 社内同行</div>
-        <div class="ch-b" style="grid-template-columns:1fr 1fr;padding:12px 14px;">
-          <div class="nf"><label>新規同行</label><div class="nc"><button class="nb" onclick="cn('accompany_new',-1)">−</button><div class="nd" id="accompany_new">0</div><button class="nb" onclick="cn('accompany_new',1)">＋</button></div></div>
-          <div class="nf"><label>既存同行</label><div class="nc"><button class="nb" onclick="cn('accompany_exist',-1)">−</button><div class="nd" id="accompany_exist">0</div><button class="nb" onclick="cn('accompany_exist',1)">＋</button></div></div>
-        </div>
-      </div>
-
       <!-- エンド対応 -->
       <div class="ch-f">
         <div class="ch-h" style="background:rgba(56,189,248,.1);color:#38bdf8;">📋 エンド対応（接触）</div>
@@ -507,16 +496,32 @@ select option{background:var(--sf);}
         <textarea id="r-topic" placeholder="商談の手応え、販売店の動き、懸案事項など"></textarea>
       </div>
       <div style="display:flex;gap:8px;align-items:center;">
-        <div id="rep-today-status" style="font-size:12px;color:var(--tx3);margin-bottom:8px;"></div>
-  <div style="display:flex;gap:8px;flex-wrap:wrap;">
-    <button class="btn btn-p" id="rep-btn" onclick="submitReport()">📨 日報を送信</button>
-    <button class="btn btn-g" id="rep-edit-btn" onclick="loadTodayReport()" style="display:none;">✏️ 本日分を編集</button>
-  </div>
+        <button class="btn btn-p" id="rep-btn" onclick="submitReport()">📨 日報を送信</button>
         <button class="btn btn-g" onclick="clearRep()">クリア</button>
         <span id="rep-status" style="font-size:11px;color:var(--tx3);"></span>
       </div>
     </div>
     <div class="cd" id="rep-preview" style="display:none;"><div class="cd-t">✅ 送信済み（本日）</div><div id="rep-preview-body"></div></div>
+
+    <!-- ===== 日報閲覧・フィードバック ===== -->
+    <div class="cd" style="margin-top:6px;">
+      <div class="cd-t">📋 過去の日報を確認・フィードバック</div>
+      <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:flex-end;">
+        <div class="fm" style="flex:1;min-width:140px;">
+          <label class="lb">日付を選択</label>
+          <input type="date" id="rv-date">
+        </div>
+        <div class="fm" style="flex:1;min-width:140px;">
+          <label class="lb">担当者</label>
+          <select id="rv-person">
+            <option>橋野 浩一</option><option>川﨑 慧</option><option>浦塚 弘樹</option>
+            <option>坂本 憲司</option><option>又吉 俊</option><option>千代島 奨磨</option>
+          </select>
+        </div>
+        <button class="btn btn-g btn-sm" onclick="loadReportView()" style="flex-shrink:0;">📋 表示</button>
+      </div>
+      <div id="rep-view-result"></div>
+    </div>
   </div>
 </div>
 
@@ -1201,22 +1206,18 @@ function go(page,sideEl,mnId){
   if(sideEl) sideEl.classList.add("on");
   if(mnId){const mnEl=document.getElementById(mnId);if(mnEl)mnEl.classList.add("on");}
   document.getElementById("mainScroll").scrollTop=0;
-  ({exec:loadExec,cashflow:loadPayments,deals:loadDeals,'partner-dev':loadPartnerDev,'vendor-nego':loadVendorNego,'client-nego':loadClientNego,partner:loadPartners,weekly:loadWeekly,monthly:loadMonthly,members:loadMembers,dealer:loadDealer,schedule:loadSchedule,report:checkTodayReport,import:()=>{}}[page]||(() => {}))();
+  ({exec:loadExec,cashflow:loadPayments,deals:loadDeals,'partner-dev':loadPartnerDev,'vendor-nego':loadVendorNego,'client-nego':loadClientNego,partner:loadPartners,weekly:loadWeekly,monthly:loadMonthly,members:loadMembers,dealer:loadDealer,schedule:loadSchedule,import:()=>{}}[page]||(() => {}))();
 }
 
 // 日報タブ（不要になったが残存コードを無害化）
 function switchRepTab(){}
 
-const NV={d_visit:0,d_prospect:0,d_ind:0,d_won:0,t_recv:0,t_nego:0,t_ind:0,t_won:0,p_new:0,p_exist:0,c_new:0,c_exist:0,accompany_new:0,accompany_exist:0,c_doc:0,c_claim:0,c_deliver:0,c_mtg:0};
+const NV={d_visit:0,d_prospect:0,d_ind:0,d_won:0,t_recv:0,t_nego:0,t_ind:0,t_won:0,p_new:0,p_exist:0,c_new:0,c_exist:0,c_doc:0,c_claim:0,c_deliver:0,c_mtg:0};
 function cn(k,d){NV[k]=Math.max(0,NV[k]+d);document.getElementById(k).textContent=NV[k];}
 
 // EXEC
 async function loadExec(){
-  const execDateEl=document.getElementById("exec-date-pick");
-  const today=execDateEl?.value||todayJST();
-  if(execDateEl&&!execDateEl.value) execDateEl.value=today;
-  const month=today.slice(0,7);
-  document.getElementById("today-lbl").textContent=today.replace(/-/g,"/");
+  const today=todayJST(),month=today.slice(0,7);
   const [reports,payments]=await Promise.all([apiGet({type:"report"}),apiGet({type:"payment"})]);
   const todayR=reports.filter(r=>r["日付"]===today),monthR=reports.filter(r=>String(r["日付"]).startsWith(month));
 
@@ -1235,8 +1236,8 @@ async function loadExec(){
   const adoptedEl=document.getElementById("kpi-adopted");
   if(adoptedEl) adoptedEl.textContent="¥"+adoptedAmt+"万";
   document.getElementById("kpi-tu").textContent=tuRate+"%";
-  // 今日の全商談件数：直販訪問 + TU受領 + 販売店商談（新規+既存）
-  const todayContact=todayR.reduce((s,r)=>s+num(r,"直販訪問")+num(r,"TU受領")+num(r,"エンド書類回収")+num(r,"エンドクレーム")+num(r,"エンド納品")+num(r,"エンド打合せ")+num(r,"販売店新規")+num(r,"販売店既存"),0);
+  // 今日の全商談件数：直販訪問 + TU受領 + 販売店商談（新規+既存）+ 取引先商談（新規+既存）
+  const todayContact=todayR.reduce((s,r)=>s+num(r,"直販訪問")+num(r,"TU受領")+num(r,"エンド書類回収")+num(r,"エンドクレーム")+num(r,"エンド納品")+num(r,"エンド打合せ")+num(r,"販売店新規")+num(r,"販売店既存")+num(r,"取引先新規")+num(r,"取引先既存"),0);
   const todayNego=todayR.reduce((s,r)=>s+num(r,"直販訪問")+num(r,"TU受領"),0);
   const todayRate=todayContact>0?Math.round(todayNego/todayContact*100):0;
   document.getElementById("kpi-acts").textContent=todayContact+"件";
@@ -1255,13 +1256,14 @@ async function loadExec(){
     const direct=pr.reduce((s,r)=>s+num(r,"直販訪問"),0);
     const tu    =pr.reduce((s,r)=>s+num(r,"TU受領"),0);
     const prt   =pr.reduce((s,r)=>s+num(r,"販売店新規")+num(r,"販売店既存"),0);
+    const client=pr.reduce((s,r)=>s+num(r,"取引先新規")+num(r,"取引先既存"),0);
     const endCont=pr.reduce((s,r)=>s+num(r,"エンド書類回収")+num(r,"エンドクレーム")+num(r,"エンド納品")+num(r,"エンド打合せ"),0);
     const nego=direct+tu;
-    const total=nego+prt+endCont;
+    const total=nego+prt+client+endCont;
     const rate=total>0?Math.round(nego/total*100):0;
     return `<div class="pc"><div class="pc-h"><div class="av" style="background:${avColors[i]}">${nm[0]}</div><div><div class="pc-n">${nm}</div><div style="font-size:10px;color:var(--tx3);">接触 ${total}件 商談率${rate}%</div></div><div style="margin-left:auto;font-size:22px;font-family:var(--mo);font-weight:700;">${total}</div></div>
-    <div class="pc-s" style="grid-template-columns:1fr 1fr 1fr 1fr;"><div class="ps-b"><div class="ps-n" style="color:var(--ac)">${direct}</div><div class="ps-t">直販</div></div><div class="ps-b"><div class="ps-n" style="color:var(--g)">${tu}</div><div class="ps-t">TU</div></div><div class="ps-b"><div class="ps-n" style="color:var(--pu)">${prt}</div><div class="ps-t">販売店</div></div><div class="ps-b"><div class="ps-n" style="color:#38bdf8">${endCont}</div><div class="ps-t">対応</div></div></div>
-    <div class="ch-pills">${nego>0?`<span class="pill pe">商談 ${nego}件</span>`:""}${endCont>0?`<span class="pill" style="background:rgba(56,189,248,.15);color:#38bdf8;">対応 ${endCont}件</span>`:""}${total===0?`<span style="font-size:13px;font-weight:700;background:rgba(248,113,113,.15);color:var(--rd);padding:4px 10px;border-radius:6px;">⚠️ 本日未入力</span>`:""}</div></div>`;
+    <div class="pc-s" style="grid-template-columns:1fr 1fr 1fr 1fr 1fr;"><div class="ps-b"><div class="ps-n" style="color:var(--ac)">${direct}</div><div class="ps-t">直販</div></div><div class="ps-b"><div class="ps-n" style="color:var(--g)">${tu}</div><div class="ps-t">TU</div></div><div class="ps-b"><div class="ps-n" style="color:var(--pu)">${prt}</div><div class="ps-t">販売店</div></div><div class="ps-b"><div class="ps-n" style="color:#ca8a04">${client}</div><div class="ps-t">取引先</div></div><div class="ps-b"><div class="ps-n" style="color:#38bdf8">${endCont}</div><div class="ps-t">対応</div></div></div>
+    <div class="ch-pills">${nego>0?`<span class="pill pe">商談 ${nego}件</span>`:""}${client>0?`<span class="pill" style="background:rgba(234,179,8,.15);color:#ca8a04;">取引先 ${client}件</span>`:""}${endCont>0?`<span class="pill" style="background:rgba(56,189,248,.15);color:#38bdf8;">対応 ${endCont}件</span>`:""}${total===0?`<span style="font-size:13px;font-weight:700;background:rgba(248,113,113,.15);color:var(--rd);padding:4px 10px;border-radius:6px;">⚠️ 本日未入力</span>`:""}</div></div>`;
   }).join("");
 
   // ファネル：直販の流れ（訪問→見込→内示→受注）
@@ -1282,41 +1284,107 @@ async function loadExec(){
   document.getElementById("exec-partner-rank").innerHTML=ptArr.length===0?`<div style="font-size:11px;color:var(--tx3);padding:8px 0;">今月のデータなし</div>`:ptArr.map(([nm,v])=>`<div class="fn-row"><span class="fn-l" style="width:100px;font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${nm}</span><div class="fn-b"><div class="fn-f" style="width:${Math.round(v/maxPV*100)}%;background:rgba(52,211,153,.3);color:var(--g);">${v}件</div></div><span class="fn-c" style="color:var(--g);">${v}</span></div>`).join("");
   renderCfBars("exec-cfbar",payments);
 
-  // 本日のトピック
-  // フィードバックデータ取得
-  // フィードバック：全件取得してJS側でフィルタ（GASの日付変換問題を回避）
-  const fbAll = await apiGet({type:"feedback"}).catch(()=>[]);
-  const fbRaw = fbAll.filter(f=>String(f["日付"]).slice(0,10)===today.slice(0,10));
-  const execFeedbacks={};
-  fbRaw.forEach(f=>{ execFeedbacks[f["担当者"]]=f["フィードバック"]||""; });
+  // 全日報データをグローバルに保持（週間要約用）
+  window._allReports = reports;
 
-  const topicsEl = document.getElementById("exec-topics");
-  if(topicsEl){
-    const topicHtml = MEMBERS.map((nm,i) => {
-      const pr = todayR.filter(r=>r["担当者"]===nm);
-      const topic = pr.map(r=>r["トピック"]).filter(Boolean).join(" / ");
-      const fbText = execFeedbacks[nm]||"";
-      const safeNm = nm.replace(/ /g,"_").replace(/　/g,"_");
-      return `<div style="padding:12px 0;border-bottom:1px solid var(--bd);">
-        <div style="display:flex;gap:12px;">
-          <div class="av" style="background:${MEMBER_COLORS[i]};width:32px;height:32px;font-size:13px;flex-shrink:0;">${nm[0]}</div>
-          <div style="flex:1;">
-            <div style="font-size:13px;font-weight:600;margin-bottom:4px;">${nm}</div>
-            ${topic
-              ? `<div style="font-size:13px;color:var(--tx2);line-height:1.6;margin-bottom:6px;">${topic}</div>`
-              : `<div style="font-size:12px;color:var(--tx3);margin-bottom:6px;">未入力</div>`
-            }
-            ${isAdmin ? `<textarea id="fb-${safeNm}" placeholder="フィードバックを入力（管理者のみ）" style="width:100%;font-size:12px;padding:6px 8px;border-radius:6px;border:1px solid var(--bd);background:var(--sf2);min-height:40px;resize:vertical;box-sizing:border-box;">${fbText}</textarea><button class="btn btn-g btn-sm" style="margin-top:4px;font-size:11px;" onclick="saveFeedback('${nm}','${today}',document.getElementById('fb-${safeNm}').value)">💾 保存</button>` :
-              fbText ? `<div style="padding:6px 10px;background:rgba(79,125,247,.08);border-radius:6px;font-size:12px;border-left:3px solid var(--ac);"><span style="font-size:10px;color:var(--tx3);display:block;margin-bottom:2px;">📝 上長フィードバック</span>${fbText}</div>` : ""}
-          </div>
-        </div>
-      </div>`;
-    }).join("");
-    topicsEl.innerHTML = topicHtml;
-  }
+  // 本日のトピック（初期表示）
+  renderTopicMode('today', reports, today);
+  document.getElementById("btn-topic-today").classList.add("on");
 
   // 整合性チェック
   renderConsistencyCheck(todayR, deals_exec, today);
+}
+
+// ============================================================
+//  トピック モード切替・要約
+// ============================================================
+function showTopicMode(mode){
+  const reports = window._allReports || [];
+  const today = todayJST();
+  // ボタンのハイライト切替
+  const btnToday = document.getElementById("btn-topic-today");
+  const btnWeek  = document.getElementById("btn-topic-week");
+  if(btnToday) btnToday.classList.toggle("on", mode==="today");
+  if(btnWeek)  btnWeek.classList.toggle("on",  mode==="week");
+  renderTopicMode(mode, reports, today);
+}
+
+function renderTopicMode(mode, reports, today){
+  const topicsEl = document.getElementById("exec-topics");
+  if(!topicsEl) return;
+
+  if(mode==="today"){
+    // 本日のトピック（担当者別1行）
+    const todayR = reports.filter(r=>r["日付"]===today);
+    const html = MEMBERS.map((nm,i)=>{
+      const pr = todayR.filter(r=>r["担当者"]===nm);
+      const topic = pr.map(r=>r["トピック"]).filter(Boolean).join(" / ");
+      return `<div style="display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--bd);">
+        <div class="av" style="background:${MEMBER_COLORS[i]};width:32px;height:32px;font-size:13px;flex-shrink:0;">${nm[0]}</div>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:600;margin-bottom:3px;">${nm}</div>
+          ${topic
+            ? `<div style="font-size:13px;color:var(--tx2);line-height:1.6;">${topic}</div>`
+            : `<div style="font-size:12px;color:var(--tx3);">未入力</div>`}
+        </div>
+      </div>`;
+    }).join("");
+    topicsEl.innerHTML = html || `<div style="font-size:12px;color:var(--tx3);">本日のトピックなし</div>`;
+    return;
+  }
+
+  // 週間要約モード（過去7日間）
+  const d7ago = (()=>{ const d=new Date();d.setDate(d.getDate()-6);const jst=new Date(d.getTime()+9*3600*1000);return jst.toISOString().split("T")[0]; })();
+  const weekR = reports.filter(r=>{ const dt=String(r["日付"]||""); return dt>=d7ago && dt<=today && r["トピック"]; });
+
+  if(weekR.length===0){
+    topicsEl.innerHTML=`<div style="font-size:12px;color:var(--tx3);">過去7日間のトピックなし</div>`;
+    return;
+  }
+
+  // 担当者別 → 日付順に並べて表示
+  const byPerson={};
+  weekR.forEach(r=>{
+    if(!byPerson[r["担当者"]]) byPerson[r["担当者"]]=[];
+    byPerson[r["担当者"]].push({date:r["日付"], text:r["トピック"]});
+  });
+
+  const html = MEMBERS.filter(nm=>byPerson[nm]).map((nm,_i)=>{
+    const i = MEMBERS.indexOf(nm);
+    const items = byPerson[nm].sort((a,b)=>a.date>b.date?1:-1);
+    // キーワード集計（文字列から主な単語を抽出してカウント）
+    const allText = items.map(t=>t.text).join(" ");
+    const keywords = extractKeywords(allText);
+    const kwHtml = keywords.length>0
+      ? `<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;">${keywords.map(kw=>`<span style="font-size:10px;padding:2px 7px;border-radius:99px;background:rgba(79,125,247,.12);color:var(--ac);">${kw}</span>`).join("")}</div>`
+      : "";
+    return `<div style="padding:10px 0;border-bottom:1px solid var(--bd);">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+        <div class="av" style="background:${MEMBER_COLORS[i]};width:28px;height:28px;font-size:11px;flex-shrink:0;">${nm[0]}</div>
+        <span style="font-size:13px;font-weight:700;">${nm}</span>
+        <span style="font-size:11px;color:var(--tx3);">${items.length}日分</span>
+      </div>
+      ${items.map(t=>`<div style="display:flex;gap:8px;margin-bottom:5px;padding:6px 10px;background:var(--sf2);border-radius:6px;">
+        <span style="font-size:10px;color:var(--tx3);white-space:nowrap;padding-top:1px;">${t.date.slice(5)}</span>
+        <span style="font-size:12px;color:var(--tx2);line-height:1.6;">${t.text}</span>
+      </div>`).join("")}
+      ${kwHtml}
+    </div>`;
+  }).join("");
+
+  topicsEl.innerHTML=`
+    <div style="font-size:11px;color:var(--tx3);margin-bottom:10px;">📅 集計期間：${d7ago} 〜 ${today}（過去7日間）</div>
+    ${html}`;
+}
+
+function extractKeywords(text){
+  // 簡易キーワード抽出：よく出る名詞・フレーズを集計
+  const stopWords=new Set(["ない","する","した","ある","いる","また","これ","その","ため","こと","もの","から","まで","にて","での","について","として","によって","など","および"]);
+  // 括弧内・助詞・2文字以下を除外して単語に近いトークンを抽出
+  const tokens = text.replace(/[（(【\[「]/g," ").replace(/[）)\]】」]/g," ").split(/[\s,、。・\n！？!?]+/).map(s=>s.trim()).filter(s=>s.length>=2&&s.length<=8&&!stopWords.has(s));
+  const freq={};
+  tokens.forEach(t=>{ freq[t]=(freq[t]||0)+1; });
+  return Object.entries(freq).filter(([,v])=>v>=2).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([k])=>k);
 }
 
 function renderConsistencyCheck(todayR, deals, today){
@@ -1384,67 +1452,6 @@ function renderConsistencyCheck(todayR, deals, today){
   <div style="padding:10px 16px;font-size:11px;color:var(--tx3);">
     ※ 日報の直販訪問＋TU受領と、案件管理の本日登録・更新件数を比較しています。±1件は誤差として許容。
   </div>`;
-}
-
-// ① 日報ページ読み込み時の確認
-async function checkTodayReport(){
-  const today=todayJST();
-  const reports=await apiGet({type:"report"});
-  const myReport=reports.find(r=>r["日付"]===today&&r["担当者"]===currentUser);
-  const editBtn=document.getElementById("rep-edit-btn");
-  const statusEl=document.getElementById("rep-today-status");
-  if(myReport){
-    if(editBtn) editBtn.style.display="inline-flex";
-    if(statusEl) statusEl.innerHTML=`<span style="color:var(--g);font-weight:600;">✅ 本日分の日報は送信済みです</span>`;
-  } else {
-    if(editBtn) editBtn.style.display="none";
-    if(statusEl) statusEl.innerHTML="";
-    window._editingReportId=null;
-  }
-}
-
-// ① 日報編集：本日分を読み込んでフォームにセット
-async function loadTodayReport(){
-  const today=todayJST();
-  const reports=await apiGet({type:"report"});
-  const myReport=reports.find(r=>r["日付"]===today&&r["担当者"]===currentUser);
-  if(!myReport){toast("本日の日報が見つかりません");return;}
-
-  // 各フィールドをセット
-  const fields=[
-    ["d_visit","直販訪問"],["d_prospect","直販新規見込"],["d_ind","直販内示"],["d_won","直販受注"],
-    ["t_recv","TU受領"],["t_nego","TU商談"],["t_ind","TU内示"],["t_won","TU受注"],
-    ["p_new","販売店新規"],["p_exist","販売店既存"],
-    ["c_new","取引先新規"],["c_exist","取引先既存"],
-    ["accompany_new","社内同行新規"],["accompany_exist","社内同行既存"],
-    ["c_doc","エンド書類回収"],["c_claim","エンドクレーム"],["c_deliver","エンド納品"],["c_mtg","エンド打合せ"],
-  ];
-  fields.forEach(([nvKey,shKey])=>{
-    NV[nvKey]=num(myReport,shKey);
-    const el=document.getElementById(nvKey);
-    if(el) el.textContent=NV[nvKey];
-  });
-  // 目標・トピック
-  ["目標1","目標2","目標3","トピック"].forEach(k=>{
-    const elMap={"目標1":"r-g1","目標2":"r-g2","目標3":"r-g3","トピック":"r-topic"};
-    const el=document.getElementById(elMap[k]);
-    if(el) el.value=myReport[k]||"";
-  });
-  // 送信ボタンを「更新」に変更
-  const btn=document.getElementById("rep-btn");
-  if(btn){btn.textContent="📨 日報を更新";btn.style.background="var(--am)";}
-  const statusEl=document.getElementById("rep-today-status");
-  if(statusEl) statusEl.innerHTML=`<span style="color:var(--am);font-weight:600;">✏️ 編集モード：送信済みの日報を編集中（ID: ${myReport["id"]}）</span>`;
-  // 送信関数に既存IDを保持
-  window._editingReportId=myReport["id"];
-  toast("本日の日報を読み込みました");
-}
-
-// ③ フィードバック保存
-async function saveFeedback(member, date, text){
-  const res=await apiPost({type:"feedback",action:"upsert",payload:{担当者:member,日付:date,フィードバック:text}});
-  if(res.ok) toast(member+"へのフィードバックを保存しました");
-  else toast("保存に失敗しました");
 }
 
 // CASHFLOW
@@ -1519,7 +1526,6 @@ async function submitReport(){
     目標3:document.getElementById("g3").value,
     トピック:document.getElementById("r-topic").value,
     取引先新規:NV.c_new, 取引先既存:NV.c_exist,
-    社内同行新規:NV.accompany_new, 社内同行既存:NV.accompany_exist,
     エンド書類回収:NV.c_doc, エンドクレーム:NV.c_claim, エンド納品:NV.c_deliver, エンド打合せ:NV.c_mtg,
   };
   const res=await apiPost({type:"report",action:"create",payload});
@@ -1556,6 +1562,96 @@ function clearRep(){
   document.getElementById("rep-preview").style.display="none";
 }
 function updateSbUser(){const nm=document.getElementById("r-person").value;document.getElementById("sb-nm").textContent=nm;document.getElementById("sb-av").textContent=nm[0];}
+
+// ============================================================
+//  日報閲覧・フィードバック
+// ============================================================
+async function loadReportView(){
+  const date   = document.getElementById("rv-date")?.value;
+  const person = document.getElementById("rv-person")?.value;
+  const el     = document.getElementById("rep-view-result");
+  if(!date||!person){ if(el) el.innerHTML=`<div style="font-size:12px;color:var(--tx3);">日付と担当者を選択してください。</div>`; return; }
+  el.innerHTML=`<div class="ld"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div><span>読み込み中...</span></div>`;
+  const reports = await apiGet({type:"report"});
+  const rep = reports.find(r=>String(r["日付"])===date && r["担当者"]===person);
+  if(!rep){
+    el.innerHTML=`<div style="font-size:12px;color:var(--tx3);padding:10px 0;">この日（${date}）の日報は見つかりませんでした。</div>`;
+    return;
+  }
+  const tuRate=num(rep,"TU受領")>0?Math.round((num(rep,"TU内示")+num(rep,"TU受注"))/num(rep,"TU受領")*100):0;
+
+  // フィードバック欄（管理者：入力可 / 一般：閲覧のみ）
+  const existFb = (rep["フィードバック"]||"").trim();
+  const fbSection = isAdmin
+    ? `<div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--bd);">
+        <label class="lb" style="display:block;margin-bottom:6px;">💬 管理者フィードバック</label>
+        <textarea id="fb-text" rows="3" placeholder="フィードバックを入力してください...">${existFb}</textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;align-items:center;">
+          <button class="btn btn-p btn-sm" onclick="submitFeedback('${rep["id"]}')">💾 保存</button>
+          <span id="fb-save-status" style="font-size:11px;color:var(--tx3);"></span>
+        </div>
+       </div>`
+    : existFb
+      ? `<div style="margin-top:14px;padding:12px 14px;background:rgba(59,110,240,.06);border:1px solid rgba(59,110,240,.2);border-radius:8px;border-left:4px solid var(--ac);">
+           <div style="font-size:11px;font-weight:700;color:var(--ac);margin-bottom:6px;">💬 管理者からのフィードバック</div>
+           <div style="font-size:13px;color:var(--tx);line-height:1.8;white-space:pre-wrap;">${existFb}</div>
+         </div>`
+      : "";
+
+  el.innerHTML=`
+    <div style="font-size:13px;font-weight:700;color:var(--tx2);margin-bottom:10px;">📅 ${date}　${person}</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:11px;margin-bottom:8px;">
+      <div style="padding:8px;background:rgba(79,125,247,.08);border-radius:6px;border:1px solid rgba(79,125,247,.2);">
+        <div style="color:var(--ac);font-weight:700;margin-bottom:4px;">🏢 直販</div>
+        訪問 <b>${num(rep,"直販訪問")}</b>件 / 見込 <b>${num(rep,"直販新規見込")}</b>件<br>
+        内示 <b>${num(rep,"直販内示")}</b>件 / 受注 <b>${num(rep,"直販受注")}</b>件
+      </div>
+      <div style="padding:8px;background:rgba(52,211,153,.08);border-radius:6px;border:1px solid rgba(52,211,153,.2);">
+        <div style="color:var(--g);font-weight:700;margin-bottom:4px;">🔄 TU　決定率 ${tuRate}%</div>
+        受領 <b>${num(rep,"TU受領")}</b>件 / 商談 <b>${num(rep,"TU商談")}</b>件<br>
+        内示 <b>${num(rep,"TU内示")}</b>件 / 受注 <b>${num(rep,"TU受注")}</b>件
+      </div>
+      <div style="padding:8px;background:rgba(167,139,250,.08);border-radius:6px;border:1px solid rgba(167,139,250,.2);">
+        <div style="color:var(--pu);font-weight:700;margin-bottom:4px;">🤝 販売店</div>
+        新規 <b>${num(rep,"販売店新規")}</b>件 / 既存 <b>${num(rep,"販売店既存")}</b>件
+      </div>
+      <div style="padding:8px;background:rgba(234,179,8,.08);border-radius:6px;border:1px solid rgba(234,179,8,.2);">
+        <div style="color:#ca8a04;font-weight:700;margin-bottom:4px;">🤝 取引先</div>
+        新規 <b>${num(rep,"取引先新規")}</b>件 / 既存 <b>${num(rep,"取引先既存")}</b>件
+      </div>
+      <div style="padding:8px;background:rgba(56,189,248,.08);border-radius:6px;border:1px solid rgba(56,189,248,.2);">
+        <div style="color:#38bdf8;font-weight:700;margin-bottom:4px;">📋 エンド対応</div>
+        書類 <b>${num(rep,"エンド書類回収")}</b>件 / クレーム <b>${num(rep,"エンドクレーム")}</b>件<br>
+        納品 <b>${num(rep,"エンド納品")}</b>件 / 打合せ <b>${num(rep,"エンド打合せ")}</b>件
+      </div>
+      ${(rep["目標1"]||rep["目標2"]||rep["目標3"])?`
+      <div style="padding:8px;background:var(--sf2);border-radius:6px;border:1px solid var(--bd);">
+        <div style="font-size:10px;font-weight:700;color:var(--tx2);margin-bottom:4px;">🎯 目標</div>
+        ${rep["目標1"]?`<div style="font-size:11px;">① ${rep["目標1"]}</div>`:""}
+        ${rep["目標2"]?`<div style="font-size:11px;">② ${rep["目標2"]}</div>`:""}
+        ${rep["目標3"]?`<div style="font-size:11px;">③ ${rep["目標3"]}</div>`:""}
+      </div>`:""}
+    </div>
+    ${rep["トピック"]?`<div style="padding:10px 12px;background:rgba(245,158,11,.06);border-radius:6px;border-left:3px solid var(--am);font-size:12px;color:var(--tx2);margin-bottom:4px;white-space:pre-wrap;">💬 ${rep["トピック"]}</div>`:""}
+    ${fbSection}`;
+}
+
+async function submitFeedback(reportId){
+  const text = (document.getElementById("fb-text")?.value||"").trim();
+  const btn  = document.querySelector("#rep-view-result .btn-p");
+  const stEl = document.getElementById("fb-save-status");
+  if(btn){btn.textContent="保存中...";btn.disabled=true;}
+  if(stEl) stEl.textContent="";
+  const res = await apiPost({type:"report", action:"updateFeedback", payload:{id:reportId, フィードバック:text}});
+  if(btn){btn.textContent="💾 保存";btn.disabled=false;}
+  if(res&&res.ok){
+    toast("フィードバックを保存しました");
+    // 保存後に画面を再読み込みして反映
+    await loadReportView();
+  } else {
+    if(stEl) stEl.textContent="保存に失敗しました。再試行してください。";
+  }
+}
 
 // DEALS
 // ---- フィルター状態 ----
@@ -3845,6 +3941,11 @@ document.getElementById("rep-dt-lbl").textContent=now.toLocaleDateString("ja-JP"
 document.getElementById("r-date").value=todayJST();
 document.getElementById("py-date").value=todayJST();
 document.getElementById("hist-date").value=todayJST();
+// 日報閲覧の初期値：前日
+(function(){
+  const rvDate=document.getElementById("rv-date");
+  if(rvDate){const d=new Date();d.setDate(d.getDate()-1);const jst=new Date(d.getTime()+9*3600*1000);rvDate.value=jst.toISOString().split("T")[0];}
+})();
 updateSubFrame();
 // セッション確認（リロード時に再ログイン不要）
 if(!checkSession()){
