@@ -365,15 +365,15 @@ select option{background:var(--sf);}
     <div class="kg">
       <div class="kpi am"><div class="kpi-l">入金見込（受注）</div><div class="kpi-v am" id="kpi-pay">—</div><div class="kpi-s">受注案件の金額合計</div></div>
       <div class="kpi gr" style="grid-column:span 1;"><div class="kpi-l">入金予定（採択）</div><div class="kpi-v gr" id="kpi-adopted">—</div><div class="kpi-s">採択案件の金額合計</div></div>
-      <div class="kpi gr"><div class="kpi-l">TU決定率（今月）</div><div class="kpi-v gr" id="kpi-tu">—</div><div class="kpi-s">内示÷商談数</div></div>
+      <div class="kpi gr"><div class="kpi-l">見込化率（今月）</div><div class="kpi-v gr" id="kpi-tu">—</div><div class="kpi-s">見込÷商談数</div></div>
       <div class="kpi bl"><div class="kpi-l">商談件数（選択日）</div><div class="kpi-v bl" id="kpi-acts">—</div><div class="kpi-s">全員合計</div></div>
-      <div class="kpi rd"><div class="kpi-l">内示合計（今月）</div><div class="kpi-v rd" id="kpi-cancel">—</div><div class="kpi-s">直販+TU</div></div>
+      <div class="kpi rd"><div class="kpi-l">フェーズ進捗（今月）</div><div class="kpi-v rd" id="kpi-cancel">—</div><div class="kpi-s">内示・報告・失注等</div></div>
     </div>
     <div class="sec" id="exec-day-lbl">担当者別 本日の活動</div>
     <div class="pg" id="exec-pg"><div class="ld"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div><span>読み込み中...</span></div></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
       <div class="cd"><div class="cd-t" id="exec-funnel-lbl">エンド商談 フェーズ分布（今月）</div><div id="exec-funnel"></div></div>
-      <div class="cd"><div class="cd-t">販売店別 TU受領（今月）</div><div id="exec-partner-rank"></div></div>
+      <div class="cd"><div class="cd-t">フェーズ別 速報（今月）</div><div id="exec-partner-rank"></div></div>
     </div>
     <div class="cd"><div class="cd-t">今後4ヶ月 入金見通し</div><div id="exec-cfbar"></div></div>
 
@@ -510,7 +510,7 @@ select option{background:var(--sf);}
       <div class="sec">個人目標 進捗</div>
       <div class="fg3" style="margin-bottom:12px;">
         <div class="fm"><label class="lb">目標1</label><input type="text" id="g1" placeholder="例：新規訪問3件"></div>
-        <div class="fm"><label class="lb">目標2</label><input type="text" id="g2" placeholder="例：TU商談2件"></div>
+        <div class="fm"><label class="lb">目標2</label><input type="text" id="g2" placeholder="例：紹介店案件2件"></div>
         <div class="fm"><label class="lb">目標3</label><input type="text" id="g3" placeholder="例：販売店訪問1件"></div>
       </div>
       <div class="fm" style="margin-bottom:16px;">
@@ -578,7 +578,7 @@ select option{background:var(--sf);}
       <div class="cd-t">新規案件登録</div>
       <div class="fg" style="margin-bottom:10px;">
         <div class="fm"><label class="lb">案件名・屋号名</label><input type="text" id="nd-nm" placeholder="〇〇社 / 屋号名"></div>
-        <div class="fm"><label class="lb">チャネル</label><select id="nd-ch"><option value="end">エンド商談（直販）</option><option value="tossup">トスアップ（販売店経由）</option></select></div>
+        <div class="fm"><label class="lb">チャネル</label><select id="nd-ch"><option value="end">エンド商談（直販）</option><option value="tossup">紹介店案件</option></select></div>
         <div class="fm"><label class="lb">申請補助金・商材</label>
           <select id="nd-sub" onchange="updateSubFrame()">
             <option value="デジタル・AI導入補助金">デジタル・AI導入補助金</option>
@@ -866,7 +866,7 @@ select option{background:var(--sf);}
     </div>
     <div class="sec" style="margin-top:14px;">担当販売店 実績（日報集計）</div>
     <div class="cd" id="partner-list"><div class="ld"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div><span>読み込み中...</span></div></div>
-    <div class="cd" style="margin-top:14px;"><div class="cd-t">販売店別 TU受領 vs 内示（今月）</div><div style="height:160px;"><canvas id="pt-chart"></canvas></div></div>
+    <div class="cd" style="margin-top:14px;"><div class="cd-t">販売店別 紹介店案件 vs 内示（今月）</div><div style="height:160px;"><canvas id="pt-chart"></canvas></div></div>
   </div>
 </div>
 
@@ -1218,6 +1218,28 @@ function go(page,sideEl,mnId){
 // 日報タブ（不要になったが残存コードを無害化）
 function switchRepTab(){}
 
+function sumKeys(r, keys){return keys.reduce((s,k)=>s+num(r,k),0);}
+function sumReports(rows, fn){return rows.reduce((s,r)=>s+fn(r),0);}
+function directVisit(r){const v=sumKeys(r,["直販新規訪問","直販再訪問"]);return v||num(r,"直販訪問");}
+function referralVisit(r){const v=sumKeys(r,["紹介店新規訪問","紹介店再訪問"]);return v||num(r,"TU受領")||num(r,"TU商談");}
+function directProspect(r){const v=sumKeys(r,["直販IT見込","直販持続化見込","直販その他見込"]);return v||num(r,"直販新規見込");}
+function referralProspect(r){return num(r,"紹介店見込");}
+function directInd(r){const v=sumKeys(r,["直販IT内示","直販持続化内示","直販その他内示"]);return v||num(r,"直販内示");}
+function referralInd(r){return num(r,"紹介店内示")||num(r,"TU内示");}
+function reportNego(r){return directVisit(r)+referralVisit(r);}
+function reportEndContact(r){return sumKeys(r,["エンド書類回収","エンドクレーム","エンド納品","エンド打合せ"]);}
+function reportPhases(r){
+  return {
+    prospect:directProspect(r)+referralProspect(r),
+    lost:sumKeys(r,["直販失注","紹介店失注"]),
+    indicated:directInd(r)+referralInd(r),
+    caseReport:sumKeys(r,["直販案件報告","紹介店案件報告"]),
+    cancel:sumKeys(r,["直販キャンセル","紹介店キャンセル"]),
+  };
+}
+function sumPhase(rows,key){return rows.reduce((s,r)=>s+reportPhases(r)[key],0);}
+function phaseRate(numerator,denominator){return denominator>0?Math.round(numerator/denominator*100):0;}
+
 const NV={
   d_new_visit:0,d_revisit:0,d_it_prospect:0,d_jizokuka_prospect:0,d_other_prospect:0,d_lost:0,d_it_ind:0,d_jizokuka_ind:0,d_other_ind:0,d_case_report:0,d_cancel:0,
   r_new_visit:0,r_revisit:0,r_prospect:0,r_lost:0,r_ind:0,r_case_report:0,r_cancel:0,
@@ -1254,12 +1276,13 @@ async function loadExec(){
   window._execReports=reports; // refreshExecTopics用にキャッシュ
   const todayR=reports.filter(r=>r["日付"]===today),monthR=reports.filter(r=>String(r["日付"]).startsWith(month));
 
-  // 新フィールド名で集計
-  const tuRecv=monthR.reduce((s,r)=>s+num(r,"TU受領"),0);
-  const tuInd =monthR.reduce((s,r)=>s+num(r,"TU内示"),0);
-  const tuWon =monthR.reduce((s,r)=>s+num(r,"TU受注"),0);
-  const tuRate=tuRecv>0?Math.round((tuInd+tuWon)/tuRecv*100):0;
-  const cancel=monthR.reduce((s,r)=>s+num(r,"直販内示"),0); // キャンセル項目なくなったので内示で代替表示
+  const monthNego=sumReports(monthR,reportNego);
+  const monthProspect=sumPhase(monthR,"prospect");
+  const monthLost=sumPhase(monthR,"lost");
+  const monthInd=sumPhase(monthR,"indicated");
+  const monthCase=sumPhase(monthR,"caseReport");
+  const monthCancel=sumPhase(monthR,"cancel");
+  const prospectRate=phaseRate(monthProspect,monthNego);
   // 受注案件（入金見込）・採択案件（入金予定）を案件データから集計
   const deals_exec=await apiGet({type:"deal"});
   const orderedAmt=deals_exec.filter(d=>d["ステータス"]==="ordered").reduce((s,d)=>s+num(d,"金額"),0);
@@ -1268,47 +1291,48 @@ async function loadExec(){
   document.getElementById("kpi-pay").textContent="¥"+orderedAmt+"万";
   const adoptedEl=document.getElementById("kpi-adopted");
   if(adoptedEl) adoptedEl.textContent="¥"+adoptedAmt+"万";
-  document.getElementById("kpi-tu").textContent=tuRate+"%";
-  // 今日の全商談件数：直販訪問 + TU受領 + 販売店商談（新規+既存）
-  const todayContact=todayR.reduce((s,r)=>s+num(r,"直販訪問")+num(r,"TU受領")+num(r,"エンド書類回収")+num(r,"エンドクレーム")+num(r,"エンド納品")+num(r,"エンド打合せ")+num(r,"販売店新規")+num(r,"販売店既存"),0);
-  const todayNego=todayR.reduce((s,r)=>s+num(r,"直販訪問")+num(r,"TU受領"),0);
-  const todayRate=todayContact>0?Math.round(todayNego/todayContact*100):0;
-  document.getElementById("kpi-acts").textContent=todayContact+"件";
-  document.querySelector("#kpi-acts").closest(".kpi").querySelector(".kpi-s").textContent="商談率 "+todayRate+"% (商談"+todayNego+"件)";
-  document.getElementById("kpi-cancel").textContent=monthR.reduce((s,r)=>s+num(r,"直販内示")+num(r,"TU内示"),0)+"件";
+  document.getElementById("kpi-tu").textContent=prospectRate+"%";
+  document.querySelector("#kpi-tu").closest(".kpi").querySelector(".kpi-s").textContent=`見込 ${monthProspect}件 / 商談 ${monthNego}件`;
+  const todayNego=sumReports(todayR,reportNego);
+  const todayDirect=sumReports(todayR,directVisit);
+  const todayReferral=sumReports(todayR,referralVisit);
+  document.getElementById("kpi-acts").textContent=todayNego+"件";
+  document.querySelector("#kpi-acts").closest(".kpi").querySelector(".kpi-s").textContent=`直販 ${todayDirect}件 / 紹介店 ${todayReferral}件`;
+  document.getElementById("kpi-cancel").textContent=(monthInd+monthCase+monthLost+monthCancel)+"件";
+  document.querySelector("#kpi-cancel").closest(".kpi").querySelector(".kpi-s").textContent=`内示${monthInd} 報告${monthCase} 失注${monthLost} 取消${monthCancel}`;
 
   const persons=["橋野 浩一","川﨑 慧","浦塚 弘樹","坂本 憲司","又吉 俊","千代島 奨磨"];
   const avColors=["#4f7df7","#34d399","#f59e0b","#a78bfa","#f87171","#38bdf8"];
   document.getElementById("exec-pg").innerHTML=persons.map((nm,i)=>{
     const pr=todayR.filter(r=>r["担当者"]===nm);
-    const direct=pr.reduce((s,r)=>s+num(r,"直販訪問"),0);
-    const tu    =pr.reduce((s,r)=>s+num(r,"TU受領"),0);
-    const prt   =pr.reduce((s,r)=>s+num(r,"販売店新規")+num(r,"販売店既存"),0);
+    const direct=sumReports(pr,directVisit);
+    const referral=sumReports(pr,referralVisit);
+    const phases={prospect:sumPhase(pr,"prospect"),lost:sumPhase(pr,"lost"),indicated:sumPhase(pr,"indicated"),caseReport:sumPhase(pr,"caseReport"),cancel:sumPhase(pr,"cancel")};
     const endCont=pr.reduce((s,r)=>s+num(r,"エンド書類回収")+num(r,"エンドクレーム")+num(r,"エンド納品")+num(r,"エンド打合せ"),0);
-    const nego=direct+tu;
-    const total=nego+prt+endCont;
-    const rate=total>0?Math.round(nego/total*100):0;
-    return `<div class="pc"><div class="pc-h"><div class="av" style="background:${avColors[i]}">${nm[0]}</div><div><div class="pc-n">${nm}</div><div style="font-size:10px;color:var(--tx3);">接触 ${total}件 商談率${rate}%</div></div><div style="margin-left:auto;font-size:22px;font-family:var(--mo);font-weight:700;">${total}</div></div>
-    <div class="pc-s" style="grid-template-columns:1fr 1fr 1fr 1fr;"><div class="ps-b"><div class="ps-n" style="color:var(--ac)">${direct}</div><div class="ps-t">直販</div></div><div class="ps-b"><div class="ps-n" style="color:var(--g)">${tu}</div><div class="ps-t">TU</div></div><div class="ps-b"><div class="ps-n" style="color:var(--pu)">${prt}</div><div class="ps-t">販売店</div></div><div class="ps-b"><div class="ps-n" style="color:#38bdf8">${endCont}</div><div class="ps-t">対応</div></div></div>
-    <div class="ch-pills">${nego>0?`<span class="pill pe">商談 ${nego}件</span>`:""}${endCont>0?`<span class="pill" style="background:rgba(56,189,248,.15);color:#38bdf8;">対応 ${endCont}件</span>`:""}${total===0?`<span style="font-size:13px;font-weight:700;background:rgba(248,113,113,.15);color:var(--rd);padding:4px 10px;border-radius:6px;">⚠️ 本日未入力</span>`:""}</div></div>`;
+    const nego=direct+referral;
+    return `<div class="pc"><div class="pc-h"><div class="av" style="background:${avColors[i]}">${nm[0]}</div><div><div class="pc-n">${nm}</div><div style="font-size:10px;color:var(--tx3);">商談 ${nego}件 / 対応 ${endCont}件</div></div><div style="margin-left:auto;font-size:22px;font-family:var(--mo);font-weight:700;">${nego}</div></div>
+    <div class="pc-s" style="grid-template-columns:1fr 1fr 1fr 1fr;"><div class="ps-b"><div class="ps-n" style="color:var(--ac)">${direct}</div><div class="ps-t">直販</div></div><div class="ps-b"><div class="ps-n" style="color:var(--g)">${referral}</div><div class="ps-t">紹介店</div></div><div class="ps-b"><div class="ps-n" style="color:var(--pu)">${phases.prospect}</div><div class="ps-t">見込</div></div><div class="ps-b"><div class="ps-n" style="color:var(--am)">${phases.indicated}</div><div class="ps-t">内示</div></div></div>
+    <div class="ch-pills">${nego>0?`<span class="pill pe">商談 ${nego}件</span>`:""}${phases.caseReport>0?`<span class="pill" style="background:rgba(167,139,250,.15);color:var(--pu);">案件報告 ${phases.caseReport}件</span>`:""}${phases.lost>0?`<span class="pill" style="background:rgba(248,113,113,.15);color:var(--rd);">失注 ${phases.lost}件</span>`:""}${phases.cancel>0?`<span class="pill" style="background:rgba(100,116,139,.15);color:#64748b;">取消 ${phases.cancel}件</span>`:""}${nego===0&&endCont===0?`<span style="font-size:13px;font-weight:700;background:rgba(248,113,113,.15);color:var(--rd);padding:4px 10px;border-radius:6px;">⚠️ 本日未入力</span>`:""}</div></div>`;
   }).join("");
 
-  // ファネル：直販の流れ（訪問→見込→内示→受注）
+  // ファネル：活動量とフェーズ速報
   const funnelData=[
-    {l:"直販訪問",v:monthR.reduce((s,r)=>s+num(r,"直販訪問"),0),c:"rgba(79,125,247,.3)",tc:"var(--ac)"},
-    {l:"直販見込",v:monthR.reduce((s,r)=>s+num(r,"直販新規見込"),0),c:"rgba(167,139,250,.3)",tc:"var(--pu)"},
-    {l:"TU受領",v:tuRecv,c:"rgba(52,211,153,.25)",tc:"var(--g)"},
-    {l:"内示合計",v:tuInd+monthR.reduce((s,r)=>s+num(r,"直販内示"),0),c:"rgba(245,158,11,.3)",tc:"var(--am)"},
+    {l:"商談数",v:monthNego,c:"rgba(79,125,247,.3)",tc:"var(--ac)"},
+    {l:"見込",v:monthProspect,c:"rgba(167,139,250,.3)",tc:"var(--pu)"},
+    {l:"内示",v:monthInd,c:"rgba(245,158,11,.3)",tc:"var(--am)"},
+    {l:"案件報告",v:monthCase,c:"rgba(52,211,153,.25)",tc:"var(--g)"},
   ];
   const maxFV=Math.max(...funnelData.map(f=>f.v),1);
   document.getElementById("exec-funnel").innerHTML=funnelData.map(f=>`<div class="fn-row"><span class="fn-l">${f.l}</span><div class="fn-b"><div class="fn-f" style="width:${Math.round(f.v/maxFV*100)}%;background:${f.c};color:${f.tc};">${f.v>0?f.v+"件":""}</div></div><span class="fn-c" style="color:${f.tc};">${f.v}</span></div>`).join("");
 
-  // 販売店別TU受領
-  const ptMap={};
-  monthR.filter(r=>num(r,"TU受領")>0).forEach(r=>{const nm=r["販売店名"]||"不明";ptMap[nm]=(ptMap[nm]||0)+num(r,"TU受領");});
-  const ptArr=Object.entries(ptMap).sort((a,b)=>b[1]-a[1]).slice(0,5);
-  const maxPV=Math.max(...ptArr.map(p=>p[1]),1);
-  document.getElementById("exec-partner-rank").innerHTML=ptArr.length===0?`<div style="font-size:11px;color:var(--tx3);padding:8px 0;">今月のデータなし</div>`:ptArr.map(([nm,v])=>`<div class="fn-row"><span class="fn-l" style="width:100px;font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${nm}</span><div class="fn-b"><div class="fn-f" style="width:${Math.round(v/maxPV*100)}%;background:rgba(52,211,153,.3);color:var(--g);">${v}件</div></div><span class="fn-c" style="color:var(--g);">${v}</span></div>`).join("");
+  const phaseRows=[
+    {l:"失注",v:monthLost,c:"rgba(248,113,113,.25)",tc:"var(--rd)"},
+    {l:"キャンセル",v:monthCancel,c:"rgba(100,116,139,.2)",tc:"#64748b"},
+    {l:"直販商談",v:sumReports(monthR,directVisit),c:"rgba(79,125,247,.25)",tc:"var(--ac)"},
+    {l:"紹介店商談",v:sumReports(monthR,referralVisit),c:"rgba(52,211,153,.25)",tc:"var(--g)"},
+  ];
+  const maxPV=Math.max(...phaseRows.map(p=>p.v),1);
+  document.getElementById("exec-partner-rank").innerHTML=phaseRows.map(p=>`<div class="fn-row"><span class="fn-l">${p.l}</span><div class="fn-b"><div class="fn-f" style="width:${Math.round(p.v/maxPV*100)}%;background:${p.c};color:${p.tc};">${p.v>0?p.v+"件":""}</div></div><span class="fn-c" style="color:${p.tc};">${p.v}</span></div>`).join("");
   renderCfBars("exec-cfbar",payments);
 
   // トピック＋フィードバック表示（共用関数を使用）
@@ -1329,8 +1353,8 @@ function renderConsistencyCheck(todayR, deals, today){
 
   const rows = MEMBERS.map((nm,i) => {
     const pr = todayR.filter(r=>r["担当者"]===nm);
-    // 日報の商談数（直販訪問＋TU受領）
-    const reportNego = pr.reduce((s,r)=>s+num(r,"直販訪問")+num(r,"TU受領"),0);
+    // 日報の商談数（直販新規/再訪問 + 紹介店新規/再訪問）
+    const reportNegoCount = sumReports(pr,reportNego);
     const reported = pr.length > 0;
 
     // 案件管理の当日登録・更新件数（登録日 or 更新日が今日）
@@ -1341,24 +1365,24 @@ function renderConsistencyCheck(todayR, deals, today){
       return regDate===today || updDate===today;
     }).length;
 
-    const diff = reportNego - dealCount;
-    const ok = reportNego === 0 || Math.abs(diff) <= 1; // ±1まで許容
+    const diff = reportNegoCount - dealCount;
+    const ok = reportNegoCount === 0 || Math.abs(diff) <= 1; // ±1まで許容
     const status = !reported
       ? {icon:"⚪", label:"未入力", color:"var(--tx3)", bg:"var(--sf2)"}
-      : reportNego === 0
+      : reportNegoCount === 0
       ? {icon:"—", label:"商談なし", color:"var(--tx3)", bg:"var(--sf2)"}
       : ok
       ? {icon:"✅", label:"一致", color:"var(--g)", bg:"rgba(22,163,74,.06)"}
       : diff > 0
-      ? {icon:"⚠️", label:`日報${reportNego}件 > 案件${dealCount}件 (${diff}件漏れの可能性)`, color:"var(--am)", bg:"rgba(217,119,6,.06)"}
-      : {icon:"⚠️", label:`日報${reportNego}件 < 案件${dealCount}件 (日報入力ミスの可能性)`, color:"var(--rd)", bg:"rgba(220,38,38,.06)"};
+      ? {icon:"⚠️", label:`日報${reportNegoCount}件 > 案件${dealCount}件 (${diff}件漏れの可能性)`, color:"var(--am)", bg:"rgba(217,119,6,.06)"}
+      : {icon:"⚠️", label:`日報${reportNegoCount}件 < 案件${dealCount}件 (日報入力ミスの可能性)`, color:"var(--rd)", bg:"rgba(220,38,38,.06)"};
 
     return `<div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--bd);background:${status.bg};">
       <div class="av" style="background:${MEMBER_COLORS[i]};width:32px;height:32px;font-size:13px;flex-shrink:0;">${nm[0]}</div>
       <div style="flex:1;">
         <div style="font-size:13px;font-weight:600;">${nm}</div>
         <div style="font-size:12px;color:var(--tx3);margin-top:2px;">
-          日報：商談${reportNego}件　｜　案件管理：本日更新${dealCount}件
+          日報：商談${reportNegoCount}件　｜　案件管理：本日更新${dealCount}件
         </div>
       </div>
       <div style="font-size:13px;font-weight:700;color:${status.color};text-align:right;white-space:nowrap;">
@@ -1371,10 +1395,10 @@ function renderConsistencyCheck(todayR, deals, today){
   const issues = MEMBERS.filter((nm,i)=>{
     const pr = todayR.filter(r=>r["担当者"]===nm);
     if(pr.length===0) return false;
-    const reportNego = pr.reduce((s,r)=>s+num(r,"直販訪問")+num(r,"TU受領"),0);
-    if(reportNego===0) return false;
+    const reportNegoCount = sumReports(pr,reportNego);
+    if(reportNegoCount===0) return false;
     const dealCount = deals.filter(d=>d["担当者"]===nm&&(String(d["登録日"]||"").slice(0,10)===today||String(d["更新日時"]||"").slice(0,10)===today)).length;
-    return Math.abs(reportNego - dealCount) > 1;
+    return Math.abs(reportNegoCount - dealCount) > 1;
   });
 
   const summaryColor = issues.length===0 ? "var(--g)" : "var(--am)";
@@ -1386,7 +1410,7 @@ function renderConsistencyCheck(todayR, deals, today){
     <span style="font-size:13px;font-weight:700;color:${summaryColor};">${summaryText}</span>
   </div>${rows}
   <div style="padding:10px 16px;font-size:11px;color:var(--tx3);">
-    ※ 日報の直販訪問＋TU受領と、案件管理の本日登録・更新件数を比較しています。±1件は誤差として許容。
+    ※ 日報の直販・紹介店案件の訪問数と、案件管理の本日登録・更新件数を比較しています。±1件は誤差として許容。
   </div>`;
 }
 
@@ -1802,7 +1826,7 @@ async function openDealDetail(dealId){
   const deal=all.find(d=>String(d["id"])===String(dealId));
   if(!deal) return;
 
-  const chL={end:"エンド商談（直販）",tossup:"トスアップ（販売店経由）"};
+  const chL={end:"エンド商談（直販）",tossup:"紹介店案件"};
   const stC={prospect:"st-p",negotiating:"st-n",indicated:"st-i",ordered:"st-w",applying:"st-n",adopted:"st-w",lost:"st-l",rejected:"st-l"};
   const stL={prospect:"見込",negotiating:"商談中",indicated:"内示",ordered:"受注",applying:"申請中",adopted:"採択",lost:"失注",rejected:"不採択"};
   const rkC={A:"rA",B:"rB",C:"rC"};
@@ -2056,20 +2080,20 @@ async function loadPartners(){
   mr.forEach(r=>{
     const nm=r["販売店名"]||"不明";
     if(!ptMap[nm]) ptMap[nm]={tu:0,pnew:0,pexist:0};
-    ptMap[nm].tu    +=num(r,"TU受領");
+    ptMap[nm].tu    +=referralVisit(r);
     ptMap[nm].pnew  +=num(r,"販売店新規");
     ptMap[nm].pexist+=num(r,"販売店既存");
   });
   const arr=Object.entries(ptMap).filter(([nm])=>nm!=="不明").sort((a,b)=>b[1].tu-a[1].tu);
   document.getElementById("partner-list").innerHTML=arr.length===0
     ?`<div style="font-size:11px;color:var(--tx3);padding:8px 0;">今月のデータなし</div>`
-    :arr.map(([nm,v],i)=>`<div class="pt-row"><div class="pt-rk">${i+1}</div><div class="pt-in"><div class="pt-nm">${nm}</div><div class="pt-rp">今月集計</div></div><div class="pt-st"><div class="pti"><div class="pti-v" style="color:var(--g)">${v.tu}</div><div class="pti-l">TU受領</div></div><div class="pti"><div class="pti-v" style="color:var(--ac)">${v.pnew}</div><div class="pti-l">新規商談</div></div><div class="pti"><div class="pti-v" style="color:var(--am)">${v.pexist}</div><div class="pti-l">既存商談</div></div></div></div>`).join("");
+    :arr.map(([nm,v],i)=>`<div class="pt-row"><div class="pt-rk">${i+1}</div><div class="pt-in"><div class="pt-nm">${nm}</div><div class="pt-rp">今月集計</div></div><div class="pt-st"><div class="pti"><div class="pti-v" style="color:var(--g)">${v.tu}</div><div class="pti-l">紹介店案件</div></div><div class="pti"><div class="pti-v" style="color:var(--ac)">${v.pnew}</div><div class="pti-l">新規商談</div></div><div class="pti"><div class="pti-v" style="color:var(--am)">${v.pexist}</div><div class="pti-l">既存商談</div></div></div></div>`).join("");
   if(ptChart){ptChart.destroy();ptChart=null;}
   if(arr.length>0){
     ptChart=new Chart(document.getElementById("pt-chart"),{
       type:"bar",
       data:{labels:arr.map(([nm])=>nm.slice(0,7)),datasets:[
-        {label:"TU受領",data:arr.map(([,v])=>v.tu),backgroundColor:"rgba(52,211,153,.6)",borderRadius:3},
+        {label:"紹介店案件",data:arr.map(([,v])=>v.tu),backgroundColor:"rgba(52,211,153,.6)",borderRadius:3},
         {label:"新規商談",data:arr.map(([,v])=>v.pnew),backgroundColor:"rgba(79,125,247,.6)",borderRadius:3}
       ]},
       options:{plugins:{legend:{labels:{color:"#8b90b0",font:{size:10}}}},scales:{x:{ticks:{color:"#5a5f7a",font:{size:10}},grid:{color:"rgba(46,50,72,.8)"}},y:{ticks:{color:"#5a5f7a",font:{size:10}},grid:{color:"rgba(46,50,72,.8)"}}}}
@@ -2107,34 +2131,31 @@ async function loadWeekly(){
   document.getElementById("weekly-lbl").textContent=label;
   const wr=reports.filter(r=>{const d=String(r["日付"]);return d>=start&&d<=end;});
 
-  const dVisit=wr.reduce((s,r)=>s+num(r,"直販訪問"),0);
-  const dInd  =wr.reduce((s,r)=>s+num(r,"直販内示"),0);
-  const dWon  =wr.reduce((s,r)=>s+num(r,"直販受注"),0);
-  const tuR   =wr.reduce((s,r)=>s+num(r,"TU受領"),0);
-  const tuI   =wr.reduce((s,r)=>s+num(r,"TU内示"),0);
-  const tuW   =wr.reduce((s,r)=>s+num(r,"TU受注"),0);
-  const tuRate=tuR>0?Math.round((tuI+tuW)/tuR*100):0;
+  const dVisit=sumReports(wr,directVisit);
+  const referral=sumReports(wr,referralVisit);
+  const prospect=sumPhase(wr,"prospect");
+  const lost=sumPhase(wr,"lost");
+  const ind=sumPhase(wr,"indicated");
+  const caseReport=sumPhase(wr,"caseReport");
+  const cancel=sumPhase(wr,"cancel");
   const prtTot=wr.reduce((s,r)=>s+num(r,"販売店新規")+num(r,"販売店既存"),0);
   const endCont=wr.reduce((s,r)=>s+num(r,"エンド書類回収")+num(r,"エンドクレーム")+num(r,"エンド納品")+num(r,"エンド打合せ"),0);
-  const totalNego=dVisit+tuR;
-  const totalContact=totalNego+endCont;
-  const totalInd=dInd+tuI;
-  const totalWon=dWon+tuW;  // 日報の受注数（変わらず）
-  const contactRate=totalContact>0?Math.round(totalNego/totalContact*100):0;
-  const indRate=totalNego>0?Math.round(totalInd/totalNego*100):0;
-  const wonRate=totalInd>0?Math.round(totalWon/totalInd*100):0;
+  const totalNego=dVisit+referral;
+  const prospectRate=phaseRate(prospect,totalNego);
+  const indRate=phaseRate(ind,totalNego);
+  const caseRate=phaseRate(caseReport,ind||totalNego);
 
   document.getElementById("weekly-kpi").innerHTML=`
-    <div class="kpi bl"><div class="kpi-l">週間 接触数</div><div class="kpi-v bl">${totalContact}件</div><div class="kpi-s">商談率 ${contactRate}% (商談${totalNego}件)</div></div>
-    <div class="kpi am"><div class="kpi-l">内示率</div><div class="kpi-v am">${indRate}%</div><div class="kpi-s">内示 ${totalInd}件</div></div>
-    <div class="kpi gr"><div class="kpi-l">受注率</div><div class="kpi-v gr">${wonRate}%</div><div class="kpi-s">受注 ${totalWon}件</div></div>
-    <div class="kpi rd"><div class="kpi-l">エンド対応</div><div class="kpi-v rd">${endCont}件</div><div class="kpi-s">書類・クレーム・納品・打合せ</div></div>`;
+    <div class="kpi bl"><div class="kpi-l">週間 商談数</div><div class="kpi-v bl">${totalNego}件</div><div class="kpi-s">直販 ${dVisit} / 紹介店 ${referral}</div></div>
+    <div class="kpi gr"><div class="kpi-l">見込化率</div><div class="kpi-v gr">${prospectRate}%</div><div class="kpi-s">見込 ${prospect}件</div></div>
+    <div class="kpi am"><div class="kpi-l">内示率</div><div class="kpi-v am">${indRate}%</div><div class="kpi-s">内示 ${ind}件</div></div>
+    <div class="kpi rd"><div class="kpi-l">失注・取消</div><div class="kpi-v rd">${lost+cancel}件</div><div class="kpi-s">失注 ${lost} / 取消 ${cancel}</div></div>`;
 
   // 転換率バー
   const rates=[
+    {l:"商談→見込",v:prospectRate,c:"var(--g)"},
     {l:"商談→内示",v:indRate,c:"var(--am)"},
-    {l:"内示→受注",v:wonRate,c:"var(--g)"},
-    {l:"TU決定率",v:tuRate,c:"var(--ac)"},
+    {l:"内示→案件報告",v:caseRate,c:"var(--pu)"},
   ];
   document.getElementById("weekly-rates").innerHTML=rates.map(r=>`
     <div style="margin-bottom:10px;">
@@ -2169,24 +2190,20 @@ async function loadWeekly(){
   else{
     const rows=show.map(nm=>{
       const pr=wr.filter(r=>r["担当者"]===nm);
-      const dv=pr.reduce((s,r)=>s+num(r,"直販訪問"),0);
-      const di=pr.reduce((s,r)=>s+num(r,"直販内示"),0);
-      const dw=pr.reduce((s,r)=>s+num(r,"直販受注"),0);
-      const tu=pr.reduce((s,r)=>s+num(r,"TU受領"),0);
-      const ti=pr.reduce((s,r)=>s+num(r,"TU内示"),0);
-      const tw=pr.reduce((s,r)=>s+num(r,"TU受注"),0);
+      const dv=sumReports(pr,directVisit);
+      const ref=sumReports(pr,referralVisit);
+      const pp=sumPhase(pr,"prospect");
+      const pi=sumPhase(pr,"indicated");
+      const pc=sumPhase(pr,"caseReport");
+      const pl=sumPhase(pr,"lost")+sumPhase(pr,"cancel");
       const pt=pr.reduce((s,r)=>s+num(r,"販売店新規")+num(r,"販売店既存"),0);
       const ec=pr.reduce((s,r)=>s+num(r,"エンド書類回収")+num(r,"エンドクレーム")+num(r,"エンド納品")+num(r,"エンド打合せ"),0);
-      const nego=dv+tu;
-      const contact=nego+ec;
-      const ind=di+ti;
-      const won=dw+tw;
-      const cr=contact>0?Math.round(nego/contact*100):0;
-      const ir=nego>0?Math.round(ind/nego*100):0;
-      const wr2=ind>0?Math.round(won/ind*100):0;
-      return`<tr><td class="td-n">${nm}</td><td class="td-m">${contact}</td><td class="td-m ${cr>=60?"gr":cr>=40?"am":"rd"}">${contact>0?cr+"%":"—"}</td><td class="td-m">${ind}</td><td class="td-m ${ir>=30?"gr":ir>=15?"am":"rd"}">${nego>0?ir+"%":"—"}</td><td class="td-m">${won}</td><td class="td-m ${wr2>=50?"gr":wr2>=30?"am":"rd"}">${ind>0?wr2+"%":"—"}</td><td class="td-m">${pt}</td></tr>`;
+      const nego=dv+ref;
+      const prRate=phaseRate(pp,nego);
+      const ir=phaseRate(pi,nego);
+      return`<tr><td class="td-n">${nm}</td><td class="td-m">${nego}</td><td class="td-m">${dv}</td><td class="td-m">${ref}</td><td class="td-m ${prRate>=30?"gr":prRate>=15?"am":"rd"}">${nego>0?prRate+"%":"—"}</td><td class="td-m">${pi}</td><td class="td-m ${ir>=20?"gr":ir>=10?"am":"rd"}">${nego>0?ir+"%":"—"}</td><td class="td-m">${pc}</td><td class="td-m">${pl}</td></tr>`;
     });
-    document.getElementById("weekly-table").innerHTML=`<table><thead><tr><th>担当者</th><th>接触数</th><th>商談率</th><th>内示数</th><th>内示率</th><th>受注数</th><th>受注率</th><th>販売店</th></tr></thead><tbody>${rows.join("")}</tbody></table>`;
+    document.getElementById("weekly-table").innerHTML=`<table><thead><tr><th>担当者</th><th>商談</th><th>直販</th><th>紹介店</th><th>見込率</th><th>内示</th><th>内示率</th><th>案件報告</th><th>失注/取消</th></tr></thead><tbody>${rows.join("")}</tbody></table>`;
   }
 
   // 担当者別トピック
@@ -2246,31 +2263,28 @@ async function loadMonthly(){
   });
   const mr=reports.filter(r=>String(r["日付"]).startsWith(month));
 
-  const dVisit=mr.reduce((s,r)=>s+num(r,"直販訪問"),0);
-  const dInd  =mr.reduce((s,r)=>s+num(r,"直販内示"),0);
-  const dWon  =mr.reduce((s,r)=>s+num(r,"直販受注"),0);
-  const tuR   =mr.reduce((s,r)=>s+num(r,"TU受領"),0);
-  const tuI   =mr.reduce((s,r)=>s+num(r,"TU内示"),0);
-  const tuW   =mr.reduce((s,r)=>s+num(r,"TU受注"),0);
-  const tuRate=tuR>0?Math.round((tuI+tuW)/tuR*100):0;
+  const dVisit=sumReports(mr,directVisit);
+  const referral=sumReports(mr,referralVisit);
+  const prospect=sumPhase(mr,"prospect");
+  const lost=sumPhase(mr,"lost");
+  const ind=sumPhase(mr,"indicated");
+  const caseReport=sumPhase(mr,"caseReport");
+  const cancel=sumPhase(mr,"cancel");
   const prtTot=mr.reduce((s,r)=>s+num(r,"販売店新規")+num(r,"販売店既存"),0);
   const mEndCont=mr.reduce((s,r)=>s+num(r,"エンド書類回収")+num(r,"エンドクレーム")+num(r,"エンド納品")+num(r,"エンド打合せ"),0);
-  const totalNego=dVisit+tuR;
-  const totalContact=totalNego+mEndCont;
-  const totalInd=dInd+tuI;
-  const totalWon=dWon+tuW;  // 日報の受注数（変わらず）
-  const contactRate=totalContact>0?Math.round(totalNego/totalContact*100):0;
-  const indRate=totalNego>0?Math.round(totalInd/totalNego*100):0;
-  const wonRate=totalInd>0?Math.round(totalWon/totalInd*100):0;
+  const totalNego=dVisit+referral;
+  const prospectRate=phaseRate(prospect,totalNego);
+  const indRate=phaseRate(ind,totalNego);
+  const caseRate=phaseRate(caseReport,ind||totalNego);
 
   document.getElementById("monthly-kpi").innerHTML=`
-    <div class="kpi bl"><div class="kpi-l">月間 接触数</div><div class="kpi-v bl">${totalContact}件</div><div class="kpi-s">商談率 ${contactRate}% (商談${totalNego}件)</div></div>
-    <div class="kpi am"><div class="kpi-l">内示率</div><div class="kpi-v am">${indRate}%</div><div class="kpi-s">内示 ${totalInd}件</div></div>
-    <div class="kpi gr"><div class="kpi-l">受注率</div><div class="kpi-v gr">${wonRate}%</div><div class="kpi-s">受注 ${totalWon}件</div></div>
-    <div class="kpi rd"><div class="kpi-l">エンド対応</div><div class="kpi-v rd">${mEndCont}件</div><div class="kpi-s">書類・クレーム・納品・打合せ</div></div>`;
+    <div class="kpi bl"><div class="kpi-l">月間 商談数</div><div class="kpi-v bl">${totalNego}件</div><div class="kpi-s">直販 ${dVisit} / 紹介店 ${referral}</div></div>
+    <div class="kpi gr"><div class="kpi-l">見込化率</div><div class="kpi-v gr">${prospectRate}%</div><div class="kpi-s">見込 ${prospect}件</div></div>
+    <div class="kpi am"><div class="kpi-l">内示率</div><div class="kpi-v am">${indRate}%</div><div class="kpi-s">内示 ${ind}件</div></div>
+    <div class="kpi rd"><div class="kpi-l">失注・取消</div><div class="kpi-v rd">${lost+cancel}件</div><div class="kpi-s">失注 ${lost} / 取消 ${cancel}</div></div>`;
 
   // 転換率
-  const rates=[{l:"商談→内示",v:indRate,c:"var(--am)"},{l:"内示→受注",v:wonRate,c:"var(--g)"},{l:"TU決定率",v:tuRate,c:"var(--ac)"}];
+  const rates=[{l:"商談→見込",v:prospectRate,c:"var(--g)"},{l:"商談→内示",v:indRate,c:"var(--am)"},{l:"内示→案件報告",v:caseRate,c:"var(--pu)"}];
   document.getElementById("monthly-rates").innerHTML=rates.map(r=>`
     <div style="margin-bottom:10px;">
       <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px;">
@@ -2363,28 +2377,22 @@ async function loadMonthly(){
   const persons=[...new Set(mr.map(r=>r["担当者"]))];
   const rows=persons.map(nm=>{
     const pr=mr.filter(r=>r["担当者"]===nm);
-    const dv=pr.reduce((s,r)=>s+num(r,"直販訪問"),0);
-    const dp=pr.reduce((s,r)=>s+num(r,"直販新規見込"),0);
-    const di=pr.reduce((s,r)=>s+num(r,"直販内示"),0);
-    const dw=pr.reduce((s,r)=>s+num(r,"直販受注"),0);
-    const tu=pr.reduce((s,r)=>s+num(r,"TU受領"),0);
-    const ti=pr.reduce((s,r)=>s+num(r,"TU内示"),0);
-    const tw=pr.reduce((s,r)=>s+num(r,"TU受注"),0);
+    const dv=sumReports(pr,directVisit);
+    const ref=sumReports(pr,referralVisit);
+    const pp=sumPhase(pr,"prospect");
+    const pi=sumPhase(pr,"indicated");
+    const pc=sumPhase(pr,"caseReport");
+    const pl=sumPhase(pr,"lost")+sumPhase(pr,"cancel");
     const pt=pr.reduce((s,r)=>s+num(r,"販売店新規")+num(r,"販売店既存"),0);
-    const nego=dv+tu;
-    const ind=di+ti;
-    const won=dw+tw;
-    const ec=pr.reduce((s,r)=>s+num(r,"エンド書類回収")+num(r,"エンドクレーム")+num(r,"エンド納品")+num(r,"エンド打合せ"),0);
-    const contact=nego+ec;
-    const cr=contact>0?Math.round(nego/contact*100):0;
-    const ir=nego>0?Math.round(ind/nego*100):0;
-    const wr=ind>0?Math.round(won/ind*100):0;
+    const nego=dv+ref;
+    const prRate=phaseRate(pp,nego);
+    const ir=phaseRate(pi,nego);
     const nmGp=deals.filter(d=>d["担当者"]===nm&&["ordered","applying","adopted"].includes(d["ステータス"])).reduce((s,d)=>s+num(d,"粗利"),0);
-    return`<tr><td class="td-n">${nm}</td><td class="td-m">${contact}</td><td class="td-m ${cr>=60?"gr":cr>=40?"am":"rd"}">${contact>0?cr+"%":"—"}</td><td class="td-m">${ind}</td><td class="td-m ${ir>=30?"gr":ir>=15?"am":"rd"}">${nego>0?ir+"%":"—"}</td><td class="td-m">${won}</td><td class="td-m ${wr>=50?"gr":wr>=30?"am":"rd"}">${ind>0?wr+"%":"—"}</td><td class="td-m">${pt}</td><td class="td-m" style="color:var(--pu);">${nmGp>0?"¥"+nmGp+"万":"—"}</td></tr>`;
+    return`<tr><td class="td-n">${nm}</td><td class="td-m">${nego}</td><td class="td-m">${dv}</td><td class="td-m">${ref}</td><td class="td-m ${prRate>=30?"gr":prRate>=15?"am":"rd"}">${nego>0?prRate+"%":"—"}</td><td class="td-m">${pi}</td><td class="td-m ${ir>=20?"gr":ir>=10?"am":"rd"}">${nego>0?ir+"%":"—"}</td><td class="td-m">${pc}</td><td class="td-m">${pl}</td><td class="td-m" style="color:var(--pu);">${nmGp>0?"¥"+nmGp+"万":"—"}</td></tr>`;
   });
-  const totRow=["合計",totalContact,contactRate+"%",totalInd,indRate+"%",totalWon,wonRate+"%",prtTot,"¥"+gpTotal+"万"];
+  const totRow=["合計",totalNego,dVisit,referral,prospectRate+"%",ind,indRate+"%",caseReport,lost+cancel,"¥"+gpTotal+"万"];
   document.getElementById("monthly-table").innerHTML=`<table>
-    <thead><tr><th>担当者</th><th>接触数</th><th>商談率</th><th>内示数</th><th>内示率</th><th>受注数</th><th>受注率</th><th>販売店</th><th>粗利</th></tr></thead>
+    <thead><tr><th>担当者</th><th>商談</th><th>直販</th><th>紹介店</th><th>見込率</th><th>内示</th><th>内示率</th><th>案件報告</th><th>失注/取消</th><th>粗利</th></tr></thead>
     <tbody>${rows.join("")}<tr style="font-weight:700;background:rgba(79,125,247,.04);">${totRow.map((v,i)=>`<td class="${i===0?"td-n":"td-m"}" style="${i===0?"color:var(--ac)":""}">${v}</td>`).join("")}</tr></tbody>
   </table>`;
 
@@ -2410,9 +2418,10 @@ async function loadMonthly(){
   const orderedAmtM=deals.filter(d=>d["ステータス"]==="ordered").reduce((s,d)=>s+num(d,"金額"),0);
   const adoptedAmtM=deals.filter(d=>d["ステータス"]==="adopted").reduce((s,d)=>s+num(d,"金額"),0);
   document.getElementById("monthly-summary").innerHTML=
-    `・月間商談数 <strong style="color:var(--ac)">${totalNego}件</strong>、内示率 <strong style="color:var(--am)">${indRate}%</strong>、受注率 <strong style="color:var(--g)">${wonRate}%</strong><br>`+
+    `・月間商談数 <strong style="color:var(--ac)">${totalNego}件</strong>（直販 ${dVisit}件 / 紹介店 ${referral}件）、見込化率 <strong style="color:var(--g)">${prospectRate}%</strong>、内示率 <strong style="color:var(--am)">${indRate}%</strong><br>`+
     `・受注 <strong style="color:var(--g)">${orderedCount}件（¥${orderedAmtM}万）</strong> ／ 申請中 <strong style="color:#38bdf8">${applyingCount}件</strong> ／ 採択 <strong style="color:var(--g)">${adoptedCount}件（¥${adoptedAmtM}万）</strong><br>`+
-    `・粗利合計 <strong style="color:var(--pu)">¥${gpTotal}万</strong>（平均 ¥${gpAvg}万）、TU決定率 <strong style="color:var(--ac)">${tuRate}%</strong><br>`+
+    `・日報速報：見込 ${prospect}件 ／ 内示 ${ind}件 ／ 案件報告 ${caseReport}件 ／ 失注 ${lost}件 ／ キャンセル ${cancel}件<br>`+
+    `・粗利合計 <strong style="color:var(--pu)">¥${gpTotal}万</strong>（平均 ¥${gpAvg}万）<br>`+
     `・入金見込（受注）¥${orderedAmtM}万 ／ 入金予定（採択）¥${adoptedAmtM}万`;
 }
 
@@ -3294,17 +3303,17 @@ async function renderPersonalWeeklyReport(person, reports, deals){
   const {start,end,label} = getWeekRange(weekOffset);
   document.getElementById("weekly-lbl").textContent = label;
   const wr = reports.filter(r=>String(r["日付"])>=start&&String(r["日付"])<=end&&r["担当者"]===person);
-  const dVisit=wr.reduce((s,r)=>s+num(r,"直販訪問"),0);
-  const tuR=wr.reduce((s,r)=>s+num(r,"TU受領"),0);
-  const dInd=wr.reduce((s,r)=>s+num(r,"直販内示"),0);
-  const tuI=wr.reduce((s,r)=>s+num(r,"TU内示"),0);
-  const dWon=wr.reduce((s,r)=>s+num(r,"直販受注"),0);
-  const tuW=wr.reduce((s,r)=>s+num(r,"TU受注"),0);
+  const dVisit=sumReports(wr,directVisit);
+  const referral=sumReports(wr,referralVisit);
+  const prospect=sumPhase(wr,"prospect");
+  const lost=sumPhase(wr,"lost");
+  const ind=sumPhase(wr,"indicated");
+  const caseReport=sumPhase(wr,"caseReport");
+  const cancel=sumPhase(wr,"cancel");
   const endCont=wr.reduce((s,r)=>s+num(r,"エンド書類回収")+num(r,"エンドクレーム")+num(r,"エンド納品")+num(r,"エンド打合せ"),0);
-  const nego=dVisit+tuR, contact=nego+endCont, ind=dInd+tuI, won=dWon+tuW;
-  const cr=contact>0?Math.round(nego/contact*100):0;
-  const ir=nego>0?Math.round(ind/nego*100):0;
-  const wr2=ind>0?Math.round(won/ind*100):0;
+  const nego=dVisit+referral;
+  const prospectRate=phaseRate(prospect,nego);
+  const ir=phaseRate(ind,nego);
   const topics=wr.filter(r=>r["トピック"]).map(r=>`<div style="padding:8px 12px;background:var(--sf2);border-radius:6px;margin-bottom:6px;border-left:3px solid var(--am);">
     <div style="font-size:11px;color:var(--tx3);margin-bottom:3px;">${r["日付"]}</div>
     <div style="font-size:13px;">${r["トピック"]}</div>
@@ -3321,7 +3330,7 @@ async function renderPersonalWeeklyReport(person, reports, deals){
   const barMaxW=300, barH=24, gap=8;
   const dayData=days.map(d=>{
     const dr=wr.filter(r=>String(r["日付"])===d);
-    return {d,nego:dr.reduce((s,r)=>s+num(r,"直販訪問")+num(r,"TU受領"),0),end:dr.reduce((s,r)=>s+num(r,"エンド書類回収")+num(r,"エンドクレーム")+num(r,"エンド納品")+num(r,"エンド打合せ"),0)};
+    return {d,nego:sumReports(dr,reportNego),end:dr.reduce((s,r)=>s+num(r,"エンド書類回収")+num(r,"エンドクレーム")+num(r,"エンド納品")+num(r,"エンド打合せ"),0)};
   });
   const maxV=Math.max(...dayData.map(d=>d.nego+d.end),1);
   const svgH=(barH+gap)*days.length+30;
@@ -3346,10 +3355,10 @@ async function renderPersonalWeeklyReport(person, reports, deals){
       <div style="font-size:13px;opacity:.85;margin-top:4px;">${label}</div>
     </div>
     <div class="kg" style="grid-template-columns:repeat(4,1fr);margin-bottom:14px;">
-      <div class="kpi bl"><div class="kpi-l">接触数</div><div class="kpi-v bl">${contact}件</div><div class="kpi-s">商談率 ${cr}%</div></div>
+      <div class="kpi bl"><div class="kpi-l">商談数</div><div class="kpi-v bl">${nego}件</div><div class="kpi-s">直販 ${dVisit} / 紹介店 ${referral}</div></div>
+      <div class="kpi gr"><div class="kpi-l">見込化率</div><div class="kpi-v gr">${prospectRate}%</div><div class="kpi-s">見込 ${prospect}件</div></div>
       <div class="kpi am"><div class="kpi-l">内示率</div><div class="kpi-v am">${ir}%</div><div class="kpi-s">内示 ${ind}件</div></div>
-      <div class="kpi gr"><div class="kpi-l">受注率</div><div class="kpi-v gr">${wr2}%</div><div class="kpi-s">受注 ${won}件</div></div>
-      <div class="kpi rd"><div class="kpi-l">エンド対応</div><div class="kpi-v rd">${endCont}件</div><div class="kpi-s">書類・納品等</div></div>
+      <div class="kpi rd"><div class="kpi-l">失注・取消</div><div class="kpi-v rd">${lost+cancel}件</div><div class="kpi-s">報告 ${caseReport}件</div></div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
       <div class="cd">
@@ -3371,17 +3380,17 @@ async function renderPersonalMonthlyReport(person, month, reports, deals){
   const [y,m]=month.split("-");
   // 当月集計
   const mr = reports.filter(r=>String(r["日付"]).startsWith(month)&&r["担当者"]===person);
-  const dVisit=mr.reduce((s,r)=>s+num(r,"直販訪問"),0);
-  const tuR=mr.reduce((s,r)=>s+num(r,"TU受領"),0);
-  const dInd=mr.reduce((s,r)=>s+num(r,"直販内示"),0);
-  const tuI=mr.reduce((s,r)=>s+num(r,"TU内示"),0);
-  const dWon=mr.reduce((s,r)=>s+num(r,"直販受注"),0);
-  const tuW=mr.reduce((s,r)=>s+num(r,"TU受注"),0);
+  const dVisit=sumReports(mr,directVisit);
+  const referral=sumReports(mr,referralVisit);
+  const prospect=sumPhase(mr,"prospect");
+  const lost=sumPhase(mr,"lost");
+  const ind=sumPhase(mr,"indicated");
+  const caseReport=sumPhase(mr,"caseReport");
+  const cancel=sumPhase(mr,"cancel");
   const endCont=mr.reduce((s,r)=>s+num(r,"エンド書類回収")+num(r,"エンドクレーム")+num(r,"エンド納品")+num(r,"エンド打合せ"),0);
-  const nego=dVisit+tuR, contact=nego+endCont, ind=dInd+tuI, won=dWon+tuW;
-  const cr=contact>0?Math.round(nego/contact*100):0;
-  const ir=nego>0?Math.round(ind/nego*100):0;
-  const wr=ind>0?Math.round(won/ind*100):0;
+  const nego=dVisit+referral;
+  const prospectRate=phaseRate(prospect,nego);
+  const ir=phaseRate(ind,nego);
 
   // 粗利・予算
   const mBudget=getMemberBudget(person);
@@ -3398,13 +3407,13 @@ async function renderPersonalMonthlyReport(person, month, reports, deals){
   });
   const monthly12=months12.map(mo=>{
     const moR=reports.filter(r=>String(r["日付"]).startsWith(mo)&&r["担当者"]===person);
-    const moNego=moR.reduce((s,r)=>s+num(r,"直販訪問")+num(r,"TU受領"),0);
+    const moNego=sumReports(moR,reportNego);
     const moEnd=moR.reduce((s,r)=>s+num(r,"エンド書類回収")+num(r,"エンドクレーム")+num(r,"エンド納品")+num(r,"エンド打合せ"),0);
     const moContact=moNego+moEnd;
-    const moInd=moR.reduce((s,r)=>s+num(r,"直販内示")+num(r,"TU内示"),0);
-    const moWon=moR.reduce((s,r)=>s+num(r,"直販受注")+num(r,"TU受注"),0);
+    const moInd=sumPhase(moR,"indicated");
+    const moCase=sumPhase(moR,"caseReport");
     const moIr=moNego>0?Math.round(moInd/moNego*100):0;
-    const moWr=moInd>0?Math.round(moWon/moInd*100):0;
+    const moWr=moInd>0?Math.round(moCase/moInd*100):0;
     // 粗利（その月に登録・更新された受注以上の案件）
     const moGp=deals.filter(d=>d["担当者"]===person&&["ordered","applying","adopted"].includes(d["ステータス"])&&String(d["登録日"]||"").startsWith(mo)).reduce((s,d)=>s+num(d,"粗利"),0);
     return {mo,label:mo.slice(5)+"月",contact:moContact,nego:moNego,end:moEnd,ir:moIr,wr:moWr,gp:moGp,isCurrent:mo===month};
@@ -3435,7 +3444,7 @@ async function renderPersonalMonthlyReport(person, month, reports, deals){
     const dow=new Date(d).getDay();
     if(dow===0||dow===6) return null;
     const dr=mr.filter(r=>String(r["日付"])===d);
-    return {d,label:String(i+1),contact:dr.reduce((s,r)=>s+num(r,"直販訪問")+num(r,"TU受領")+num(r,"エンド書類回収")+num(r,"エンドクレーム")+num(r,"エンド納品")+num(r,"エンド打合せ"),0)};
+    return {d,label:String(i+1),contact:sumReports(dr,reportNego)+dr.reduce((s,r)=>s+num(r,"エンド書類回収")+num(r,"エンドクレーム")+num(r,"エンド納品")+num(r,"エンド打合せ"),0)};
   }).filter(Boolean);
   const maxDay=Math.max(...dayData.map(d=>d.contact),1);
   const dW=Math.max(480,dayData.length*22);
@@ -3482,10 +3491,10 @@ async function renderPersonalMonthlyReport(person, month, reports, deals){
     <!-- KPI 5枚 -->
     <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:18px;">
       ${[
-        {l:"月間接触数",v:contact+"件",s:"商談率 "+cr+"%",c:"#3b6ef0"},
+        {l:"月間商談数",v:nego+"件",s:"直販 "+dVisit+" / 紹介店 "+referral,c:"#3b6ef0"},
+        {l:"見込化率",v:prospectRate+"%",s:"見込 "+prospect+"件",c:"#16a34a"},
         {l:"内示率",v:ir+"%",s:"内示 "+ind+"件",c:"#d97706"},
-        {l:"受注率",v:wr+"%",s:"受注 "+won+"件",c:"#16a34a"},
-        {l:"エンド対応",v:endCont+"件",s:"書類・納品等",c:"#38bdf8"},
+        {l:"案件報告",v:caseReport+"件",s:"失注/取消 "+(lost+cancel)+"件",c:"#7c3aed"},
         {l:"粗利実績",v:"¥"+gpTotal+"万",s:"目標 ¥"+monthlyBudget+"万",c:"#7c3aed"},
       ].map(k=>`<div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px 12px;border-top:3px solid ${k.c};box-shadow:0 1px 4px rgba(0,0,0,.06);">
         <div style="font-size:11px;color:#64748b;margin-bottom:6px;">${k.l}</div>
@@ -3513,11 +3522,11 @@ async function renderPersonalMonthlyReport(person, month, reports, deals){
     <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:16px;margin-bottom:18px;box-shadow:0 1px 4px rgba(0,0,0,.06);">
       <div style="font-size:13px;font-weight:700;color:#475569;margin-bottom:14px;">📊 年間トレンド（過去12ヶ月）</div>
       <div style="margin-bottom:16px;">
-        <div style="font-size:11px;font-weight:600;color:#3b6ef0;margin-bottom:6px;">① 月別 接触数推移</div>
-        ${makeSVG(monthly12,d=>d.contact,"#3b6ef0","接触数","件")}
+        <div style="font-size:11px;font-weight:600;color:#3b6ef0;margin-bottom:6px;">① 月別 商談数推移</div>
+        ${makeSVG(monthly12,d=>d.nego,"#3b6ef0","商談数","件")}
       </div>
       <div style="margin-bottom:16px;">
-        <div style="font-size:11px;font-weight:600;color:#d97706;margin-bottom:6px;">② 内示率・受注率の推移（%）</div>
+        <div style="font-size:11px;font-weight:600;color:#d97706;margin-bottom:6px;">② 内示率・案件報告率の推移（%）</div>
         <svg width="100%" viewBox="0 0 520 110" xmlns="http://www.w3.org/2000/svg">
           ${monthly12.map((d,i)=>{
             const x=35+i*38,barW=16,H=110,padB=24;
@@ -3529,7 +3538,7 @@ async function renderPersonalMonthlyReport(person, month, reports, deals){
               ${d.wr>0?`<text x="${x+barW+1}" y="${H-padB-bWr-4}" font-size="8" text-anchor="middle" fill="#16a34a">${d.wr}%</text>`:""}`;
           }).join("")}
           <text x="2" y="20" font-size="9" fill="#d97706">■内示率</text>
-          <text x="45" y="20" font-size="9" fill="#16a34a">■受注率</text>
+          <text x="45" y="20" font-size="9" fill="#16a34a">■案件報告率</text>
         </svg>
       </div>
       <div>
