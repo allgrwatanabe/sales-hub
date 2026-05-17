@@ -440,21 +440,31 @@ select option{background:var(--sf);}
       <div class="ch-f">
         <div class="ch-h ch-end">🏢 直販</div>
         <div class="ch-b ch-b4">
-          <div class="nf"><label>訪問件数</label><div class="nc"><button class="nb" onclick="cn('d_visit',-1)">−</button><div class="nd" id="d_visit">0</div><button class="nb" onclick="cn('d_visit',1)">＋</button></div></div>
-          <div class="nf"><label>新規見込</label><div class="nc"><button class="nb" onclick="cn('d_prospect',-1)">−</button><div class="nd" id="d_prospect">0</div><button class="nb" onclick="cn('d_prospect',1)">＋</button></div></div>
-          <div class="nf"><label>内示</label><div class="nc"><button class="nb" onclick="cn('d_ind',-1)">−</button><div class="nd" id="d_ind">0</div><button class="nb" onclick="cn('d_ind',1)">＋</button></div></div>
-          <div class="nf"><label>受注</label><div class="nc"><button class="nb" onclick="cn('d_won',-1)">−</button><div class="nd" id="d_won">0</div><button class="nb" onclick="cn('d_won',1)">＋</button></div></div>
+          <div class="nf"><label>新規訪問</label><div class="nc"><button class="nb" onclick="cn('d_new_visit',-1)">−</button><div class="nd" id="d_new_visit">0</div><button class="nb" onclick="cn('d_new_visit',1)">＋</button></div></div>
+          <div class="nf"><label>再訪問</label><div class="nc"><button class="nb" onclick="cn('d_revisit',-1)">−</button><div class="nd" id="d_revisit">0</div><button class="nb" onclick="cn('d_revisit',1)">＋</button></div></div>
+          <div class="nf"><label>IT見込</label><div class="nc"><button class="nb" onclick="cn('d_it_prospect',-1)">−</button><div class="nd" id="d_it_prospect">0</div><button class="nb" onclick="cn('d_it_prospect',1)">＋</button></div></div>
+          <div class="nf"><label>持続化見込</label><div class="nc"><button class="nb" onclick="cn('d_jizokuka_prospect',-1)">−</button><div class="nd" id="d_jizokuka_prospect">0</div><button class="nb" onclick="cn('d_jizokuka_prospect',1)">＋</button></div></div>
+          <div class="nf"><label>その他見込</label><div class="nc"><button class="nb" onclick="cn('d_other_prospect',-1)">−</button><div class="nd" id="d_other_prospect">0</div><button class="nb" onclick="cn('d_other_prospect',1)">＋</button></div></div>
+          <div class="nf"><label>失注</label><div class="nc"><button class="nb" onclick="cn('d_lost',-1)">−</button><div class="nd" id="d_lost">0</div><button class="nb" onclick="cn('d_lost',1)">＋</button></div></div>
+          <div class="nf"><label>IT内示</label><div class="nc"><button class="nb" onclick="cn('d_it_ind',-1)">−</button><div class="nd" id="d_it_ind">0</div><button class="nb" onclick="cn('d_it_ind',1)">＋</button></div></div>
+          <div class="nf"><label>持続化内示</label><div class="nc"><button class="nb" onclick="cn('d_jizokuka_ind',-1)">−</button><div class="nd" id="d_jizokuka_ind">0</div><button class="nb" onclick="cn('d_jizokuka_ind',1)">＋</button></div></div>
+          <div class="nf"><label>その他内示</label><div class="nc"><button class="nb" onclick="cn('d_other_ind',-1)">−</button><div class="nd" id="d_other_ind">0</div><button class="nb" onclick="cn('d_other_ind',1)">＋</button></div></div>
+          <div class="nf"><label>案件報告</label><div class="nc"><button class="nb" onclick="cn('d_case_report',-1)">−</button><div class="nd" id="d_case_report">0</div><button class="nb" onclick="cn('d_case_report',1)">＋</button></div></div>
+          <div class="nf"><label>キャンセル</label><div class="nc"><button class="nb" onclick="cn('d_cancel',-1)">−</button><div class="nd" id="d_cancel">0</div><button class="nb" onclick="cn('d_cancel',1)">＋</button></div></div>
         </div>
       </div>
 
-      <!-- トスアップ -->
+      <!-- 紹介店案件 -->
       <div class="ch-f">
-        <div class="ch-h ch-prt">🔄 トスアップ</div>
+        <div class="ch-h ch-prt">🔄 紹介店案件</div>
         <div class="ch-b ch-b4">
-          <div class="nf"><label>受領件数</label><div class="nc"><button class="nb" onclick="cn('t_recv',-1)">−</button><div class="nd" id="t_recv">0</div><button class="nb" onclick="cn('t_recv',1)">＋</button></div></div>
-          <div class="nf"><label>商談件数</label><div class="nc"><button class="nb" onclick="cn('t_nego',-1)">−</button><div class="nd" id="t_nego">0</div><button class="nb" onclick="cn('t_nego',1)">＋</button></div></div>
-          <div class="nf"><label>内示</label><div class="nc"><button class="nb" onclick="cn('t_ind',-1)">−</button><div class="nd" id="t_ind">0</div><button class="nb" onclick="cn('t_ind',1)">＋</button></div></div>
-          <div class="nf"><label>受注</label><div class="nc"><button class="nb" onclick="cn('t_won',-1)">−</button><div class="nd" id="t_won">0</div><button class="nb" onclick="cn('t_won',1)">＋</button></div></div>
+          <div class="nf"><label>新規訪問</label><div class="nc"><button class="nb" onclick="cn('r_new_visit',-1)">−</button><div class="nd" id="r_new_visit">0</div><button class="nb" onclick="cn('r_new_visit',1)">＋</button></div></div>
+          <div class="nf"><label>再訪問</label><div class="nc"><button class="nb" onclick="cn('r_revisit',-1)">−</button><div class="nd" id="r_revisit">0</div><button class="nb" onclick="cn('r_revisit',1)">＋</button></div></div>
+          <div class="nf"><label>見込</label><div class="nc"><button class="nb" onclick="cn('r_prospect',-1)">−</button><div class="nd" id="r_prospect">0</div><button class="nb" onclick="cn('r_prospect',1)">＋</button></div></div>
+          <div class="nf"><label>失注</label><div class="nc"><button class="nb" onclick="cn('r_lost',-1)">−</button><div class="nd" id="r_lost">0</div><button class="nb" onclick="cn('r_lost',1)">＋</button></div></div>
+          <div class="nf"><label>内示</label><div class="nc"><button class="nb" onclick="cn('r_ind',-1)">−</button><div class="nd" id="r_ind">0</div><button class="nb" onclick="cn('r_ind',1)">＋</button></div></div>
+          <div class="nf"><label>案件報告</label><div class="nc"><button class="nb" onclick="cn('r_case_report',-1)">−</button><div class="nd" id="r_case_report">0</div><button class="nb" onclick="cn('r_case_report',1)">＋</button></div></div>
+          <div class="nf"><label>キャンセル</label><div class="nc"><button class="nb" onclick="cn('r_cancel',-1)">−</button><div class="nd" id="r_cancel">0</div><button class="nb" onclick="cn('r_cancel',1)">＋</button></div></div>
         </div>
       </div>
 
@@ -476,12 +486,12 @@ select option{background:var(--sf);}
         </div>
       </div>
 
-      <!-- 社内同行 -->
+      <!-- 同行 -->
       <div class="ch-f">
-        <div class="ch-h" style="background:rgba(100,116,139,.1);color:#64748b;">👥 社内同行</div>
+        <div class="ch-h" style="background:rgba(100,116,139,.1);color:#64748b;">👥 同行</div>
         <div class="ch-b" style="grid-template-columns:1fr 1fr;padding:12px 14px;">
-          <div class="nf"><label>新規同行</label><div class="nc"><button class="nb" onclick="cn('accompany_new',-1)">−</button><div class="nd" id="accompany_new">0</div><button class="nb" onclick="cn('accompany_new',1)">＋</button></div></div>
-          <div class="nf"><label>既存同行</label><div class="nc"><button class="nb" onclick="cn('accompany_exist',-1)">−</button><div class="nd" id="accompany_exist">0</div><button class="nb" onclick="cn('accompany_exist',1)">＋</button></div></div>
+          <div class="nf"><label>社内同行</label><div class="nc"><button class="nb" onclick="cn('accompany_internal',-1)">−</button><div class="nd" id="accompany_internal">0</div><button class="nb" onclick="cn('accompany_internal',1)">＋</button></div></div>
+          <div class="nf"><label>販売店営業同行</label><div class="nc"><button class="nb" onclick="cn('accompany_dealer',-1)">−</button><div class="nd" id="accompany_dealer">0</div><button class="nb" onclick="cn('accompany_dealer',1)">＋</button></div></div>
         </div>
       </div>
 
@@ -1119,7 +1129,7 @@ select option{background:var(--sf);}
     <div class="cd">
       <div class="cd-t">📝 日報データ</div>
       <div style="font-size:11px;color:var(--tx3);margin-bottom:10px;">
-        列：日付(YYYY-MM-DD), 担当者, 直販訪問, 直販新規見込, 直販内示, 直販受注, TU受領, TU商談, TU内示, TU受注, 販売店新規, 販売店既存, 目標1, 目標2, 目標3, トピック
+        列：日付(YYYY-MM-DD), 担当者, 直販新規訪問, 直販再訪問, 直販IT見込, 直販持続化見込, 直販その他見込, 直販失注, 直販IT内示, 直販持続化内示, 直販その他内示, 直販案件報告, 直販キャンセル, 紹介店新規訪問, 紹介店再訪問, 紹介店見込, 紹介店失注, 紹介店内示, 紹介店案件報告, 紹介店キャンセル, 同行社内同行, 同行販売店営業同行, 目標1, 目標2, 目標3, トピック
       </div>
       <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
         <button class="btn btn-g btn-sm" onclick="downloadTemplate('report')">📄 テンプレートDL</button>
@@ -1208,7 +1218,11 @@ function go(page,sideEl,mnId){
 // 日報タブ（不要になったが残存コードを無害化）
 function switchRepTab(){}
 
-const NV={d_visit:0,d_prospect:0,d_ind:0,d_won:0,t_recv:0,t_nego:0,t_ind:0,t_won:0,p_new:0,p_exist:0,c_new:0,c_exist:0,accompany_new:0,accompany_exist:0,c_doc:0,c_claim:0,c_deliver:0,c_mtg:0};
+const NV={
+  d_new_visit:0,d_revisit:0,d_it_prospect:0,d_jizokuka_prospect:0,d_other_prospect:0,d_lost:0,d_it_ind:0,d_jizokuka_ind:0,d_other_ind:0,d_case_report:0,d_cancel:0,
+  r_new_visit:0,r_revisit:0,r_prospect:0,r_lost:0,r_ind:0,r_case_report:0,r_cancel:0,
+  p_new:0,p_exist:0,c_new:0,c_exist:0,accompany_internal:0,accompany_dealer:0,c_doc:0,c_claim:0,c_deliver:0,c_mtg:0
+};
 function cn(k,d){NV[k]=Math.max(0,NV[k]+d);document.getElementById(k).textContent=NV[k];}
 
 // EXEC
@@ -1402,11 +1416,11 @@ async function loadTodayReport(){
 
   // 各フィールドをセット
   const fields=[
-    ["d_visit","直販訪問"],["d_prospect","直販新規見込"],["d_ind","直販内示"],["d_won","直販受注"],
-    ["t_recv","TU受領"],["t_nego","TU商談"],["t_ind","TU内示"],["t_won","TU受注"],
+    ["d_new_visit","直販新規訪問"],["d_revisit","直販再訪問"],["d_it_prospect","直販IT見込"],["d_jizokuka_prospect","直販持続化見込"],["d_other_prospect","直販その他見込"],["d_lost","直販失注"],["d_it_ind","直販IT内示"],["d_jizokuka_ind","直販持続化内示"],["d_other_ind","直販その他内示"],["d_case_report","直販案件報告"],["d_cancel","直販キャンセル"],
+    ["r_new_visit","紹介店新規訪問"],["r_revisit","紹介店再訪問"],["r_prospect","紹介店見込"],["r_lost","紹介店失注"],["r_ind","紹介店内示"],["r_case_report","紹介店案件報告"],["r_cancel","紹介店キャンセル"],
     ["p_new","販売店新規"],["p_exist","販売店既存"],
     ["c_new","取引先新規"],["c_exist","取引先既存"],
-    ["accompany_new","社内同行新規"],["accompany_exist","社内同行既存"],
+    ["accompany_internal","同行社内同行"],["accompany_dealer","同行販売店営業同行"],
     ["c_doc","エンド書類回収"],["c_claim","エンドクレーム"],["c_deliver","エンド納品"],["c_mtg","エンド打合せ"],
   ];
   fields.forEach(([nvKey,shKey])=>{
@@ -1416,7 +1430,7 @@ async function loadTodayReport(){
   });
   // 目標・トピック
   ["目標1","目標2","目標3","トピック"].forEach(k=>{
-    const elMap={"目標1":"r-g1","目標2":"r-g2","目標3":"r-g3","トピック":"r-topic"};
+    const elMap={"目標1":"g1","目標2":"g2","目標3":"g3","トピック":"r-topic"};
     const el=document.getElementById(elMap[k]);
     if(el) el.value=myReport[k]||"";
   });
@@ -1546,33 +1560,41 @@ async function submitPayment(){
 async function submitReport(){
   const btn=document.getElementById("rep-btn"),st=document.getElementById("rep-status");
   btn.textContent="送信中...";btn.disabled=true;st.textContent="";
+  const directVisit=NV.d_new_visit+NV.d_revisit;
+  const directProspect=NV.d_it_prospect+NV.d_jizokuka_prospect+NV.d_other_prospect;
+  const directInd=NV.d_it_ind+NV.d_jizokuka_ind+NV.d_other_ind;
+  const referralVisit=NV.r_new_visit+NV.r_revisit;
   const payload={
     日付:document.getElementById("r-date").value,
     担当者:document.getElementById("r-person").value,
-    直販訪問:NV.d_visit, 直販新規見込:NV.d_prospect, 直販内示:NV.d_ind, 直販受注:NV.d_won,
-    TU受領:NV.t_recv, TU商談:NV.t_nego, TU内示:NV.t_ind, TU受注:NV.t_won,
+    直販新規訪問:NV.d_new_visit, 直販再訪問:NV.d_revisit, 直販IT見込:NV.d_it_prospect, 直販持続化見込:NV.d_jizokuka_prospect, 直販その他見込:NV.d_other_prospect,
+    直販失注:NV.d_lost, 直販IT内示:NV.d_it_ind, 直販持続化内示:NV.d_jizokuka_ind, 直販その他内示:NV.d_other_ind, 直販案件報告:NV.d_case_report, 直販キャンセル:NV.d_cancel,
+    紹介店新規訪問:NV.r_new_visit, 紹介店再訪問:NV.r_revisit, 紹介店見込:NV.r_prospect, 紹介店失注:NV.r_lost, 紹介店内示:NV.r_ind, 紹介店案件報告:NV.r_case_report, 紹介店キャンセル:NV.r_cancel,
+    同行社内同行:NV.accompany_internal, 同行販売店営業同行:NV.accompany_dealer,
+    直販訪問:directVisit, 直販新規見込:directProspect, 直販内示:directInd, 直販受注:0,
+    TU受領:referralVisit, TU商談:referralVisit, TU内示:NV.r_ind, TU受注:0,
     販売店新規:NV.p_new, 販売店既存:NV.p_exist,
     目標1:document.getElementById("g1").value,
     目標2:document.getElementById("g2").value,
     目標3:document.getElementById("g3").value,
     トピック:document.getElementById("r-topic").value,
     取引先新規:NV.c_new, 取引先既存:NV.c_exist,
-    社内同行新規:NV.accompany_new, 社内同行既存:NV.accompany_exist,
+    社内同行新規:NV.accompany_internal, 社内同行既存:NV.accompany_dealer,
     エンド書類回収:NV.c_doc, エンドクレーム:NV.c_claim, エンド納品:NV.c_deliver, エンド打合せ:NV.c_mtg,
   };
   const res=await apiPost({type:"report",action:"create",payload});
   btn.textContent="📨 日報を送信";btn.disabled=false;
   if(res.ok){
-    const tuRate=NV.t_recv>0?Math.round((NV.t_ind+NV.t_won)/NV.t_recv*100):0;
+    const referralRate=referralVisit>0?Math.round(NV.r_ind/referralVisit*100):0;
     document.getElementById("rep-preview-body").innerHTML=`
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:11px;">
         <div style="padding:8px;background:rgba(79,125,247,.08);border-radius:6px;border:1px solid rgba(79,125,247,.2);">
           <div style="color:var(--ac);font-weight:700;margin-bottom:4px;">🏢 直販</div>
-          訪問 <b>${NV.d_visit}</b>件 / 新規見込 <b>${NV.d_prospect}</b>件<br>内示 <b>${NV.d_ind}</b>件 / 受注 <b>${NV.d_won}</b>件
+          新規訪問 <b>${NV.d_new_visit}</b>件 / 再訪問 <b>${NV.d_revisit}</b>件<br>見込 <b>${directProspect}</b>件 / 内示 <b>${directInd}</b>件
         </div>
         <div style="padding:8px;background:rgba(52,211,153,.08);border-radius:6px;border:1px solid rgba(52,211,153,.2);">
-          <div style="color:var(--g);font-weight:700;margin-bottom:4px;">🔄 トスアップ　決定率 ${tuRate}%</div>
-          受領 <b>${NV.t_recv}</b>件 / 商談 <b>${NV.t_nego}</b>件<br>内示 <b>${NV.t_ind}</b>件 / 受注 <b>${NV.t_won}</b>件
+          <div style="color:var(--g);font-weight:700;margin-bottom:4px;">🔄 紹介店案件　内示率 ${referralRate}%</div>
+          新規訪問 <b>${NV.r_new_visit}</b>件 / 再訪問 <b>${NV.r_revisit}</b>件<br>見込 <b>${NV.r_prospect}</b>件 / 内示 <b>${NV.r_ind}</b>件
         </div>
         <div style="padding:8px;background:rgba(167,139,250,.08);border-radius:6px;border:1px solid rgba(167,139,250,.2);">
           <div style="color:var(--pu);font-weight:700;margin-bottom:4px;">🤝 販売店商談</div>
@@ -1581,7 +1603,7 @@ async function submitReport(){
       </div>
       ${payload.トピック?`<div style="margin-top:8px;font-size:11px;color:var(--tx2);padding:8px;background:var(--sf2);border-radius:5px;">${payload.トピック}</div>`:""}
       <div style="margin-top:8px;padding:8px;background:rgba(56,189,248,.08);border-radius:6px;border:1px solid rgba(56,189,248,.2);font-size:11px;">
-        <div style="color:#38bdf8;font-weight:700;margin-bottom:4px;">📋 エンド対応　接触数 ${NV.d_visit+NV.t_recv+NV.c_doc+NV.c_claim+NV.c_deliver+NV.c_mtg}件　商談率 ${(NV.d_visit+NV.t_recv+NV.c_doc+NV.c_claim+NV.c_deliver+NV.c_mtg)>0?Math.round((NV.d_visit+NV.t_recv)/(NV.d_visit+NV.t_recv+NV.c_doc+NV.c_claim+NV.c_deliver+NV.c_mtg)*100):0}%</div>
+        <div style="color:#38bdf8;font-weight:700;margin-bottom:4px;">📋 エンド対応　接触数 ${directVisit+referralVisit+NV.c_doc+NV.c_claim+NV.c_deliver+NV.c_mtg}件　商談率 ${(directVisit+referralVisit+NV.c_doc+NV.c_claim+NV.c_deliver+NV.c_mtg)>0?Math.round((directVisit+referralVisit)/(directVisit+referralVisit+NV.c_doc+NV.c_claim+NV.c_deliver+NV.c_mtg)*100):0}%</div>
         書類回収 <b>${NV.c_doc}</b>件 / クレーム <b>${NV.c_claim}</b>件 / 納品 <b>${NV.c_deliver}</b>件 / 打合せ <b>${NV.c_mtg}</b>件
       </div>`;
     document.getElementById("rep-preview").style.display="block";
@@ -3604,7 +3626,7 @@ const TEMPLATES = {
   // 販売店開拓
   partnerdev: "代理店名,担当者,リード元,電話番号,メール,都道府県,対応者,ステータス,メモ,登録日\n〇〇株式会社,山田太郎,代理店募集.com,090-0000-0000,test@example.com,東京都,橋野 浩一,1stコンタクト,初回メモ,2026-03-01",
   // 日報：エンド対応項目を含む
-  report: "日付,担当者,直販訪問,直販新規見込,直販内示,直販受注,TU受領,TU商談,TU内示,TU受注,販売店新規,販売店既存,エンド書類回収,エンドクレーム,エンド納品,エンド打合せ,目標1,目標2,目標3,トピック\n2026-03-01,橋野 浩一,3,2,1,0,2,1,0,0,1,0,1,0,2,1,訪問3件目標,TU2件,,本日の特記事項",
+  report: "日付,担当者,直販新規訪問,直販再訪問,直販IT見込,直販持続化見込,直販その他見込,直販失注,直販IT内示,直販持続化内示,直販その他内示,直販案件報告,直販キャンセル,紹介店新規訪問,紹介店再訪問,紹介店見込,紹介店失注,紹介店内示,紹介店案件報告,紹介店キャンセル,同行社内同行,同行販売店営業同行,販売店新規,販売店既存,エンド書類回収,エンドクレーム,エンド納品,エンド打合せ,目標1,目標2,目標3,トピック\n2026-03-01,橋野 浩一,2,1,1,1,0,0,1,0,0,1,0,1,1,1,0,1,1,0,1,0,1,0,1,0,2,1,訪問3件目標,紹介店案件2件,,本日の特記事項",
   // 販売店マスタ（新スキーマ：1次2次3次階層管理対応）
   dealer: "会社名,何次店,商流,1次販売店,2次販売店,窓口担当者名,都道府県,市区町村,ALL担当,活動ランク,スキーム,電話,メール,メモ,登録日\nM&Kソリューション,1次,M&K,,,,大阪府,大阪市,橋野 浩一,A,完全クロージング,06-0000-0000,mk@example.com,,2026-03-01\n株式会社サンプル,2次,M&K,M&Kソリューション,,山田太郎,東京都,渋谷区,川﨑 慧,B,トスアップ,03-0000-0000,sample@example.com,,2026-03-01"
 };
@@ -3724,12 +3746,23 @@ async function runImport(type) {
         };
       } else {
         apiType = "report";
+        const directVisit=(parseInt(row["直販新規訪問"])||0)+(parseInt(row["直販再訪問"])||0);
+        const directProspect=(parseInt(row["直販IT見込"])||0)+(parseInt(row["直販持続化見込"])||0)+(parseInt(row["直販その他見込"])||0);
+        const directInd=(parseInt(row["直販IT内示"])||0)+(parseInt(row["直販持続化内示"])||0)+(parseInt(row["直販その他内示"])||0);
+        const referralVisit=(parseInt(row["紹介店新規訪問"])||0)+(parseInt(row["紹介店再訪問"])||0);
         payload = {
           日付:row["日付"]||today, 担当者:row["担当者"]||"",
-          直販訪問:parseInt(row["直販訪問"])||0, 直販新規見込:parseInt(row["直販新規見込"])||0,
-          直販内示:parseInt(row["直販内示"])||0, 直販受注:parseInt(row["直販受注"])||0,
-          TU受領:parseInt(row["TU受領"])||0, TU商談:parseInt(row["TU商談"])||0,
-          TU内示:parseInt(row["TU内示"])||0, TU受注:parseInt(row["TU受注"])||0,
+          直販新規訪問:parseInt(row["直販新規訪問"])||0, 直販再訪問:parseInt(row["直販再訪問"])||0,
+          直販IT見込:parseInt(row["直販IT見込"])||0, 直販持続化見込:parseInt(row["直販持続化見込"])||0, 直販その他見込:parseInt(row["直販その他見込"])||0,
+          直販失注:parseInt(row["直販失注"])||0, 直販IT内示:parseInt(row["直販IT内示"])||0, 直販持続化内示:parseInt(row["直販持続化内示"])||0,
+          直販その他内示:parseInt(row["直販その他内示"])||0, 直販案件報告:parseInt(row["直販案件報告"])||0, 直販キャンセル:parseInt(row["直販キャンセル"])||0,
+          紹介店新規訪問:parseInt(row["紹介店新規訪問"])||0, 紹介店再訪問:parseInt(row["紹介店再訪問"])||0, 紹介店見込:parseInt(row["紹介店見込"])||0,
+          紹介店失注:parseInt(row["紹介店失注"])||0, 紹介店内示:parseInt(row["紹介店内示"])||0, 紹介店案件報告:parseInt(row["紹介店案件報告"])||0, 紹介店キャンセル:parseInt(row["紹介店キャンセル"])||0,
+          同行社内同行:parseInt(row["同行社内同行"])||0, 同行販売店営業同行:parseInt(row["同行販売店営業同行"])||0,
+          直販訪問:directVisit, 直販新規見込:directProspect,
+          直販内示:directInd, 直販受注:0,
+          TU受領:referralVisit, TU商談:referralVisit,
+          TU内示:parseInt(row["紹介店内示"])||0, TU受注:0,
           販売店新規:parseInt(row["販売店新規"])||0, 販売店既存:parseInt(row["販売店既存"])||0,
           エンド書類回収:parseInt(row["エンド書類回収"])||0, エンドクレーム:parseInt(row["エンドクレーム"])||0,
           エンド納品:parseInt(row["エンド納品"])||0, エンド打合せ:parseInt(row["エンド打合せ"])||0,
